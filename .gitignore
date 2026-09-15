@@ -1,0 +1,16 @@
+# системное
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# редакторы
+.vscode/
+.idea/
+*.swp
+
+# node (нужен только для tools/fetch-fonts.mjs)
+node_modules/
+npm-debug.log*
+
+# vercel
+.vercel

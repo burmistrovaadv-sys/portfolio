@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Сохранение контактов, IronWallet — кейс Анастасии Бурмистровой</title>
+<meta name="description" content="Кейс продуктового дизайнера: как контакты в крипто-кошельке IronWallet перестали быть мёртвой фичей и начали работать внутри Send-флоу.">
+<link rel="canonical" href="https://example.ru/cases/sohranenie-kontaktov.html">
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="Сохранение контактов, IronWallet — кейс">
+<meta property="og:description" content="Контакты перестали быть мёртвой фичей и начали работать в Send-флоу.">
+<meta property="og:image" content="https://example.ru/assets/img/art-4.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<meta name="theme-color" content="#f2f1ee">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../assets/case.css">
+
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+<a class="skip-link" href="#content">Перейти к содержанию</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <div class="identity">
+      <a class="monogram" href="../index.html" aria-label="На главную">АБ</a>
+      <span class="sparkle" aria-hidden="true">✦</span>
+      <a href="../index.html#cases" class="back-link">Все кейсы</a>
+    </div>
+    <nav class="site-nav" aria-label="Контакты">
+      <a href="https://t.me/Anastasia_Jay" target="_blank" rel="noopener">Telegram</a>
+      <span class="slash" aria-hidden="true">/</span>
+      <a class="underlined" href="mailto:burmistrova.adv@gmail.com">Email</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page" id="content">
+
+  <section class="case-hero wrap" id="top">
+    <div class="tags">
+      <span class="tag light">IronWallet</span>
+      <span class="tag light">Mobile</span>
+      <span class="tag light">B2C</span>
+      <span class="tag accent">Send-флоу</span>
+    </div>
+    <h1>Сохранение контактов</h1>
+    <p class="case-intro">Контакты в кошельке были мёртвой фичей: их никто не заводил и не использовал. Я встроила их в тот момент, где адрес действительно нужен — в отправку.</p>
+  </section>
+
+  <section class="wrap">
+    <div class="case-cover">
+      <img src="../assets/img/art-4.png" width="858" height="1857"
+           alt="Экран отправки IronWallet с выбором сохранённого получателя"
+           fetchpriority="high" decoding="async">
+    </div>
+  </section>
+
+  <div class="case-layout wrap">
+
+    <aside class="case-nav" aria-label="Содержание кейса">
+      <div class="mono case-nav-title">Содержание</div>
+      <a href="#context">01 — Контекст</a>
+      <a href="#hypothesis">02 — Гипотеза</a>
+      <a href="#solution">03 — Решение</a>
+      <a href="#details">04 — Детали</a>
+      <a href="#results">05 — Итоги</a>
+      <a href="#next">06 — Что дальше</a>
+      <a href="#thanks">Спасибо и контакты</a>
+      <a class="case-nav-back" href="../index.html#cases">← Все кейсы</a>
+    </aside>
+
+    <main class="case-main">
+
+      <section class="case-meta">
+        <div class="meta-grid">
+          <div class="meta-cell"><div class="mono">Продукт</div><div class="meta-value">IronWallet</div></div>
+          <div class="meta-cell"><div class="mono">Роль</div><div class="meta-value">Продуктовый дизайнер</div></div>
+          <div class="meta-cell"><div class="mono">Платформа</div><div class="meta-value">iOS · Android</div></div>
+          <div class="meta-cell"><div class="mono">Что делала</div><div class="meta-value">Флоу, UI, хендофф</div></div>
+        </div>
+      </section>
+
+      <section class="case-section" id="context">
+        <span class="mono">01 — Контекст</span>
+        <h2>Фича была, пользы не было</h2>
+        <p class="case-p">Раздел контактов существовал отдельно от отправки: чтобы сохранить адрес, нужно было выйти из сценария, вспомнить название и вернуться обратно. В итоге адреса копировали из переписок и истории транзакций.</p>
+      </section>
+
+      <section class="case-section" id="hypothesis">
+        <span class="mono">02 — Гипотеза</span>
+        <h2>Сохранять там, где отправляешь</h2>
+        <div class="three-col">
+          <div>
+            <span class="mono small">Где сохраняем</span>
+            <p>После ввода адреса пользователь сразу получает предложение назвать и сохранить получателя — без ухода из отправки и без отдельного раздела.</p>
+          </div>
+          <div>
+            <span class="mono small">Где используем</span>
+            <p>На первом шаге Send — быстрый выбор из сохранённых: имя, сеть и короткий адрес, поиск по списку при большом количестве контактов.</p>
+          </div>
+          <div>
+            <span class="mono small">Что проверяли</span>
+            <p>Состояния: пусто, первый контакт, много контактов, дубли и похожие адреса. На каждое — свой экран и понятная подсказка.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section" id="solution">
+        <span class="mono">03 — Решение</span>
+        <h2>Контакт как часть отправки</h2>
+        <p class="case-p">Список получателей на первом экране Send, карточка контакта с сетью и адресом, безопасные состояния для похожих адресов. Компоненты собраны на дизайн-системе продукта и переданы в разработку с прототипом.</p>
+      </section>
+
+      <section class="case-section" id="details">
+        <span class="mono">04 — Детали</span>
+        <h2>Мелочи, которые снимают страх</h2>
+        <div class="details-grid">
+          <div class="details-text">
+            <p>Подписи вместо длинных адресов, подтверждение перед первой отправкой на новый адрес, понятные ошибки вместо системных кодов. Отдельно проверили сценарий с несколькими сетями, чтобы пользователь не отправил монеты не туда.</p>
+            <p>Каждое состояние описано текстом: что произошло, чем это грозит и что делать дальше. UX-тексты писала сама и согласовывала вместе с саппортом.</p>
+          </div>
+          <div class="details-side">
+            <span class="mono small">Второстепенное</span>
+            <div class="side-row">Компоненты: список, карточка контакта, поле имени, шит подтверждения</div>
+            <div class="side-sep"></div>
+            <div class="side-row">Состояния: пусто · поиск · дубль · новая сеть · ошибка</div>
+            <div class="side-sep"></div>
+            <div class="side-row">Отдано: макеты, прототип, спецификация состояний</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section flush" id="results">
+        <div class="results-card">
+          <div>
+            <span class="mono light">05 — Итоги</span>
+            <p class="results-headline">Контакты перестали быть мёртвой фичей и начали работать в Send-флоу</p>
+          </div>
+          <div class="results-grid">
+            <div class="result-chip"><div class="result-label">Место в продукте</div><div class="result-value">Send-флоу</div></div>
+            <div class="result-chip"><div class="result-label">Роль</div><div class="result-value">End-to-end</div></div>
+            <div class="result-chip"><div class="result-label">Отдано в разработку</div><div class="result-value">Макеты + прототип</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section" id="next">
+        <span class="mono">06 — Что бы я сделала ещё</span>
+        <h2>Куда развивать дальше</h2>
+        <div class="ideas-grid">
+          <div class="idea">
+            <span class="mono small">01</span>
+            <div class="idea-title">Проверить на цифрах</div>
+            <p>Замерить долю отправок из сохранённых контактов и время до подтверждения — сейчас данных по фиче не хватает.</p>
+          </div>
+          <div class="idea">
+            <span class="mono small">02</span>
+            <div class="idea-title">Импорт и шеринг</div>
+            <p>Добавить импорт адресов из истории и обмен контактом ссылкой, чтобы не вводить адрес вручную вообще.</p>
+          </div>
+          <div class="idea">
+            <span class="mono small">03</span>
+            <div class="idea-title">Метки риска</div>
+            <p>Помечать адреса, на которые уже были успешные отправки, и предупреждать о похожих — меньше страха ошибиться.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section flush" id="thanks">
+        <div class="thanks-card">
+          <h2>Спасибо, что дочитали</h2>
+          <p>Если хочется подробностей по флоу и решениям — напишите, покажу макеты и прототип и расскажу, что не поместилось в кейс.</p>
+          <div class="thanks-links">
+            <a class="thanks-btn primary" href="https://t.me/Anastasia_Jay" target="_blank" rel="noopener">@Anastasia_Jay</a>
+            <a class="thanks-btn" href="mailto:burmistrova.adv@gmail.com">burmistrova.adv@gmail.com</a>
+            <a class="thanks-btn" href="tel:+79089745517">+7 908 974 55 17</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section" id="other">
+        <div class="other-head">
+          <h2>Другие кейсы</h2>
+          <a href="../index.html#cases">Все работы</a>
+        </div>
+        <div class="other-grid">
+          <a class="other-card theme-dark" href="../index.html#cases">
+            <div class="other-media">
+              <img src="../assets/img/art-2.png" width="2091" height="1818" alt="" loading="lazy" decoding="async">
+            </div>
+            <div class="other-text">
+              <span class="mono small">exmo.me</span>
+              <span class="other-title">Редизайн веба и приложения</span>
+            </div>
+          </a>
+          <a class="other-card theme-mint" href="../index.html#cases">
+            <div class="other-media">
+              <img src="../assets/img/art-5.png" width="858" height="1854" alt="" loading="lazy" decoding="async">
+            </div>
+            <div class="other-text">
+              <span class="mono small">IronWallet</span>
+              <span class="other-title">SWAP: быстрые пары</span>
+            </div>
+          </a>
+          <a class="other-card theme-lime" href="../index.html#cases">
+            <div class="other-media">
+              <img src="../assets/img/art-6.png" width="837" height="1920" alt="" loading="lazy" decoding="async">
+            </div>
+            <div class="other-text">
+              <span class="mono small">EXMO.ME</span>
+              <span class="other-title">Маскот во флоу платежей</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script src="../assets/case.js" defer></script>
+</body>
+</html>
