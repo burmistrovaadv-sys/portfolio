@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Домен-заглушка example.ru. После подключения своего домена
+<!-- Сейчас указан адрес на vercel.app. После подключения своего домена
      заменить его здесь, в robots.txt и в тегах canonical/og:url. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://example.ru/</loc>
+    <loc>https://portfolio-liart-delta-79.vercel.app/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://example.ru/cases/sohranenie-kontaktov.html</loc>
+    <loc>https://portfolio-liart-delta-79.vercel.app/cases/sohranenie-kontaktov</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

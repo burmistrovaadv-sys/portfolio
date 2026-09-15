@@ -40,8 +40,8 @@ npx serve .
 
 ## Перед подключением своего домена
 
-В файлах ниже стоит домен-заглушка `https://example.ru`. Его нужно заменить
-на настоящий адрес сайта:
+Сейчас во всех адресах указан `https://portfolio-liart-delta-79.vercel.app`.
+После подключения своего домена его нужно заменить в этих файлах:
 
 - `index.html` — теги `canonical`, `og:url`, `og:image`
 - `cases/sohranenie-kontaktov.html` — то же самое
@@ -52,3 +52,7 @@ npx serve .
 
 Сайт статический, собирать нечего. Vercel берёт файлы из репозитория как есть:
 Framework Preset — **Other**, Build Command — пусто, Output Directory — пусто.
+
+Любой `git push` в ветку `main` автоматически обновляет сайт.
+
+`vercel.json` включает адреса без `.html` и долгий кеш для шрифтов и картинок.
