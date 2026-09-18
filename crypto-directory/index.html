@@ -95,12 +95,13 @@
   .media .frame.pair img{border-radius:14px; max-width:100%}
   .media .fade{display:none}
 
-  /* обложка кейса: не растягиваем шире натуральных 1052px — иначе апскейл и мыло */
+  /* обложка кейса: превью — отдельный файл hero-preview, уже обрезанный как в фигме
+     (1227×823, экспорт ×3), поэтому ни кропа по max-height, ни градиента-затухания не нужно.
+     По клику открывается hero-full — вся страница целиком */
   .frame{position:relative; border-radius:clamp(16px,2vw,26px); overflow:hidden; background:var(--surface);
-    max-height:min(74vh,720px); cursor:zoom-in; max-width:1052px; margin-inline:auto}
+    cursor:zoom-in; max-width:1227px; margin-inline:auto}
   .frame img{display:block; width:100%; height:auto}
-  .fade{position:absolute; left:0; right:0; bottom:0; height:110px; pointer-events:none;
-    background:linear-gradient(to bottom,rgba(242,241,238,0),rgba(242,241,238,.92))}
+  .fade{display:none}
   .zoom{position:absolute; right:16px; top:16px; width:46px; height:46px; border-radius:50%;
     display:grid; place-items:center; background:rgba(21,23,27,.72); color:#fff; backdrop-filter:blur(6px);
     opacity:0; transform:scale(.9); transition:opacity .2s,transform .2s; pointer-events:none}
@@ -111,6 +112,11 @@
   .results{border-radius:clamp(20px,2.4vw,34px); background:#15171b; color:#f4f3f0;
     padding:clamp(26px,3.4vw,56px); display:flex; flex-direction:column; gap:clamp(20px,2.4vw,32px)}
   .results .mono{color:#b0b4b8}
+  /* верх карточки итогов — две колонки как в фигме: текст 613 + скрин 627, gap 32 */
+  .res-top{display:grid; grid-template-columns:minmax(0,613fr) minmax(0,627fr);
+    gap:clamp(20px,2.2vw,32px); align-items:start}
+  .frame.res-shot{max-width:100%; border-radius:clamp(12px,1.2vw,18px); background:#0f1113}
+  @media (max-width:860px){ .res-top{grid-template-columns:1fr} }
   .results .st{margin:14px 0 0; font-size:clamp(24px,2.8vw,40px); font-weight:600; letter-spacing:-.03em; line-height:1.12; max-width:24ch; color:#f4f3f0}
   .grid3{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr)); gap:12px}
   .rcard{padding:20px 22px; border-radius:18px; background:rgba(255,255,255,.09)}
@@ -177,7 +183,7 @@
         <span style="color:#c6c3bc;">/</span>
         <a href="mailto:burmistrova.adv@gmail.com">Email</a>
         <span style="color:#c6c3bc;">/</span>
-        <a href="tel:+79089745517">+7 908 974 55 17</a>
+        <a href="/assets/cv-anastasia-burmistrova.pdf" target="_blank" rel="noopener" style="text-decoration:none;">CV</a>
       </nav>
     </header>
 
@@ -194,8 +200,8 @@
     </section>
 
     <section style="padding-bottom:8px;">
-      <div class="frame" data-src="/crypto-directory/img/hero.webp" data-title="Crypto Directory — главная страница" tabindex="0">
-        <img src="/crypto-directory/img/hero.webp" width="771" height="3000" fetchpriority="high" decoding="async" alt="Crypto Directory — главная страница">
+      <div class="frame" data-src="/crypto-directory/img/hero-full.webp" data-title="Crypto Directory — главная страница целиком" tabindex="0">
+        <img src="/crypto-directory/img/hero-preview.webp" width="3000" height="2012" fetchpriority="high" decoding="async" alt="Crypto Directory — главная страница">
         <div class="fade"></div>
         <div class="zoom" aria-hidden="true">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -407,9 +413,15 @@
 
         <section id="results" style="padding-bottom:clamp(44px,5.5vw,90px);">
           <div class="results">
-            <div>
-              <span class="mono">Итог. Общий Scope задачи</span>
-              <p class="st">Каталог криптосервисов превратился в directory бизнесов, которые принимают криптовалюту</p>
+            <div class="res-top">
+              <div>
+                <span class="mono">Итог. Общий Scope задачи</span>
+                <p class="st">Каталог криптосервисов превратился в directory бизнесов, которые принимают криптовалюту</p>
+              </div>
+              <div class="frame res-shot" data-src="/crypto-directory/img/result.webp" data-title="Общий объём работы — макеты в Figma" tabindex="0">
+                <img src="/crypto-directory/img/result.webp" width="2508" height="1556" loading="lazy" decoding="async" alt="Общий объём работы — все макеты проекта в Figma">
+                <div class="zoom" aria-hidden="true"></div>
+              </div>
             </div>
             <div class="grid3">
               <div class="rcard"><div class="l">Объем работы</div><div class="v">380 экранов, дизайн-система, Light/Dark mode</div></div>

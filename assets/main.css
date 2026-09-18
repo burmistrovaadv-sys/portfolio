@@ -1,9 +1,3 @@
-/* =========================================================
-   Главная страница портфолио.
-   Один файл на две страницы: / и /japanstat — они отличаются
-   только приветствием в тексте, оформление общее.
-   ========================================================= */
-
 :root{
   --bg:#f2f1ee; --ink:#15171b; --ink-2:#3a3f45; --ink-3:#5a5f66;
   --line:#dcd9d3; --surface:#e7e5e0; --chip:#e3e3e3;
@@ -37,22 +31,26 @@ nav.top .sep{color:#c6c3bc}
 .hero{display:flex; flex-direction:column; align-items:center; text-align:center;
   gap:clamp(20px,2.4vw,34px); padding:clamp(34px,5vw,70px) 0 clamp(40px,5vw,78px)}
 .hero .ava{width:clamp(140px,14vw,205px); aspect-ratio:205/200; object-fit:contain}
-.hero h1{margin:0; font-size:clamp(34px,4.6vw,64px); font-weight:700; letter-spacing:-.04em; line-height:1}
+.hero h1{margin:0; font-size:clamp(34px,3.46vw,62px); font-weight:700; letter-spacing:-.03em; line-height:1.02}
 .tagline{display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:14px}
-.tagline .role{color:var(--ink-3); font-size:clamp(16px,1.5vw,20px)}
-.badge{display:inline-flex; align-items:center; padding:4px 12px; border-radius:999px;
-  background:var(--lime); color:var(--lime-ink); font-size:15px; font-weight:600}
-.statement{margin:0; max-width:820px; font-size:clamp(22px,2.4vw,34px); font-weight:600;
-  letter-spacing:-.02em; line-height:1.24}
+.tagline .role{color:#5a5f66; font-size:clamp(16px,1.06vw,19px); line-height:1.55}
+/* lime-бейджи: скругление 4–5, не пилюля, начертание Regular */
+.badge{display:inline-flex; align-items:center; padding:1px 8px; border-radius:4px;
+  background:var(--lime); color:var(--lime-ink); font-size:clamp(16px,1.06vw,19px); font-weight:400}
+.badge.note{padding:3px 10px; border-radius:5px; font-size:clamp(15px,.95vw,17px)}
+.statement{margin:0; max-width:820px; font-size:clamp(24px,2.57vw,46px); font-weight:600;
+  letter-spacing:-.03em; line-height:1.12}
 .statement .hi{display:block; margin-bottom:.55em}
 .chips{display:flex; flex-wrap:wrap; justify-content:center; gap:10px}
-.chip{padding:8px 16px; border-radius:999px; background:var(--chip); color:var(--ink-2);
-  font-size:15px; font-weight:500; line-height:1.2}
+.chip{padding:9px 20px; border-radius:999px; background:var(--chip); color:#4a4f55;
+  font-size:clamp(15px,.95vw,17px); font-weight:400; line-height:1.2}
 
 /* ---------- section heads ---------- */
 .sec-head{display:flex; align-items:baseline; justify-content:space-between; gap:20px;
   flex-wrap:wrap; padding-bottom:clamp(16px,2vw,28px)}
-.sec-head h2{margin:0; font-size:clamp(26px,3vw,40px); font-weight:700; letter-spacing:-.03em}
+/* H2 «Избранные кейсы» = 34 SemiBold; H2 «Другие работы, шоты» = 46 Medium */
+.sec-head h2{margin:0; font-size:clamp(24px,1.9vw,34px); font-weight:600; letter-spacing:-.03em}
+.sec-head.big h2{font-size:clamp(28px,2.57vw,46px); font-weight:500; letter-spacing:-.035em}
 section{padding:clamp(28px,4vw,60px) 0}
 
 /* ---------- featured case cards ---------- */
@@ -63,22 +61,33 @@ section{padding:clamp(28px,4vw,60px) 0}
 .case.c-crypto .media{background:#0f1113}
 .case.c-wallet{background:#1f2a3a}
 .case.c-wallet .media{background:#18212e}
-.case .content{display:flex; flex-direction:column; gap:22px; padding:clamp(24px,2.8vw,40px); min-width:0}
+/* колонка контента в фигме 840 с padding 56 и gap 22 */
+.case .content{display:flex; flex-direction:column; gap:22px; padding:clamp(24px,3.13vw,56px); min-width:0}
 .case .tags{display:flex; flex-wrap:wrap; gap:8px}
-.case .tags span{padding:6px 14px; border-radius:999px; background:#fff; color:#14161f;
-  font-size:14px; font-weight:500}
-.case h3{margin:0; font-size:clamp(28px,3.2vw,46px); font-weight:700; letter-spacing:-.035em; line-height:1.04}
-.case p{margin:0; max-width:46ch; font-size:clamp(15px,1.2vw,17px); line-height:1.5; color:#b0b4b8}
+/* теги на тёмных карточках — полупрозрачный белый, не заливка */
+.case .tags span{padding:6px 14px; border-radius:999px; background:rgba(255,255,255,.09); color:#f4f3f0;
+  font-size:14px; font-weight:400}
+.case.c-wallet .tags span{color:#eef1f5}
+.case h3{margin:0; font-size:clamp(28px,3.24vw,58px); font-weight:600; letter-spacing:-.035em; line-height:1.04}
+.case p{margin:0; max-width:46ch; font-size:clamp(16px,1.06vw,19px); line-height:1.45; color:#b0b4b8}
 .case.c-wallet p{color:#a6b0bf}
 .case .grow{flex:1}
-.stats{display:inline-flex; align-self:flex-start; border-radius:18px; background:#fff; color:#14161f; overflow:hidden}
-.stats div{padding:16px 24px}
-.stats div + div{border-left:1px solid #e6e4df}
-.stats .k{font-family:"Martian Mono",ui-monospace,monospace; font-size:11px; letter-spacing:.04em;
-  text-transform:uppercase; color:#6b7078}
-.stats .v{margin-top:6px; font-size:clamp(20px,1.9vw,26px); font-weight:600; letter-spacing:-.02em}
-.cta{display:inline-flex; align-self:flex-start; align-items:center; gap:12px; padding:20px 28px;
-  border-radius:16px; background:var(--lime); color:var(--lime-ink); font-size:19px; font-weight:600}
+/* Stats — тоже полупрозрачный белый, текст светлый (как в фигме) */
+.stats{display:inline-flex; align-self:flex-start; border-radius:18px;
+  background:rgba(255,255,255,.09); color:#f4f3f0; overflow:hidden}
+.case.c-wallet .stats{color:#eef1f5}
+/* ячейка хагает по контенту (в фигме 180 и 268 при padding 16/28) — поэтому nowrap:
+   подписи короткие («Экранов», «Роль», «Флоу»), переносов быть не должно */
+.stats > div{padding:16px 28px; display:flex; flex-direction:column; gap:4px;
+  white-space:nowrap; min-width:180px}
+.stats > div + div{border-left:1px solid rgba(255,255,255,.14)}
+.stats .k{font-size:clamp(13px,.78vw,14px); font-weight:400; line-height:1.4; color:#b0b4b8}
+.case.c-wallet .stats .k{color:#a6b0bf}
+.stats .v{font-size:clamp(26px,2.23vw,40px); font-weight:600; letter-spacing:-.02em; line-height:1.1}
+/* CTA в фигме — фиксированные 520 с контентом по центру, не хаг */
+.cta{display:flex; align-self:flex-start; align-items:center; justify-content:center; gap:12px;
+  width:min(520px,100%); padding:20px 32px; border-radius:16px; background:var(--lime);
+  color:var(--lime-ink); font-size:clamp(17px,1.34vw,24px); font-weight:600}
 .cta::before{content:""; width:9px; height:9px; border-radius:50%; background:var(--lime-ink)}
 .case:hover .cta{filter:brightness(1.05)}
 .case .media{position:relative; display:grid; place-items:center; padding:clamp(20px,2.4vw,34px); min-height:340px}
@@ -86,12 +95,13 @@ section{padding:clamp(28px,4vw,60px) 0}
 .case.c-crypto .media img{width:min(775px,100%)}
 .case.c-wallet .media img{width:min(286px,72%)}
 .case .badge-co{position:absolute; left:clamp(20px,2.4vw,34px); top:clamp(20px,2.4vw,34px);
-  padding:6px 14px; border-radius:999px; background:#fff; color:#14161f;
-  font-family:"Martian Mono",ui-monospace,monospace; font-size:11px; letter-spacing:.04em; text-transform:uppercase}
+  padding:6px 12px; border-radius:999px; background:rgba(255,255,255,.09); color:#f4f3f0;
+  font-family:"Martian Mono",ui-monospace,monospace; font-size:12px; letter-spacing:.04em}
+.case.c-wallet .badge-co{color:#eef1f5}
 
 /* ---------- lead paragraph ---------- */
-.lead{margin:0; max-width:1096px; font-size:clamp(20px,2.1vw,30px); font-weight:500;
-  letter-spacing:-.02em; line-height:1.34; color:var(--ink)}
+.lead{margin:0; max-width:1400px; font-size:clamp(24px,2.57vw,46px); font-weight:500;
+  letter-spacing:-.035em; line-height:1.2; color:var(--ink)}
 mark{background:var(--lime); color:var(--lime-ink); padding:0 .18em; border-radius:4px}
 
 /* ---------- shots grid ---------- */
@@ -104,31 +114,35 @@ mark{background:var(--lime); color:var(--lime-ink); padding:0 .18em; border-radi
 /* картинка не растягивается и не кропится: ширина колонки, высота — натуральная */
 .shot .body > img{display:block; width:100%; height:auto; border-radius:3.97cqw}
 .shot .tags{display:flex; flex-wrap:wrap; gap:8px}
-.shot .tags span{padding:6px 14px; border-radius:999px; background:#14161f; color:#f4f3f0;
-  font-size:14px; font-weight:500}
-.shot.dark .tags span{background:#f4f3f0; color:#14161f}
-.shot h3{margin:0; font-size:clamp(22px,2.2vw,32px); font-weight:700; letter-spacing:-.03em; line-height:1.08}
-.shot p{margin:0; font-size:15px; line-height:1.5; color:#4e5464}
-.shot.dark p{color:#a8adb8}
+/* теги шотов — заливка своего же цвета с малой прозрачностью, текст в цвет карточки */
+.shot .tags span{padding:6px 14px; border-radius:999px; background:rgba(20,22,31,.07); color:#14161f;
+  font-size:1.74cqw; font-weight:400}
+.shot.dark .tags span{background:rgba(203,203,203,.07); color:#eef1f5}
+.shot h3{margin:0; font-size:7.2cqw; font-weight:600; letter-spacing:-.035em; line-height:1.08}
+.shot.dark h3{color:#f4f3f0}
+.shot p{margin:0; font-size:2.36cqw; line-height:1.4; color:#4e5464}
 .shot .grow{flex:1; min-height:0}
 
 /* ---------- skills ---------- */
 .skills{display:flex; flex-wrap:wrap; gap:10px; padding-top:clamp(24px,3vw,48px)}
+/* чипы навыков — скругление 16, а не пилюля */
+.skills .chip{padding:18px 20px; border-radius:16px; color:#3a3f45; font-size:clamp(14px,.89vw,16px)}
 
 /* ---------- personal block ---------- */
 .personal{display:flex; flex-direction:column; align-items:center; text-align:center;
   gap:clamp(24px,3vw,40px); max-width:1100px; margin:0 auto; padding:clamp(40px,5vw,80px) 0}
-.personal .badge{font-size:15px}
 .personal .photo{width:200px; height:200px; border-radius:50%; object-fit:cover}
-.personal h2{margin:0; font-size:clamp(28px,3vw,42px); font-weight:700; letter-spacing:-.03em}
-.personal .sub{margin:10px 0 0; color:var(--ink-3); font-size:clamp(15px,1.3vw,18px)}
-.personal .para{margin:0; font-size:clamp(17px,1.6vw,22px); line-height:1.45; color:var(--ink-2)}
+.personal h2{margin:0; font-size:clamp(26px,2.23vw,40px); font-weight:600; letter-spacing:-.03em}
+.personal .sub{margin:10px 0 0; color:var(--ink-3); font-size:clamp(15px,.95vw,17px)}
+.personal .para{margin:0; font-size:clamp(20px,1.67vw,30px); font-weight:500;
+  letter-spacing:-.02em; line-height:1.3; color:var(--ink-2)}
 
 /* ---------- footer ---------- */
 footer{border-top:1px solid var(--line); padding:clamp(28px,3vw,48px) 0 clamp(40px,4vw,64px);
   display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap}
-footer .headline{font-size:clamp(20px,2vw,28px); font-weight:600; letter-spacing:-.025em}
-footer .contacts{display:flex; flex-wrap:wrap; align-items:center; gap:10px; font-size:17px}
+footer .headline{font-size:clamp(20px,1.56vw,28px); font-weight:600; letter-spacing:-.025em}
+footer .contacts{display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+  font-size:clamp(15px,.95vw,17px); font-weight:500}
 footer .contacts a{text-decoration:none; border-bottom:1px solid var(--line)}
 footer .contacts a:hover{background:var(--lime); border-bottom-color:transparent}
 footer .sep{color:#c6c3bc}

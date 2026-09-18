@@ -30,6 +30,7 @@ assets/
   main.css                  стили главной и /japanstat
   case.js                   табы, просмотр картинки, подсветка оглавления
   favicon.svg               иконка вкладки
+  cv-anastasia-burmistrova.pdf  резюме, открывается по ссылке «CV» в шапке
   img/                      картинки главной, экспорт x3
   fonts/                    Onest и Martian Mono, локальные woff2
 tools/
