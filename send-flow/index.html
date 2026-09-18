@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Кейс — Сохранение контактов, IronWallet</title>
+<meta name="description" content="Кейс продуктового дизайнера: контакты в Send-флоу IronWallet. Исследование, гипотеза, решение и итоги — сохранение адреса прямо в отправке.">
+<link rel="canonical" href="https://portfolio-liart-delta-79.vercel.app/send-flow">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://portfolio-liart-delta-79.vercel.app/send-flow">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="Сохранение контактов в Send-флоу — кейс IronWallet">
+<meta property="og:description" content="Контакты перестали быть мёртвой фичей: сохранение адреса прямо в отправке и быстрый выбор получателя.">
+<meta property="og:image" content="https://portfolio-liart-delta-79.vercel.app/send-flow/img/hero.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<meta name="theme-color" content="#f2f1ee">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/favicon.svg">
+
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/onest-700-cyrillic.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/onest-400-cyrillic.woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+<style>
+  :root{
+    --bg:#f2f1ee; --ink:#15171b; --ink-2:#3a3f45; --ink-3:#5a5f66;
+    --line:#dcd9d3; --surface:#e7e5e0; --lime:#cdf25e; --lime-ink:#111a0a;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-font-smoothing:antialiased; scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:"Onest",system-ui,sans-serif}
+  a{color:var(--ink); text-decoration-thickness:1px; text-underline-offset:4px}
+  a:hover{background:var(--lime)}
+  ::selection{background:var(--lime)}
+  .mono{font-family:"Martian Mono",ui-monospace,monospace; font-size:12px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-3)}
+  .mono-s{font-family:"Martian Mono",ui-monospace,monospace; font-size:11px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-3)}
+  .wrap{padding:0 clamp(16px,4vw,56px)}
+  .inner{max-width:1680px; margin:0 auto}
+
+  header{position:sticky; top:0; z-index:30; display:flex; align-items:center; justify-content:space-between;
+    gap:16px; flex-wrap:wrap; padding:18px 0; background:rgba(242,241,238,.88); backdrop-filter:blur(10px)}
+  .logo{display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:8px;
+    background:var(--ink); color:var(--bg); font-weight:700; font-size:13px; text-decoration:none}
+  .logo:hover{background:var(--ink)}
+
+  .tags{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:clamp(18px,2vw,28px)}
+  .tag{padding:6px 14px; border-radius:999px; background:var(--surface); color:#4a4f55; font-size:14px; font-weight:500}
+  .tag.hl{background:var(--lime); color:var(--lime-ink)}
+  h1{margin:0; max-width:18ch; font-size:clamp(40px,7vw,96px); font-weight:700; letter-spacing:-.045em; line-height:.98}
+  .lead{margin:clamp(20px,2.4vw,32px) 0 0; max-width:60ch; font-size:clamp(18px,1.8vw,24px); line-height:1.45; color:var(--ink-2)}
+
+  .layout{display:grid; grid-template-columns:minmax(170px,240px) minmax(0,1fr); gap:clamp(20px,3vw,56px);
+    align-items:start; padding-top:clamp(28px,3.5vw,48px)}
+  aside{position:sticky; top:86px; align-self:start; display:flex; flex-direction:column; gap:4px; min-width:0}
+  aside a{padding:10px 12px; border-radius:10px; font-size:16px; line-height:1.3; text-decoration:none;
+    color:var(--ink-2); transition:background .2s,color .2s}
+  aside a:hover{background:var(--lime); color:var(--lime-ink)}
+  aside a.on{background:var(--lime); color:var(--lime-ink); font-weight:600}
+  .back{margin-top:14px; text-align:center; border:1px solid var(--line); color:var(--ink-3); font-size:15px}
+
+  main{min-width:0; display:flex; flex-direction:column}
+  section{scroll-margin-top:96px}
+  .sec{padding:clamp(24px,3vw,44px) 0 clamp(44px,5.5vw,90px); border-top:1px solid var(--line);
+    display:flex; flex-direction:column; gap:18px}
+  h2{margin:0; font-size:clamp(26px,3.4vw,44px); font-weight:600; letter-spacing:-.035em; line-height:1.05; max-width:22ch}
+  h3{margin:0; font-size:clamp(18px,1.7vw,22px); font-weight:600; letter-spacing:-.02em; line-height:1.2}
+  p{margin:0; font-size:clamp(17px,1.5vw,20px); line-height:1.55; color:var(--ink-2); max-width:62ch}
+  .cols{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr)); gap:clamp(16px,2vw,32px)}
+  .col{display:flex; flex-direction:column; gap:10px}
+  .col p{font-size:17px}
+  .card{padding:24px; border-radius:20px; background:var(--surface); display:flex; flex-direction:column; gap:10px}
+  .card p{font-size:16px; color:#4a4f55}
+  .list{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:10px}
+  .list li{font-size:16px; line-height:1.5; color:#4a4f55; display:flex; gap:10px}
+  .list li::before{content:"—"; color:var(--ink-3); flex:none}
+  .list.arrows li::before{content:""}
+  .divider{height:1px; background:#d2cfc8}
+  .grid-ins{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr)); gap:12px}
+
+  /* media block: фон → таб → картинка (ширина ≤1037, вписана в высоту экрана) */
+  .media{background:var(--surface); border-radius:clamp(16px,2vw,26px);
+    padding:clamp(20px,2.4vw,32px); display:flex; flex-direction:column; align-items:center; gap:clamp(20px,2.4vw,32px)}
+  .tabs{display:inline-flex; flex-wrap:wrap; gap:4px; padding:5px; border-radius:999px; background:var(--ink)}
+  .tabs button{appearance:none; border:0; cursor:pointer; font:inherit; font-size:15px; line-height:1;
+    padding:12px 20px; border-radius:999px; background:transparent; color:#b0b4b8; transition:background .2s,color .2s}
+  .tabs button:hover{color:#f4f3f0}
+  .tabs button[aria-selected="true"]{background:var(--lime); color:var(--lime-ink); font-weight:600}
+
+  .shots{width:100%; display:flex; justify-content:center}
+  .shot{display:none; margin:0; width:100%; flex-direction:column; align-items:center; gap:10px}
+  .shot.on{display:flex}
+  .frame{position:relative; display:inline-flex; border-radius:14px; overflow:hidden; cursor:zoom-in;
+    max-width:min(1037px,100%); background:#fff}
+  .frame img{display:block; width:min(1037px,100%); height:auto}
+  .zoom{position:absolute; right:14px; top:14px; width:46px; height:46px; border-radius:50%;
+    display:grid; place-items:center; background:rgba(21,23,27,.72); color:#fff; backdrop-filter:blur(6px);
+    opacity:0; transform:scale(.9); transition:opacity .2s,transform .2s; pointer-events:none}
+  .frame:hover .zoom, .frame:focus-visible .zoom{opacity:1; transform:scale(1)}
+  .cap{font-size:14px; color:var(--ink-3); text-align:center}
+
+  /* верхний блок: текст слева, обложка справа (как в макете 1081 + 599) */
+  .top-row{display:grid; grid-template-columns:minmax(0,1081fr) minmax(0,599fr);
+    gap:clamp(24px,3vw,48px); align-items:center}
+  .top-text{min-width:0}
+  .top-cover{min-width:0; display:flex; justify-content:center}
+  .frame.cover{max-width:min(518px,100%); border-radius:20px; background:transparent}
+  .frame.cover img{width:min(518px,100%)}
+  @media (max-width:900px){
+    .top-row{grid-template-columns:1fr}
+    .top-cover{order:-1}
+  }
+
+  /* results */
+  .results{border-radius:clamp(20px,2.4vw,34px); background:#15171b; color:#f4f3f0;
+    padding:clamp(26px,3.4vw,56px); display:flex; flex-direction:column; gap:clamp(20px,2.4vw,32px)}
+  .results .mono{color:#b0b4b8}
+  .results .st{margin:14px 0 0; font-size:clamp(24px,2.8vw,40px); font-weight:600; letter-spacing:-.03em; line-height:1.12; max-width:24ch; color:#f4f3f0}
+  .grid3{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr)); gap:12px}
+  .rcard{padding:20px 22px; border-radius:18px; background:rgba(255,255,255,.09)}
+  .rcard .l{font-size:14px; color:#b0b4b8}
+  .rcard .v{margin-top:6px; font-size:clamp(17px,1.4vw,20px); font-weight:600; letter-spacing:-.02em; line-height:1.35}
+
+  .thanks{border-radius:clamp(20px,2.4vw,34px); background:var(--lime); color:var(--lime-ink);
+    padding:clamp(28px,4vw,64px); display:flex; flex-direction:column; gap:clamp(18px,2.2vw,28px)}
+  .thanks h2{font-size:clamp(32px,4.6vw,64px); font-weight:700; letter-spacing:-.04em; line-height:1; max-width:none}
+  .thanks p{color:var(--lime-ink); max-width:48ch; font-size:clamp(17px,1.6vw,21px)}
+  .btns{display:flex; flex-wrap:wrap; gap:12px}
+  .btn{padding:16px 26px; border-radius:16px; background:var(--lime-ink); color:#f4f3f0; font-size:17px;
+    font-weight:600; text-decoration:none; transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+  .btn:hover{transform:translateY(-2px); background:var(--lime-ink)}
+  .btn.ghost{background:rgba(17,26,10,.1); color:var(--lime-ink)}
+  .btn.ghost:hover{background:rgba(17,26,10,.16)}
+
+  .others{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); gap:12px}
+  .others a, .others .soon{display:flex; flex-direction:column; gap:6px; padding:20px; border-radius:20px; text-decoration:none;
+    transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+  .others a:hover{transform:translateY(-4px)}
+  /* кейс ещё не опубликован: карточка на месте, но не кликается */
+  .others .soon{cursor:default; opacity:.55}
+  .soon-label{margin-top:4px}
+
+  /* lightbox */
+  .lb{position:fixed; inset:0; z-index:100; display:none; background:rgba(12,13,15,.94); backdrop-filter:blur(4px)}
+  .lb.on{display:block}
+  .lb-scroll{position:absolute; inset:0; overflow:auto; padding:clamp(16px,4vw,64px); text-align:center}
+  .lb img{max-width:100%; max-height:calc(100vh - 128px); height:auto; border-radius:10px; background:#fff; cursor:zoom-in}
+  .lb img.full{max-width:none; max-height:none; width:auto; cursor:zoom-out}
+  .lb-bar{position:fixed; top:0; left:0; right:0; display:flex; align-items:center; justify-content:space-between;
+    gap:16px; padding:16px clamp(16px,4vw,32px); color:#f4f3f0; font-size:15px;
+    background:linear-gradient(to bottom,rgba(12,13,15,.85),rgba(12,13,15,0))}
+  .lb-bar button{appearance:none; border:0; cursor:pointer; font:inherit; color:#f4f3f0;
+    background:rgba(255,255,255,.12); border-radius:999px; padding:10px 18px}
+  .lb-bar button:hover{background:rgba(255,255,255,.22)}
+
+  @media (max-width:860px){
+    .layout{grid-template-columns:1fr}
+    aside{position:static; flex-direction:row; overflow:auto; gap:6px; padding-bottom:6px}
+    aside .mono, aside .back{display:none}
+    aside a{white-space:nowrap}
+  }
+  /* доступность */
+  :focus-visible{outline:2px solid var(--ink); outline-offset:3px; border-radius:6px}
+  .skip-link{position:absolute; left:-9999px; top:0; z-index:100; padding:12px 18px;
+    background:var(--ink); color:var(--bg); border-radius:0 0 10px 0; text-decoration:none}
+  .skip-link:focus{left:0}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *{animation-duration:.001ms !important; transition-duration:.001ms !important}
+  }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#top">Перейти к содержанию</a>
+
+<div class="wrap">
+  <div class="inner">
+    <header>
+      <div style="display:flex; align-items:center; gap:10px; font-size:17px; font-weight:500;">
+        <a class="logo" href="/">АБ</a>
+        <span style="color:#9a978f;">✦</span>
+        <a href="/" style="text-decoration:none;">Все кейсы</a>
+      </div>
+      <nav style="display:flex; align-items:center; gap:18px; font-size:17px; font-weight:500;">
+        <a href="https://t.me/Anastasia_Jay" style="text-decoration:none;">Telegram</a>
+        <span style="color:#c6c3bc;">/</span>
+        <a href="mailto:burmistrova.adv@gmail.com">Email</a>
+        <span style="color:#c6c3bc;">/</span>
+        <a href="tel:+79089745517">+7 908 974 55 17</a>
+      </nav>
+    </header>
+
+    <section id="top" style="padding:clamp(30px,5vw,70px) 0 clamp(24px,3vw,40px);">
+      <div class="top-row">
+        <div class="top-text">
+          <div class="tags">
+            <span class="tag">IronWallet</span>
+            <span class="tag">Mobile</span>
+            <span class="tag">B2C</span>
+            <span class="tag hl">Send-флоу</span>
+          </div>
+          <h1>Сохранение контактов</h1>
+          <p class="lead">Контакты в кошельке были мёртвой фичей: их никто не заводил и не использовал. Я встроила их в тот момент, где адрес действительно нужен — в отправку.</p>
+          <p class="lead">IronWallet — международный некастодиальный крипто-кошелёк, более 1 млн зарегистрированных пользователей, нацелен на простоту и безопасность использования, основные операции — Send, SWAP.</p>
+        </div>
+        <div class="top-cover">
+          <div class="frame cover" data-src="/send-flow/img/hero.png" data-title="Сохранение контактов — обложка" tabindex="0">
+            <img src="/send-flow/img/hero.png" width="2072" height="2268" fetchpriority="high" decoding="async" alt="Сохранение контактов — экраны кошелька">
+            <div class="zoom" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <aside>
+        <div class="mono" style="padding:0 12px 10px;">Содержание</div>
+        <a href="#top">Обзор</a>
+        <a href="#summary">01 — Саммари</a>
+        <a href="#context">02 — Контекст</a>
+        <a href="#research">03 — Исследование</a>
+        <a href="#hypothesis">04 — Гипотеза</a>
+        <a href="#solution">05 — Решение</a>
+        <a href="#details">06 — Детали</a>
+        <a href="#results">07 — Итоги</a>
+        <a href="#next">08 — Что дальше</a>
+        <a href="#thanks">Спасибо и контакты</a>
+        <a href="#other">Другие кейсы</a>
+        <a class="back" href="/">← Все кейсы</a>
+      </aside>
+
+      <main>
+
+        <section id="meta" style="padding-bottom:clamp(40px,5vw,80px);">
+          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr)); gap:1px; background:var(--line); border-radius:20px; overflow:hidden;">
+            <div style="background:var(--bg); padding:22px 24px;"><div class="mono">Продукт</div><div style="margin-top:8px; font-size:clamp(18px,1.6vw,22px); font-weight:600; letter-spacing:-.02em;">IronWallet</div></div>
+            <div style="background:var(--bg); padding:22px 24px;"><div class="mono">Роль</div><div style="margin-top:8px; font-size:clamp(18px,1.6vw,22px); font-weight:600; letter-spacing:-.02em;">Продуктовый дизайнер</div></div>
+            <div style="background:var(--bg); padding:22px 24px;"><div class="mono">Платформа</div><div style="margin-top:8px; font-size:clamp(18px,1.6vw,22px); font-weight:600; letter-spacing:-.02em;">iOS · Android</div></div>
+            <div style="background:var(--bg); padding:22px 24px;"><div class="mono">Период</div><div style="margin-top:8px; font-size:clamp(18px,1.6vw,22px); font-weight:600; letter-spacing:-.02em;">Октябрь 2026 — н.в.</div></div>
+            <div style="background:var(--bg); padding:22px 24px;"><div class="mono">Что делала</div><div style="margin-top:8px; font-size:clamp(18px,1.6vw,22px); font-weight:600; letter-spacing:-.02em;">Флоу, UI, хендофф</div></div>
+          </div>
+        </section>
+
+        <section id="summary" class="sec">
+          <span class="mono">01 — Саммари</span>
+          <h2>Сохранение встроено в отправку</h2>
+          <div class="cols">
+            <div class="col">
+              <p>Переработала сценарий сохранения контактов, встроив его в флоу отправки вместо скрытого раздела в настройках. Это повысило видимость функции и упростило повторные переводы.</p>
+            </div>
+            <div class="card">
+              <span class="mono-s">Зачем</span>
+              <p>Решение направлено на рост использования контактов, снижение ошибок при вводе адреса и повышение доверия к продукту.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="context" class="sec">
+          <span class="mono">02 — Контекст</span>
+          <h2>Фича была, пользы не было</h2>
+          <p>Раздел контактов существовал отдельно от отправки: чтобы сохранить адрес, нужно было выйти из сценария, вспомнить название и вернуться обратно. В итоге адреса копировали из переписок и истории транзакций.</p>
+          <p>Текущий сценарий сохранения контактов скрыт в настройках и практически не используется. Пользователи не знают о существовании функции и не заходят в этот раздел. Задача — сделать сохранение контактов заметным и нативно встроенным в основной флоу.</p>
+          <div class="cols">
+            <div class="col">
+              <span class="mono-s">Миссия</span>
+              <p>Упростить сохранение и использование контактов, чтобы ускорить операции, повысить удобство и снизить стресс и вероятность ошибки при отправке средств.</p>
+            </div>
+            <div class="col">
+              <span class="mono-s">Проблема</span>
+              <p>Пользователи не сохраняют контакты, потому что:</p>
+              <ul class="list">
+                <li>не знают о функции</li>
+                <li>она реализована вне основного сценария</li>
+                <li>доступ к ней неудобный и неинтуитивный</li>
+              </ul>
+            </div>
+            <div class="col">
+              <span class="mono-s">Цель</span>
+              <p>Повысить доверие к продукту и упростить пользовательский опыт за счёт:</p>
+              <ul class="list">
+                <li>увеличения использования сохранённых контактов</li>
+                <li>снижения количества ошибок при отправке</li>
+                <li>повышения ощущения безопасности операций</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <span class="mono-s">Критерии успеха</span>
+            <ul class="list arrows">
+              <li>↑ % пользователей, сохраняющих адреса (Contacts adoption rate)</li>
+              <li>↑ доля транзакций через сохранённые контакты</li>
+              <li>↓ время на ввод/подтверждение адреса</li>
+              <li>↓ количество ошибок/отмен из-за неверного адреса</li>
+              <li>↑ repeat transactions / retention</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="research" class="sec">
+          <span class="mono">03 — Исследование</span>
+          <h2>Что показали рынок и пользователи</h2>
+
+          <h3>Бенчмаркинг</h3>
+          <p>Основные инсайты:</p>
+          <ul class="list">
+            <li>У лидеров рынка контакт сохраняется после совершения операции</li>
+            <li>Адресная книга — базовый паттерн (есть у всех)</li>
+            <li>Сохранение доступно уже на этапе ввода адреса</li>
+            <li>Чем раньше в флоу появляется сохранение — тем выше вероятность использования</li>
+            <li>Короткая форма (1 экран) работает лучше, чем многошаговый сценарий</li>
+            <li>Поле Network усложняет сохранение и требует отдельной проверки на понимание пользователями</li>
+          </ul>
+          <div class="media">
+            <div class="shots">
+              <figure class="shot on">
+                <div class="frame" data-src="/send-flow/img/benchmark.png" data-title="Бенчмаркинг сценариев сохранения контактов" tabindex="0">
+                  <img src="/send-flow/img/benchmark.png" width="1264" height="1461" loading="lazy" decoding="async" alt="Бенчмаркинг сценариев сохранения контактов">
+                  <div class="zoom"></div>
+                </div>
+              </figure>
+            </div>
+          </div>
+
+          <h3 style="margin-top:14px;">Глубинные интервью</h3>
+          <p>Ключевые инсайты:</p>
+          <div class="grid-ins">
+            <div class="card"><span class="mono-s">01</span><h3>Высокий уровень тревожности при отправке</h3><p>Пользователи боятся ошибиться с адресом и отправить средства не туда → многократно перепроверяют.</p></div>
+            <div class="card"><span class="mono-s">02</span><h3>Повторные переводы — частый сценарий</h3><p>Многие регулярно отправляют средства на одни и те же адреса, но не имеют удобного способа их переиспользовать.</p></div>
+            <div class="card"><span class="mono-s">03</span><h3>Низкая осведомлённость о контактах</h3><p>Пользователи не знают о существовании функции, так как она скрыта вне основного флоу.</p></div>
+            <div class="card"><span class="mono-s">04</span><h3>Сохранение вне контекста не работает</h3><p>Функции, вынесенные в отдельные разделы (например, настройки), игнорируются.</p></div>
+            <div class="card"><span class="mono-s">05</span><h3>Когнитивная перегрузка в форме</h3><p>Сложные поля (например, Network) вызывают неуверенность и увеличивают риск ошибки.</p></div>
+          </div>
+          <div class="media">
+            <div class="shots">
+              <figure class="shot on">
+                <div class="frame" data-src="/send-flow/img/interviews.png" data-title="Глубинные интервью — ключевые инсайты" tabindex="0">
+                  <img src="/send-flow/img/interviews.png" width="3912" height="1356" loading="lazy" decoding="async" alt="Глубинные интервью — ключевые инсайты">
+                  <div class="zoom"></div>
+                </div>
+              </figure>
+            </div>
+          </div>
+        </section>
+
+        <section id="hypothesis" class="sec">
+          <span class="mono">04 — Гипотеза</span>
+          <h2>Сохранять там, где отправляешь</h2>
+          <div class="cols">
+            <div class="col">
+              <span class="mono-s">Где сохраняем</span>
+              <p>После ввода адреса пользователь сразу получает предложение назвать и сохранить получателя — без ухода из отправки и без отдельного раздела.</p>
+            </div>
+            <div class="col">
+              <span class="mono-s">Где используем</span>
+              <p>На первом шаге Send — быстрый выбор из сохранённых: имя, сеть и короткий адрес, поиск по списку при большом количестве контактов.</p>
+            </div>
+            <div class="col">
+              <span class="mono-s">Что проверяли</span>
+              <p>Состояния: пусто, первый контакт, много контактов, дубли и похожие адреса. На каждое — свой экран и понятная подсказка.</p>
+            </div>
+          </div>
+          <p>Спроектировала новый флоу:</p>
+          <div class="media">
+            <div class="shots">
+              <figure class="shot on">
+                <div class="frame" data-src="/send-flow/img/flow.png" data-title="Новый флоу отправки с сохранением контакта" tabindex="0">
+                  <img src="/send-flow/img/flow.png" width="7476" height="1720" loading="lazy" decoding="async" alt="Новый флоу отправки с сохранением контакта">
+                  <div class="zoom"></div>
+                </div>
+              </figure>
+            </div>
+          </div>
+        </section>
+
+        <section id="solution" class="sec">
+          <span class="mono">05 — Решение</span>
+          <h2>Контакт как часть отправки</h2>
+          <p>Список получателей на первом экране Send, карточка контакта с сетью и адресом, безопасные состояния для похожих адресов. Компоненты собраны на дизайн-системе продукта и переданы в разработку с прототипом.</p>
+          <div class="media"><div class="shots"><figure class="shot on"><div class="frame" data-src="/send-flow/img/s1.png" data-title="Дизайн решения — экран 1" tabindex="0"><img src="/send-flow/img/s1.png" width="4056" height="2730" loading="lazy" decoding="async" alt="Дизайн решения — экран 1"><div class="zoom"></div></div></figure></div></div>
+          <div class="media"><div class="shots"><figure class="shot on"><div class="frame" data-src="/send-flow/img/s2.png" data-title="Дизайн решения — экран 2" tabindex="0"><img src="/send-flow/img/s2.png" width="4056" height="2730" loading="lazy" decoding="async" alt="Дизайн решения — экран 2"><div class="zoom"></div></div></figure></div></div>
+          <div class="media"><div class="shots"><figure class="shot on"><div class="frame" data-src="/send-flow/img/s3.png" data-title="Дизайн решения — экран 3" tabindex="0"><img src="/send-flow/img/s3.png" width="4056" height="2730" loading="lazy" decoding="async" alt="Дизайн решения — экран 3"><div class="zoom"></div></div></figure></div></div>
+          <div class="media"><div class="shots"><figure class="shot on"><div class="frame" data-src="/send-flow/img/s4.png" data-title="Дизайн решения — экран 4" tabindex="0"><img src="/send-flow/img/s4.png" width="4056" height="2898" loading="lazy" decoding="async" alt="Дизайн решения — экран 4"><div class="zoom"></div></div></figure></div></div>
+          <div class="media"><div class="shots"><figure class="shot on"><div class="frame" data-src="/send-flow/img/s5.png" data-title="Дизайн решения — экран 5" tabindex="0"><img src="/send-flow/img/s5.png" width="4056" height="2730" loading="lazy" decoding="async" alt="Дизайн решения — экран 5"><div class="zoom"></div></div></figure></div></div>
+          <div class="media"><div class="shots"><figure class="shot on"><div class="frame" data-src="/send-flow/img/s6.png" data-title="Дизайн решения — экран 6" tabindex="0"><img src="/send-flow/img/s6.png" width="4056" height="2730" loading="lazy" decoding="async" alt="Дизайн решения — экран 6"><div class="zoom"></div></div></figure></div></div>
+        </section>
+
+        <section id="details" class="sec">
+          <span class="mono">06 — Детали</span>
+          <h2>Мелочи, которые снимают страх</h2>
+          <div style="display:grid; grid-template-columns:minmax(0,2fr) minmax(min(100%,190px),1fr); gap:clamp(18px,2.4vw,40px); align-items:start;">
+            <div style="min-width:0; display:flex; flex-direction:column; gap:16px;">
+              <p>Подписи вместо длинных адресов, подтверждение перед первой отправкой на новый адрес, понятные ошибки вместо системных кодов. Отдельно проверили сценарий с несколькими сетями, чтобы пользователь не отправил монеты не туда.</p>
+              <p>Каждое состояние описано текстом: что произошло, чем это грозит и что делать дальше. UX-тексты писала сама и согласовывала вместе с саппортом.</p>
+            </div>
+            <div class="card" style="padding:20px; border-radius:18px;">
+              <span class="mono-s">Второстепенное</span>
+              <div style="font-size:15px; line-height:1.5; color:#4a4f55;">Компоненты: список, карточка контакта, поле имени, шит подтверждения</div>
+              <div class="divider"></div>
+              <div style="font-size:15px; line-height:1.5; color:#4a4f55;">Состояния: пусто · поиск · дубль · новая сеть · ошибка</div>
+              <div class="divider"></div>
+              <div style="font-size:15px; line-height:1.5; color:#4a4f55;">Отдано: макеты, прототип, спецификация состояний</div>
+            </div>
+          </div>
+        </section>
+
+        <section id="results" style="padding-bottom:clamp(44px,5.5vw,90px);">
+          <div class="results">
+            <div>
+              <span class="mono">07 — Итоги</span>
+              <p class="st">Контакты перестали быть мёртвой фичей и начали работать в Send-флоу</p>
+            </div>
+            <div class="grid3">
+              <div class="rcard"><div class="l">Рост использования контактов</div><div class="v">Пользователи начали сохранять и переиспользовать адреса прямо в Send-флоу</div></div>
+              <div class="rcard"><div class="l">Снижение тревожности</div><div class="v">Подсказка «вы уже отправляли на этот адрес» уменьшила страх ошибки</div></div>
+              <div class="rcard"><div class="l">Ускорение операций</div><div class="v">Сокращение времени на ввод и проверку адресов</div></div>
+              <div class="rcard"><div class="l">Минимизация ошибок</div><div class="v">Автоматическое определение сети Network исключило ошибки выбора</div></div>
+              <div class="rcard"><div class="l">Повышение доверия</div><div class="v">Пользователи ощущают более безопасный и удобный UX</div></div>
+            </div>
+            <div class="grid3">
+              <div class="rcard"><div class="l">Место в продукте</div><div class="v">Send-флоу</div></div>
+              <div class="rcard"><div class="l">Роль</div><div class="v">End-to-end</div></div>
+              <div class="rcard"><div class="l">Отдано в разработку</div><div class="v">Макеты + прототип</div></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="next" class="sec">
+          <span class="mono">08 — Что дальше</span>
+          <h2>Куда развивать дальше</h2>
+          <div class="cols">
+            <div class="card"><span class="mono-s">01</span><h3>Проверить на цифрах</h3><p>Замерить долю отправок из сохранённых контактов и время до подтверждения — сейчас данных по фиче не хватает.</p></div>
+            <div class="card"><span class="mono-s">02</span><h3>Импорт и шеринг</h3><p>Добавить импорт адресов из истории и обмен контактом ссылкой, чтобы не вводить адрес вручную вообще.</p></div>
+            <div class="card"><span class="mono-s">03</span><h3>Метки риска</h3><p>Помечать адреса, на которые уже были успешные отправки, и предупреждать о похожих — меньше страха ошибиться.</p></div>
+          </div>
+        </section>
+
+        <section id="thanks" style="padding-bottom:clamp(44px,5.5vw,90px);">
+          <div class="thanks">
+            <h2>Спасибо, что дочитали</h2>
+            <p>Если хочется подробностей по флоу и решениям — напишите, покажу макеты и прототип и расскажу, что не поместилось в кейс.</p>
+            <div class="btns">
+              <a class="btn" href="https://t.me/Anastasia_Jay">@Anastasia_Jay</a>
+              <a class="btn ghost" href="mailto:burmistrova.adv@gmail.com">burmistrova.adv@gmail.com</a>
+              <a class="btn ghost" href="tel:+79089745517">+7 908 974 55 17</a>
+            </div>
+          </div>
+        </section>
+
+        <section id="other" class="sec" style="padding-bottom:clamp(40px,5vw,80px);">
+          <div style="display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+            <h2 style="font-size:clamp(22px,2.6vw,30px);">Другие кейсы</h2>
+            <a href="/" style="font-size:16px;">Все работы</a>
+          </div>
+          <div class="others">
+            <a href="/crypto-directory" style="background:#15171b; color:#f4f3f0;">
+              <span class="mono" style="color:#b0b4b8;">Crypto Directory</span>
+              <span style="font-size:19px; font-weight:600; letter-spacing:-.02em; line-height:1.15;">Каталог бизнесов, принимающих криптовалюту</span>
+            </a>
+            <div class="soon" style="background:#d8e3dc; color:#131a17;" aria-disabled="true">
+              <span class="mono" style="color:#4a5550;">IronWallet</span>
+              <span style="font-size:19px; font-weight:600; letter-spacing:-.02em; line-height:1.15;">SWAP: редизайн</span>
+              <span class="mono-s soon-label">Скоро</span>
+            </div>
+            <div class="soon" style="background:#dbe0ec; color:#14161f;" aria-disabled="true">
+              <span class="mono" style="color:#4a4f5f;">exmo.me</span>
+              <span style="font-size:19px; font-weight:600; letter-spacing:-.02em; line-height:1.15;">Редизайн веба и приложения</span>
+              <span class="mono-s soon-label">Скоро</span>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+</div>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Просмотр изображения">
+  <div class="lb-scroll" id="lbScroll"><img id="lbImg" alt=""></div>
+  <div class="lb-bar">
+    <span id="lbTitle"></span>
+    <span style="display:flex; gap:8px;">
+      <button type="button" id="lbSize">100%</button>
+      <button type="button" id="lbClose">Закрыть ✕</button>
+    </span>
+  </div>
+</div>
+
+<script src="/assets/case.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Кейс — Crypto Directory</title>
+<meta name="description" content="Кейс продуктового дизайнера: каталог бизнесов, принимающих криптовалюту. Аналитика, концепты, поиск и карта, добавление компании — end-to-end.">
+<link rel="canonical" href="https://portfolio-liart-delta-79.vercel.app/crypto-directory">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://portfolio-liart-delta-79.vercel.app/crypto-directory">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="Crypto Directory — каталог бизнесов, принимающих криптовалюту">
+<meta property="og:description" content="С нуля, с аналитики: сложный каталог с фильтрами и картой. Дизайн-система и 40+ страниц.">
+<meta property="og:image" content="https://portfolio-liart-delta-79.vercel.app/assets/img/c1.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<meta name="theme-color" content="#f2f1ee">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/favicon.svg">
+
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/onest-700-cyrillic.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/onest-400-cyrillic.woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+<style>
+  :root{
+    --bg:#f2f1ee; --ink:#15171b; --ink-2:#3a3f45; --ink-3:#5a5f66;
+    --line:#dcd9d3; --surface:#e7e5e0; --lime:#cdf25e; --lime-ink:#111a0a;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-font-smoothing:antialiased; scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:"Onest",system-ui,sans-serif}
+  a{color:var(--ink); text-decoration-thickness:1px; text-underline-offset:4px}
+  a:hover{background:var(--lime)}
+  ::selection{background:var(--lime)}
+  .mono{font-family:"Martian Mono",ui-monospace,monospace; font-size:12px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-3)}
+  .wrap{padding:0 clamp(16px,4vw,56px)}
+  .inner{max-width:1680px; margin:0 auto}
+
+  header{position:sticky; top:0; z-index:30; display:flex; align-items:center; justify-content:space-between;
+    gap:16px; flex-wrap:wrap; padding:18px 0; background:rgba(242,241,238,.88); backdrop-filter:blur(10px)}
+  .logo{display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:8px;
+    background:var(--ink); color:var(--bg); font-weight:700; font-size:13px; text-decoration:none}
+  .logo:hover{background:var(--ink)}
+
+  .tags{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:clamp(18px,2vw,28px)}
+  .tag{padding:6px 14px; border-radius:999px; background:var(--surface); color:#4a4f55; font-size:14px; font-weight:500}
+  .tag.hl{background:var(--lime); color:var(--lime-ink)}
+  h1{margin:0; max-width:18ch; font-size:clamp(40px,7vw,96px); font-weight:700; letter-spacing:-.045em; line-height:.98}
+  .lead{margin:clamp(20px,2.4vw,32px) 0 0; max-width:60ch; font-size:clamp(18px,1.8vw,24px); line-height:1.45; color:var(--ink-2)}
+
+  .layout{display:grid; grid-template-columns:minmax(170px,240px) minmax(0,1fr); gap:clamp(20px,3vw,56px);
+    align-items:start; padding-top:clamp(28px,3.5vw,48px)}
+  aside{position:sticky; top:86px; align-self:start; display:flex; flex-direction:column; gap:4px; min-width:0}
+  aside a{padding:10px 12px; border-radius:10px; font-size:16px; line-height:1.3; text-decoration:none;
+    color:var(--ink-2); transition:background .2s,color .2s}
+  aside a:hover{background:var(--lime); color:var(--lime-ink)}
+  aside a.on{background:var(--lime); color:var(--lime-ink); font-weight:600}
+  .back{margin-top:14px; text-align:center; border:1px solid var(--line); color:var(--ink-3); font-size:15px}
+
+  main{min-width:0; display:flex; flex-direction:column}
+  section{scroll-margin-top:96px}
+  .sec{padding:clamp(24px,3vw,44px) 0 clamp(44px,5.5vw,90px); border-top:1px solid var(--line);
+    display:flex; flex-direction:column; gap:18px}
+  h2{margin:0; font-size:clamp(26px,3.4vw,44px); font-weight:600; letter-spacing:-.035em; line-height:1.05; max-width:22ch}
+  p{margin:0; font-size:clamp(17px,1.5vw,20px); line-height:1.55; color:var(--ink-2); max-width:62ch}
+  .cols{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr)); gap:clamp(16px,2vw,32px)}
+  .col{display:flex; flex-direction:column; gap:10px}
+  .col p{font-size:17px}
+  .card{padding:24px; border-radius:20px; background:var(--surface); display:flex; flex-direction:column; gap:10px}
+  .card .t{font-size:clamp(18px,1.7vw,22px); font-weight:600; letter-spacing:-.02em; line-height:1.2}
+  .card p{font-size:16px; color:#4a4f55}
+  .chips{display:flex; flex-wrap:wrap; gap:8px}
+  .chip{padding:10px 16px; border-radius:999px; background:var(--surface); color:#4a4f55; font-size:15px; line-height:1.3}
+  .flow{padding:18px 22px; border-radius:16px; background:var(--surface); font-size:16px; color:#4a4f55; line-height:1.5}
+
+  /* media block: фон → таб → картинка (ширина ≤1037, вписана в высоту экрана) */
+  .media{background:var(--surface); border-radius:clamp(16px,2vw,26px);
+    padding:clamp(20px,2.4vw,32px); display:flex; flex-direction:column; align-items:center; gap:clamp(20px,2.4vw,32px)}
+  .tabs{display:inline-flex; flex-wrap:wrap; justify-content:center; gap:4px; padding:5px; border-radius:999px; background:var(--ink)}
+  .tabs button{appearance:none; border:0; cursor:pointer; font:inherit; font-size:15px; line-height:1;
+    padding:12px 20px; border-radius:999px; background:transparent; color:#b0b4b8; transition:background .2s,color .2s}
+  .tabs button:hover{color:#f4f3f0}
+  .tabs button[aria-selected="true"]{background:var(--lime); color:var(--lime-ink); font-weight:600}
+
+  .shots{width:100%; display:flex; justify-content:center}
+  .shot{display:none; margin:0; width:100%; flex-direction:column; align-items:center; gap:10px}
+  .shot.on{display:flex}
+
+  /* картинка внутри медиа-блока */
+  .media .frame{position:relative; display:inline-flex; border-radius:14px; overflow:hidden;
+    background:#fff; cursor:zoom-in; max-width:min(1037px,100%); max-height:none}
+  .media .frame img{display:block; width:min(1037px,100%); height:auto}
+  .media .frame.pair{display:grid; grid-template-columns:1fr 1fr; gap:16px; padding:0; background:transparent}
+  .media .frame.pair img{border-radius:14px; max-width:100%}
+  .media .fade{display:none}
+
+  /* обложка кейса: не растягиваем шире натуральных 1052px — иначе апскейл и мыло */
+  .frame{position:relative; border-radius:clamp(16px,2vw,26px); overflow:hidden; background:var(--surface);
+    max-height:min(74vh,720px); cursor:zoom-in; max-width:1052px; margin-inline:auto}
+  .frame img{display:block; width:100%; height:auto}
+  .fade{position:absolute; left:0; right:0; bottom:0; height:110px; pointer-events:none;
+    background:linear-gradient(to bottom,rgba(242,241,238,0),rgba(242,241,238,.92))}
+  .zoom{position:absolute; right:16px; top:16px; width:46px; height:46px; border-radius:50%;
+    display:grid; place-items:center; background:rgba(21,23,27,.72); color:#fff; backdrop-filter:blur(6px);
+    opacity:0; transform:scale(.9); transition:opacity .2s,transform .2s; pointer-events:none}
+  .frame:hover .zoom, .frame:focus-visible .zoom{opacity:1; transform:scale(1)}
+  .cap{font-size:14px; color:var(--ink-3); text-align:center}
+
+  /* results */
+  .results{border-radius:clamp(20px,2.4vw,34px); background:#15171b; color:#f4f3f0;
+    padding:clamp(26px,3.4vw,56px); display:flex; flex-direction:column; gap:clamp(20px,2.4vw,32px)}
+  .results .mono{color:#b0b4b8}
+  .results .st{margin:14px 0 0; font-size:clamp(24px,2.8vw,40px); font-weight:600; letter-spacing:-.03em; line-height:1.12; max-width:24ch; color:#f4f3f0}
+  .grid3{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr)); gap:12px}
+  .rcard{padding:20px 22px; border-radius:18px; background:rgba(255,255,255,.09)}
+  .rcard .l{font-size:14px; color:#b0b4b8}
+  .rcard .v{margin-top:6px; font-size:clamp(20px,2vw,28px); font-weight:600; letter-spacing:-.03em}
+
+  .thanks{border-radius:clamp(20px,2.4vw,34px); background:var(--lime); color:var(--lime-ink);
+    padding:clamp(28px,4vw,64px); display:flex; flex-direction:column; gap:clamp(18px,2.2vw,28px)}
+  .thanks h2{font-size:clamp(32px,4.6vw,64px); font-weight:700; letter-spacing:-.04em; line-height:1; max-width:none}
+  .thanks p{color:var(--lime-ink); max-width:48ch; font-size:clamp(17px,1.6vw,21px)}
+  .btns{display:flex; flex-wrap:wrap; gap:12px}
+  .btn{padding:16px 26px; border-radius:16px; background:var(--lime-ink); color:#f4f3f0; font-size:17px;
+    font-weight:600; text-decoration:none; transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+  .btn:hover{transform:translateY(-2px); background:var(--lime-ink)}
+  .btn.ghost{background:rgba(17,26,10,.1); color:var(--lime-ink)}
+  .btn.ghost:hover{background:rgba(17,26,10,.16)}
+
+  /* lightbox */
+  .lb{position:fixed; inset:0; z-index:100; display:none; background:rgba(12,13,15,.94); backdrop-filter:blur(4px)}
+  .lb.on{display:block}
+  .lb-scroll{position:absolute; inset:0; overflow:auto; padding:clamp(16px,4vw,64px); text-align:center}
+  .lb img{max-width:100%; max-height:calc(100vh - 128px); height:auto; border-radius:10px; background:#fff; cursor:zoom-in}
+  .lb img.full{max-width:none; max-height:none; width:auto; cursor:zoom-out}
+  .lb-bar{position:fixed; top:0; left:0; right:0; display:flex; align-items:center; justify-content:space-between;
+    gap:16px; padding:16px clamp(16px,4vw,32px); color:#f4f3f0; font-size:15px;
+    background:linear-gradient(to bottom,rgba(12,13,15,.85),rgba(12,13,15,0))}
+  .lb-bar button{appearance:none; border:0; cursor:pointer; font:inherit; color:#f4f3f0;
+    background:rgba(255,255,255,.12); border-radius:999px; padding:10px 18px}
+  .lb-bar button:hover{background:rgba(255,255,255,.22)}
+
+  @media (max-width:860px){
+    .layout{grid-template-columns:1fr}
+    aside{position:static; flex-direction:row; overflow:auto; gap:6px; padding-bottom:6px}
+    aside .mono, aside .back{display:none}
+    aside a{white-space:nowrap}
+    .media .frame.pair{grid-template-columns:1fr}
+    .media{padding:16px}
+  }
+  /* доступность */
+  :focus-visible{outline:2px solid var(--ink); outline-offset:3px; border-radius:6px}
+  .skip-link{position:absolute; left:-9999px; top:0; z-index:100; padding:12px 18px;
+    background:var(--ink); color:var(--bg); border-radius:0 0 10px 0; text-decoration:none}
+  .skip-link:focus{left:0}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *{animation-duration:.001ms !important; transition-duration:.001ms !important}
+  }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#top">Перейти к содержанию</a>
+
+<div class="wrap">
+  <div class="inner">
+    <header>
+      <div style="display:flex; align-items:center; gap:10px; font-size:17px; font-weight:500;">
+        <a class="logo" href="/">АБ</a>
+        <span style="color:#9a978f;">✦</span>
+        <a href="/" style="text-decoration:none;">Все кейсы</a>
+      </div>
+      <nav style="display:flex; align-items:center; gap:18px; font-size:17px; font-weight:500;">
+        <a href="https://t.me/Anastasia_Jay" style="text-decoration:none;">Telegram</a>
+        <span style="color:#c6c3bc;">/</span>
+        <a href="mailto:burmistrova.adv@gmail.com">Email</a>
+        <span style="color:#c6c3bc;">/</span>
+        <a href="tel:+79089745517">+7 908 974 55 17</a>
+      </nav>
+    </header>
+
+    <section id="top" style="padding:clamp(30px,5vw,70px) 0 clamp(24px,3vw,40px);">
+      <div class="tags">
+        <span class="tag">Crypto Directory</span>
+        <span class="tag">Web + Mobile</span>
+        <span class="tag">0→1</span>
+        <span class="tag hl">Product Discovery</span>
+      </div>
+      <h1>Каталог, который начинался с идеи «Yellow Pages для крипто»</h1>
+      <p class="lead">Изначально мы хотели собрать в одном месте компании и сервисы, связанные с криптовалютой. В процессе исследования стало понятно: пользователю не нужен ещё один каталог криптопроектов — ему нужно быстро понять, где он может использовать свою криптовалюту.</p>
+      <p class="lead">Я помогла сфокусировать продукт, определить нужные данные и спроектировать сценарии поиска — от каталога до карты.</p>
+    </section>
+
+    <section style="padding-bottom:8px;">
+      <div class="frame" data-src="/crypto-directory/img/hero.png" data-title="Crypto Directory — главная страница" tabindex="0">
+        <img src="/crypto-directory/img/hero.png" width="1052" height="4096" fetchpriority="high" decoding="async" alt="Crypto Directory — главная страница">
+        <div class="fade"></div>
+        <div class="zoom" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="11" cy="11" r="7"/><path d="M20 20l-4.2-4.2M11 8v6M8 11h6"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <aside>
+        <div class="mono" style="padding:0 12px 10px;">Содержание</div>
+        <a href="#top">Обзор</a>
+        <a href="#context">01 — Контекст</a>
+        <a href="#analysis">02 — Анализ</a>
+        <a href="#data">03 — Данные</a>
+        <a href="#solution">04 — Решение</a>
+        <a href="#map">05 — Поиск и карта</a>
+        <a href="#addcompany">06 — Добавить компанию</a>
+        <a href="#details">07 — Детали</a>
+        <a href="#results">Итог</a>
+        <a href="#next">08 — Что дальше</a>
+        <a href="#thanks">Спасибо и контакты</a>
+        <a class="back" href="/">← Все кейсы</a>
+      </aside>
+
+      <main>
+
+        <section id="meta" style="padding-bottom:clamp(40px,5vw,80px);">
+          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr)); gap:1px; background:var(--line); border-radius:20px; overflow:hidden;">
+            <div style="background:var(--bg); padding:22px 24px;"><div class="mono">Продукт</div><div style="margin-top:8px; font-size:clamp(18px,1.6vw,22px); font-weight:600; letter-spacing:-.02em;">Crypto Directory</div></div>
+            <div style="background:var(--bg); padding:22px 24px;"><div class="mono">Роль</div><div style="margin-top:8px; font-size:clamp(18px,1.6vw,22px); font-weight:600; letter-spacing:-.02em;">Продуктовый дизайнер</div></div>
+            <div style="background:var(--bg); padding:22px 24px;"><div class="mono">Платформа</div><div style="margin-top:8px; font-size:clamp(18px,1.6vw,22px); font-weight:600; letter-spacing:-.02em;">Web · Mobile</div></div>
+            <div style="background:var(--bg); padding:22px 24px;"><div class="mono">Команда</div><div style="margin-top:8px; font-size:clamp(18px,1.6vw,22px); font-weight:600; letter-spacing:-.02em;">PM · Designer</div></div>
+            <div style="background:var(--bg); padding:22px 24px;"><div class="mono">Что делала</div><div style="margin-top:8px; font-size:clamp(18px,1.6vw,22px); font-weight:600; letter-spacing:-.02em;">Discovery, UX, UI</div></div>
+          </div>
+        </section>
+
+        <section id="context" class="sec">
+          <span class="mono">01 — Контекст</span>
+          <h2>Сначала мы не знали, что именно строим</h2>
+          <p>На старте была широкая идея: «сделаем Yellow Pages для крипто». Но за ней не было конкретного пользовательского сценария. Нужно было определить, кто будет пользоваться продуктом, что именно человек ищет, какие данные помогут ему выбрать, чем продукт будет отличаться от существующих каталогов и на чём его можно монетизировать</p>
+          <div class="cols">
+            <div class="col">
+              <span class="mono">Что изучала</span>
+              <p>Конкурентный анализ, аудитория, SEO-запросы и трафик на сайты конкурентов, пользовательские сценарии и смежные directory-продукты. Параллельно: SWOT, user flows, категории, монетизация, структура каталога. Подготовила презентацию для встречи с бизнесом</p>
+            </div>
+            <div class="col">
+              <span class="mono">Главный инсайт</span>
+              <p>Пользователю важно, что сервисы, которые он уже использует, можно оплатить криптой, не выводя в фиат. И где можно локально в его городе расплатиться криптой</p>
+            </div>
+          </div>
+          <div class="media" data-media>
+            <div class="tabs" role="tablist">
+              <button role="tab" aria-selected="true">Сравнение двух проектов</button>
+              <button role="tab" aria-selected="false">SWOT</button>
+              <button role="tab" aria-selected="false">Benchmarking</button>
+              <button role="tab" aria-selected="false">CJM</button>
+            </div>
+            <div class="shots">
+              <figure class="shot on"><div class="frame" data-src="/crypto-directory/img/a1.png" data-title="Сравнение Cryptwerk и MetaMask Explore" tabindex="0"><img src="/crypto-directory/img/a1.png" width="3684" height="3426" loading="lazy" decoding="async" alt="Сравнение Cryptwerk и MetaMask Explore"><div class="fade"></div><div class="zoom"></div></div></figure>
+              <figure class="shot"><div class="frame" data-src="/crypto-directory/img/a2.png" data-title="SWOT-анализ" tabindex="0"><img src="/crypto-directory/img/a2.png" width="2096" height="4096" loading="lazy" decoding="async" alt="SWOT-анализ"><div class="fade"></div><div class="zoom"></div></div></figure>
+              <figure class="shot"><div class="frame" data-src="/crypto-directory/img/a3.png" data-title="Benchmarking" tabindex="0"><img src="/crypto-directory/img/a3.png" width="1258" height="1779" loading="lazy" decoding="async" alt="Benchmarking"><div class="fade"></div><div class="zoom"></div></div></figure>
+              <figure class="shot"><div class="frame" data-src="/crypto-directory/img/a4.png" data-title="CJM" tabindex="0"><img src="/crypto-directory/img/a4.png" width="1980" height="2496" loading="lazy" decoding="async" alt="Customer Journey Map"><div class="fade"></div><div class="zoom"></div></div></figure>
+            </div>
+          </div>
+        </section>
+
+        <section id="analysis" class="sec">
+          <span class="mono">02 — Анализ</span>
+          <h2>От «каталога крипто» — к конкретной задаче</h2>
+          <p>По итогу анализа подготовила визуализации трёх концепций, собранных за пару дней с помощью ИИ. Это сильно упростило презентацию и принятие решения для бизнеса, поскольку был не теоретический, а уже предметный разговор. По итогу приняли третью концепцию — делать каталог компаний, которые принимают оплату в крипте</p>
+          <div class="media" data-media>
+            <div class="tabs" role="tablist">
+              <button role="tab" aria-selected="true">1 концепт</button>
+              <button role="tab" aria-selected="false">2 концепт</button>
+              <button role="tab" aria-selected="false">3 концепт</button>
+            </div>
+            <div class="shots">
+              <figure class="shot on"><div class="frame" data-src="/crypto-directory/img/b1.png" data-title="Концепт 1" tabindex="0"><img src="/crypto-directory/img/b1.png" width="3922" height="4096" loading="lazy" decoding="async" alt="Концепт 1"><div class="fade"></div><div class="zoom"></div></div></figure>
+              <figure class="shot"><div class="frame" data-src="/crypto-directory/img/b2.png" data-title="Концепт 2" tabindex="0"><img src="/crypto-directory/img/b2.png" width="3922" height="4096" loading="lazy" decoding="async" alt="Концепт 2"><div class="fade"></div><div class="zoom"></div></div></figure>
+              <figure class="shot"><div class="frame" data-src="/crypto-directory/img/b3.png" data-title="Концепт 3" tabindex="0"><img src="/crypto-directory/img/b3.png" width="2708" height="4096" loading="lazy" decoding="async" alt="Концепт 3"><div class="fade"></div><div class="zoom"></div></div></figure>
+            </div>
+          </div>
+        </section>
+
+        <section id="data" class="sec">
+          <span class="mono">03 — Данные</span>
+          <h2>Какие данные действительно нужны</h2>
+          <p>Следующий вопрос — что показать пользователю, чтобы он мог принять решение. Я определяла, какие данные нужны уже в выдаче, что оставить для страницы бизнеса, какие параметры сделать фильтрами и какие данные повышают доверие. Например, добавили рейтинг Trustpilot как внешний сигнал доверия</p>
+          <p>При этом учитывали и другую сторону задачи: какие данные мы реально можем получить и поддерживать. Поэтому структуру формировали на пересечении трёх вещей</p>
+          <div class="cols">
+            <div class="card"><span class="mono">Пересечение</span><div class="t">Пользовательская ценность</div></div>
+            <div class="card"><span class="mono">Пересечение</span><div class="t">Продуктовая ценность</div></div>
+            <div class="card"><span class="mono">Пересечение</span><div class="t">Доступность данных</div></div>
+          </div>
+          <div class="media" data-media>
+            <div class="tabs" role="tablist">
+              <button role="tab" aria-selected="true">User flow</button>
+              <button role="tab" aria-selected="false">Карточка компании</button>
+            </div>
+            <div class="shots">
+              <figure class="shot on"><div class="frame" data-src="/crypto-directory/img/c1.png" data-title="User flow каталога" tabindex="0"><img src="/crypto-directory/img/c1.png" width="4096" height="3003" loading="lazy" decoding="async" alt="User flow каталога"><div class="fade"></div><div class="zoom"></div></div></figure>
+              <figure class="shot"><div class="frame" data-src="/crypto-directory/img/c2.png" data-title="Карточка компании" tabindex="0"><img src="/crypto-directory/img/c2.png" width="1605" height="4096" loading="lazy" decoding="async" alt="Карточка компании"><div class="fade"></div><div class="zoom"></div></div></figure>
+            </div>
+          </div>
+        </section>
+
+        <section id="solution" class="sec">
+          <span class="mono">04 — Решение</span>
+          <h2>Поиск → Фильтрация → Оценка → Выбор</h2>
+          <p>Основной сценарий пользователя: найти → отфильтровать → изучить → выбрать. Главный экран — категории с фильтрами</p>
+          <div class="cols">
+            <div class="card"><div class="t">Каталог</div><p>Компании и категории с поиском и фильтрацией</p></div>
+            <div class="card"><div class="t">Карточка бизнеса</div><p>Ключевая информация, поддерживаемые криптовалюты, локация и внешние сигналы доверия</p></div>
+            <div class="card"><div class="t">Карта</div><p>Определила, что карта нужна только в некоторых категориях (локальные бизнесы). На остальных — не нужна</p></div>
+            <div class="card"><div class="t">Контент</div><p>Дополнительная точка входа в продукт и основа для SEO</p></div>
+          </div>
+          <div class="media" data-media>
+            <div class="tabs" role="tablist">
+              <button role="tab" aria-selected="true">Desktop</button>
+              <button role="tab" aria-selected="false">Mobile</button>
+            </div>
+            <div class="shots">
+              <figure class="shot on"><div class="frame" data-src="/crypto-directory/img/d1.png" data-title="Каталог — desktop" tabindex="0"><img src="/crypto-directory/img/d1.png" width="2450" height="4096" loading="lazy" decoding="async" alt="Каталог — desktop"><div class="fade"></div><div class="zoom"></div></div></figure>
+              <figure class="shot"><div class="frame" data-src="/crypto-directory/img/d2.png" data-title="Каталог — mobile" tabindex="0"><img src="/crypto-directory/img/d2.png" width="1479" height="1395" loading="lazy" decoding="async" alt="Каталог — mobile"><div class="fade"></div><div class="zoom"></div></div></figure>
+            </div>
+          </div>
+        </section>
+
+        <section id="map" class="sec">
+          <span class="mono">05 — Поиск и карта</span>
+          <h2>Карта должна помогать искать, а не мешать</h2>
+          <p>Отдельно проработала сценарий поиска и фильтрации на карте. Задача была простой только на первый взгляд: пользователь должен одновременно видеть карту, управлять фильтрами и открывать карточку бизнеса — не теряя контекст. Особенно сложным оказался mobile</p>
+          <p>Провели серию коридорных тестов: найти → отфильтровать → открыть → вернуться → продолжить поиск. По результатам несколько раз перестраивали механику карточки, фильтров и mobile-выдачи. Также с разработкой прорабатывала вопрос адресов компаний с одинаковым именем и определения гео пользователя</p>
+          <div class="col">
+            <span class="mono">Что проверяли</span>
+            <div class="chips">
+              <span class="chip">Насколько очевиден поиск</span>
+              <span class="chip">Как пользователь открывает карточку</span>
+              <span class="chip">Не перекрывает ли карточка карту</span>
+              <span class="chip">Где ожидает увидеть фильтры</span>
+              <span class="chip">Удобно ли комбинировать фильтры</span>
+              <span class="chip">Сохраняется ли контекст после закрытия</span>
+            </div>
+          </div>
+          <div class="media" data-media>
+            <div class="tabs" role="tablist">
+              <button role="tab" aria-selected="true">Desktop</button>
+              <button role="tab" aria-selected="false">Mobile</button>
+            </div>
+            <div class="shots">
+              <figure class="shot on"><div class="frame" data-src="/crypto-directory/img/e1.png" data-title="Поиск и карта — desktop" tabindex="0"><img src="/crypto-directory/img/e1.png" width="3865" height="4096" loading="lazy" decoding="async" alt="Поиск и карта — desktop"><div class="fade"></div><div class="zoom"></div></div></figure>
+              <figure class="shot">
+                <div class="frame pair">
+                  <img src="/crypto-directory/img/e2.png" width="1170" height="2532" loading="lazy" decoding="async" alt="Карта на mobile — фильтры" data-src="/crypto-directory/img/e2.png" data-title="Карта на mobile — фильтры">
+                  <img src="/crypto-directory/img/e2-2.png" width="1170" height="2532" loading="lazy" decoding="async" alt="Карта на mobile — места" data-src="/crypto-directory/img/e2-2.png" data-title="Карта на mobile — места">
+                </div>
+                <div class="cap">Нажмите на экран, чтобы открыть его целиком</div>
+              </figure>
+            </div>
+          </div>
+        </section>
+
+        <section id="addcompany" class="sec">
+          <span class="mono">06 — Добавить компанию</span>
+          <h2>Сократила форму «Добавить компанию»</h2>
+          <p>Изначально форма добавления компании была многоэтапной и содержала большое количество полей. На бумаге это выглядело логично — собрать максимум данных сразу. Но коридорные тесты показали другую проблему: форма психологически воспринималась как слишком большая и сложная</p>
+          <p>Пользователь видел не простое добавление компании, а полноценное заполнение профиля</p>
+          <div class="col">
+            <span class="mono">Что показали тесты</span>
+            <div class="chips">
+              <span class="chip">Форма читается как слишком большая</span>
+              <span class="chip">Добавление воспринимается как заполнение профиля</span>
+              <span class="chip">Слишком много полей на первом шаге</span>
+            </div>
+          </div>
+          <p>Провела дополнительный бенчмаркинг сценариев «Добавить компанию» и пересмотрела структуру формы</p>
+          <div class="cols">
+            <div class="card"><div class="t">Необходимые для добавления</div><p>Минимум информации, который нужен, чтобы создать карточку компании</p></div>
+            <div class="card"><div class="t">Данные для дальнейшего редактирования</div><p>Расширенная информация, которую необязательно запрашивать на первом шаге</p></div>
+          </div>
+          <p>В итоге сократили форму и оставили сложные и второстепенные поля для редактирования профиля бизнеса в личном кабинете. Так пользователь быстрее создаёт карточку, а бизнес постепенно заполняет и актуализирует свой профиль</p>
+          <div class="flow">Добавить компанию → быстрое добавление → Business Cabinet → расширенное редактирование</div>
+          <p>Это также связало MVP с архитектурой второго этапа продукта</p>
+          <div class="media" data-media>
+            <div class="tabs" role="tablist">
+              <button role="tab" aria-selected="true">Было</button>
+              <button role="tab" aria-selected="false">Стало</button>
+            </div>
+            <div class="shots">
+              <figure class="shot on"><div class="frame" data-src="/crypto-directory/img/f1.png" data-title="Форма добавления — было" tabindex="0"><img src="/crypto-directory/img/f1.png" width="3480" height="3621" loading="lazy" decoding="async" alt="Форма добавления — было"><div class="fade"></div><div class="zoom"></div></div></figure>
+              <figure class="shot"><div class="frame" data-src="/crypto-directory/img/f2.png" data-title="Форма добавления — стало" tabindex="0"><img src="/crypto-directory/img/f2.png" width="2688" height="4096" loading="lazy" decoding="async" alt="Форма добавления — стало"><div class="fade"></div><div class="zoom"></div></div></figure>
+            </div>
+          </div>
+        </section>
+
+        <section id="details" class="sec">
+          <span class="mono">07 — Детали</span>
+          <h2>Интерфейс строится вокруг принятия решения</h2>
+          <p>В каталоге важно было не просто показать максимум информации, а помочь быстро ответить на несколько вопросов: что это, где находится, принимает ли мою криптовалюту, можно ли ему доверять и что делать дальше</p>
+          <p>Поэтому в карточках и выдаче оставили только данные, которые помогают двигаться к следующему действию. Остальная информация раскрывается на странице бизнеса</p>
+          <div class="media">
+            <div class="shots">
+              <figure class="shot on"><div class="frame" data-src="/crypto-directory/img/g1.png" data-title="Страница бизнеса" tabindex="0"><img src="/crypto-directory/img/g1.png" width="1605" height="4096" loading="lazy" decoding="async" alt="Страница бизнеса"><div class="fade"></div><div class="zoom"></div></div></figure>
+            </div>
+          </div>
+        </section>
+
+        <section id="results" style="padding-bottom:clamp(44px,5.5vw,90px);">
+          <div class="results">
+            <div>
+              <span class="mono">Итог. Общий Scope задачи</span>
+              <p class="st">Каталог криптосервисов превратился в directory бизнесов, которые принимают криптовалюту</p>
+            </div>
+            <div class="grid3">
+              <div class="rcard"><div class="l">Объем работы</div><div class="v">380 экранов, дизайн-система, Light/Dark mode</div></div>
+              <div class="rcard"><div class="l">Роль</div><div class="v">end-to-end</div></div>
+              <div class="rcard"><div class="l">Отдано в разработку</div><div class="v">Web + Mobile</div></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="next" class="sec">
+          <span class="mono">08 — Что дальше</span>
+          <h2>v 2.0 — из каталога в платформу</h2>
+          <div class="cols">
+            <div class="card"><span class="mono">01</span><div class="t">Личный кабинет пользователя</div><p>Сохранённые компании, избранное и персональные функции для возвращающихся пользователей.</p></div>
+            <div class="card"><span class="mono">02</span><div class="t">Личный кабинет бизнеса</div><p>Управление профилем компании, информацией и размещением в каталоге.</p></div>
+            <div class="card"><span class="mono">03</span><div class="t">Двусторонняя платформа</div><p>Оба сценария готовятся ко второму этапу разработки: directory перестаёт быть только инструментом поиска.</p></div>
+          </div>
+        </section>
+
+        <section id="thanks" style="padding-bottom:clamp(44px,5.5vw,90px);">
+          <div class="thanks">
+            <h2>Спасибо, что дочитали</h2>
+            <p>Если хочется подробностей по исследованию и решениям — напишите: покажу флоу и то, что не поместилось в кейс</p>
+            <div class="btns">
+              <a class="btn" href="https://t.me/Anastasia_Jay">@Anastasia_Jay</a>
+              <a class="btn ghost" href="mailto:burmistrova.adv@gmail.com">burmistrova.adv@gmail.com</a>
+              <a class="btn ghost" href="tel:+79089745517">+7 908 974 55 17</a>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+</div>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Просмотр изображения">
+  <div class="lb-scroll" id="lbScroll"><img id="lbImg" alt=""></div>
+  <div class="lb-bar">
+    <span id="lbTitle"></span>
+    <span style="display:flex; gap:8px;">
+      <button type="button" id="lbSize">100%</button>
+      <button type="button" id="lbClose">Закрыть ✕</button>
+    </span>
+  </div>
+</div>
+
+<script src="/assets/case.js" defer></script>
+</body>
+</html>

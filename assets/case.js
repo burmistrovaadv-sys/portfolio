@@ -1,36 +1,74 @@
-/* Подсветка активного пункта в оглавлении кейса.
-   Скрипт ничего не рисует и ничего не скрывает: если он не загрузится,
-   страница читается полностью, просто без подсветки. */
-(function () {
-  var links = document.querySelectorAll('.case-nav a[href^="#"]');
-  if (!links.length || !('IntersectionObserver' in window)) return;
+/* =========================================================
+   Общий скрипт страниц кейсов (/send-flow, /crypto-directory).
+   Три независимых блока: табы с макетами, лайтбокс, подсветка
+   активного пункта бокового меню. Без зависимостей.
+   ========================================================= */
+(function(){
+  var ZOOM_SVG = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">'
+    + '<circle cx="11" cy="11" r="7"/><path d="M20 20l-4.2-4.2M11 8v6M8 11h6"/></svg>';
+  document.querySelectorAll('.zoom').forEach(function(z){ if(!z.innerHTML.trim()) z.innerHTML = ZOOM_SVG; });
 
-  var map = {};
-  var sections = [];
+  /* --- tabs --- */
+  document.querySelectorAll('[data-media]').forEach(function(media){
+    var btns  = media.querySelectorAll('.tabs button');
+    var shots = media.querySelectorAll('.shot');
+    btns.forEach(function(btn, i){
+      btn.addEventListener('click', function(){
+        btns.forEach(function(b, j){ b.setAttribute('aria-selected', j === i ? 'true' : 'false'); });
+        shots.forEach(function(s, j){ s.classList.toggle('on', j === i); });
+      });
+    });
+  });
 
-  for (var i = 0; i < links.length; i++) {
-    var id = links[i].getAttribute('href').slice(1);
-    var el = document.getElementById(id);
-    if (!el) continue;
-    map[id] = links[i];
-    sections.push(el);
+  /* --- lightbox --- */
+  var lb = document.getElementById('lb'),
+      lbImg = document.getElementById('lbImg'),
+      lbTitle = document.getElementById('lbTitle'),
+      lbSize = document.getElementById('lbSize'),
+      lbScroll = document.getElementById('lbScroll');
+  if(!lb) return;
+
+  function open(src, title){
+    lbImg.src = src;
+    lbImg.classList.remove('full');
+    lbSize.textContent = '100%';
+    lbTitle.textContent = title || '';
+    lb.classList.add('on');
+    lbScroll.scrollTop = 0;
+    document.body.style.overflow = 'hidden';
   }
-  if (!sections.length) return;
-
-  function setActive(id) {
-    for (var key in map) {
-      if (Object.prototype.hasOwnProperty.call(map, key)) {
-        map[key].classList.toggle('is-active', key === id);
-      }
-    }
+  function close(){
+    lb.classList.remove('on');
+    lbImg.src = '';
+    document.body.style.overflow = '';
+  }
+  function toggleSize(){
+    var full = lbImg.classList.toggle('full');
+    lbSize.textContent = full ? 'Вписать' : '100%';
   }
 
-  // Активной считается секция, пересекающая середину экрана.
-  var io = new IntersectionObserver(function (entries) {
-    for (var i = 0; i < entries.length; i++) {
-      if (entries[i].isIntersecting) setActive(entries[i].target.id);
-    }
-  }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+  document.querySelectorAll('[data-src]').forEach(function(el){
+    el.style.cursor = 'zoom-in';
+    el.addEventListener('click', function(){ open(el.getAttribute('data-src'), el.getAttribute('data-title')); });
+    el.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); open(el.getAttribute('data-src'), el.getAttribute('data-title')); }
+    });
+  });
 
-  for (var j = 0; j < sections.length; j++) io.observe(sections[j]);
+  document.getElementById('lbClose').addEventListener('click', close);
+  lbSize.addEventListener('click', toggleSize);
+  lbImg.addEventListener('click', toggleSize);
+  lbScroll.addEventListener('click', function(e){ if(e.target === lbScroll) close(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && lb.classList.contains('on')) close(); });
+
+  /* --- active nav item --- */
+  var links = Array.prototype.slice.call(document.querySelectorAll('aside a[href^="#"]'));
+  var secs  = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  function pick(){
+    var cur = 0;
+    secs.forEach(function(s, i){ if(s && s.getBoundingClientRect().top <= 140) cur = i; });
+    links.forEach(function(a, i){ a.classList.toggle('on', i === cur); });
+  }
+  window.addEventListener('scroll', pick, { passive: true });
+  pick();
 })();

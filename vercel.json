@@ -2,6 +2,11 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/JapanStat", "destination": "/japanstat", "permanent": false },
+    { "source": "/cases/sohranenie-kontaktov", "destination": "/send-flow", "permanent": true },
+    { "source": "/cases/:path*", "destination": "/", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/assets/fonts/(.*)",
@@ -11,6 +16,18 @@
     },
     {
       "source": "/assets/img/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }
+      ]
+    },
+    {
+      "source": "/send-flow/img/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }
+      ]
+    },
+    {
+      "source": "/crypto-directory/img/(.*)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }
       ]
