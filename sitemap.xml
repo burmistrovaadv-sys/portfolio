@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Сейчас указан адрес на vercel.app. После подключения своего домена
-     заменить его здесь, в robots.txt и в тегах canonical/og:url.
-     /japanstat в карту не входит: это персональная страница под отклик,
+<!-- /japanstat в карту не входит: это персональная страница под отклик,
      она закрыта от индексации через <meta name="robots" content="noindex">. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://portfolio-liart-delta-79.vercel.app/</loc>
+    <loc>https://www.anastasia-burmistrova.ru/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://portfolio-liart-delta-79.vercel.app/crypto-directory</loc>
+    <loc>https://www.anastasia-burmistrova.ru/crypto-directory</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://portfolio-liart-delta-79.vercel.app/send-flow</loc>
+    <loc>https://www.anastasia-burmistrova.ru/send-flow</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

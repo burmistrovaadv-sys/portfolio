@@ -74,10 +74,19 @@ npx serve .
 так страница открывается быстрее и не зависит от доступности CDN.
 Обновить их можно командой `node tools/fetch-fonts.mjs` (нужен Node.js).
 
-## Перед подключением своего домена
+## Домен
 
-Сейчас во всех адресах указан `https://portfolio-liart-delta-79.vercel.app`.
-После подключения своего домена его нужно заменить в этих файлах:
+Основной адрес сайта — **https://www.anastasia-burmistrova.ru**
+
+Домен куплен в nic.ru, а DNS делегирован на Vercel (`ns1.vercel-dns.com`,
+`ns2.vercel-dns.com`). Это значит, что все записи домена настраиваются
+в самом Vercel, а в nic.ru больше ничего трогать не нужно.
+Сертификат HTTPS Vercel выпускает и продлевает сам, покупать не надо.
+
+Адрес без `www` и адрес по `http://` автоматически перекидывают на основной.
+Старый адрес `portfolio-liart-delta-79.vercel.app` тоже продолжает работать.
+
+Если домен когда-нибудь поменяется, его нужно заменить в этих файлах:
 
 - `index.html`, `japanstat/index.html` — теги `canonical`, `og:url`, `og:image`
 - `send-flow/index.html`, `crypto-directory/index.html` — то же самое
