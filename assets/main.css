@@ -91,7 +91,8 @@ section{padding:clamp(28px,4vw,60px) 0}
 .cta::before{content:""; width:9px; height:9px; border-radius:50%; background:var(--lime-ink)}
 .case:hover .cta{filter:brightness(1.05)}
 .case .media{position:relative; display:grid; place-items:center; padding:clamp(20px,2.4vw,34px); min-height:340px}
-.case .media img{border-radius:clamp(14px,1.8vw,32px); display:block}
+/* height:auto — картинка тянется только по ширине, пропорции не ломаются */
+.case .media img{border-radius:clamp(14px,1.8vw,32px); display:block; height:auto}
 .case.c-crypto .media img{width:min(775px,100%)}
 .case.c-wallet .media img{width:min(286px,72%)}
 .case .badge-co{position:absolute; left:clamp(20px,2.4vw,34px); top:clamp(20px,2.4vw,34px);
