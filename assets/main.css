@@ -116,7 +116,10 @@ mark{background:var(--lime); color:var(--lime-ink); padding:0 .18em; border-radi
 .shot.dark{background:var(--card-dark); color:#f4f3f0}
 .shot .body{flex:1; display:flex; flex-direction:column; gap:max(12px,2.73cqw); padding:max(20px,6.95cqw); min-width:0}
 /* картинка не растягивается и не кропится: ширина колонки, высота — натуральная */
-.shot .body > img{display:block; width:100%; height:auto; border-radius:3.97cqw}
+/* видео живёт по тем же правилам, что и картинка: без рамок, фона и отступов */
+.shot .body > img,
+.shot .body > video{display:block; width:100%; height:auto; border-radius:3.97cqw;
+  border:0; outline:0; margin:0; padding:0; background:none}
 .shot .tags{display:flex; flex-wrap:wrap; gap:8px}
 /* теги шотов — заливка своего же цвета с малой прозрачностью, текст в цвет карточки */
 /* max() обязателен: на мобильном карточка ~340px, и чистый cqw давал теги 6px,
