@@ -134,23 +134,15 @@ mark{background:var(--lime); color:var(--lime-ink); padding:0 .18em; border-radi
 .shot .grow{flex:1; min-height:0}
 
 /* ---------- мобильные флоу ---------- */
-/* записи вертикальные и разного пропорции (0.46 и 0.8). Если дать видео
+/* только видео: ни карточки, ни фона, ни подписей */
+/* записи вертикальные и разной пропорции (0.46 и 0.8). Если дать видео
    width:100%, телефонный кадр на колонке 696px вытянется в 1520px и порвёт
-   страницу, поэтому высоту задаёт контейнер, а кадр вписывается в неё
-   через object-fit:contain — пропорции целы, высота обеих карточек общая */
+   страницу, поэтому высоту задаём явно, а кадр вписывается в неё
+   через object-fit:contain — пропорции целы, обе записи одной высоты.
+   Поля от contain прозрачные, поэтому вокруг видео ничего не видно */
 .flows{display:grid; grid-template-columns:1fr 1fr; gap:clamp(20px,2.8vw,48px)}
-.flow{container-type:inline-size; display:flex; flex-direction:column;
-  border-radius:4.22cqw; background:var(--card-dark); color:#f4f3f0; overflow:hidden}
-/* фон не задаём: поля от contain сливаются с карточкой, рамки вокруг видео нет */
-.flow .screen{height:clamp(420px,34vw,640px)}
-.flow .screen video{display:block; width:100%; height:100%; object-fit:contain;
+.flows video{display:block; width:100%; height:clamp(420px,34vw,640px); object-fit:contain;
   border:0; outline:0; margin:0; padding:0; background:none}
-.flow .body{display:flex; flex-direction:column; gap:max(12px,2.73cqw); padding:max(20px,6.95cqw)}
-.flow .tags{display:flex; flex-wrap:wrap; gap:8px}
-.flow .tags span{padding:6px 14px; border-radius:999px; background:rgba(203,203,203,.07);
-  color:#eef1f5; font-size:max(13px,1.74cqw); font-weight:400}
-.flow h3{margin:0; display:flex; align-items:baseline; flex-wrap:wrap; gap:10px;
-  font-size:max(22px,5.4cqw); font-weight:600; letter-spacing:-.035em; line-height:1.08}
 
 /* ---------- skills ---------- */
 .skills{display:flex; flex-wrap:wrap; gap:10px; padding-top:clamp(24px,3vw,48px)}
