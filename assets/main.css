@@ -114,17 +114,20 @@ mark{background:var(--lime); color:var(--lime-ink); padding:0 .18em; border-radi
 .shot{container-type:inline-size; display:flex; border-radius:4.22cqw;
   background:var(--card-light); color:#14161f; text-decoration:none}
 .shot.dark{background:var(--card-dark); color:#f4f3f0}
-.shot .body{flex:1; display:flex; flex-direction:column; gap:2.73cqw; padding:6.95cqw; min-width:0}
+.shot .body{flex:1; display:flex; flex-direction:column; gap:max(12px,2.73cqw); padding:max(20px,6.95cqw); min-width:0}
 /* картинка не растягивается и не кропится: ширина колонки, высота — натуральная */
 .shot .body > img{display:block; width:100%; height:auto; border-radius:3.97cqw}
 .shot .tags{display:flex; flex-wrap:wrap; gap:8px}
 /* теги шотов — заливка своего же цвета с малой прозрачностью, текст в цвет карточки */
+/* max() обязателен: на мобильном карточка ~340px, и чистый cqw давал теги 6px,
+   описание 8px — нечитаемо. На десктопе (806px) cqw всегда больше порога,
+   поэтому фигмовские размеры 58/19/14 не меняются */
 .shot .tags span{padding:6px 14px; border-radius:999px; background:rgba(20,22,31,.07); color:#14161f;
-  font-size:1.74cqw; font-weight:400}
+  font-size:max(13px,1.74cqw); font-weight:400}
 .shot.dark .tags span{background:rgba(203,203,203,.07); color:#eef1f5}
-.shot h3{margin:0; font-size:7.2cqw; font-weight:600; letter-spacing:-.035em; line-height:1.08}
+.shot h3{margin:0; font-size:max(22px,7.2cqw); font-weight:600; letter-spacing:-.035em; line-height:1.08}
 .shot.dark h3{color:#f4f3f0}
-.shot p{margin:0; font-size:2.36cqw; line-height:1.4; color:#4e5464}
+.shot p{margin:0; font-size:max(15px,2.36cqw); line-height:1.4; color:#4e5464}
 .shot .grow{flex:1; min-height:0}
 
 /* ---------- skills ---------- */
@@ -153,8 +156,20 @@ footer .sep{color:#c6c3bc}
 
 @media (max-width:980px){
   .case{grid-template-columns:1fr}
-  .case .media{order:-1; min-height:0}
-  .grid{grid-template-columns:1fr}
+  /* padding-top освобождает место под бейджем компании — иначе он ложится на картинку */
+  .case .media{order:-1; min-height:0; padding-top:76px}
+  /* в одну колонку каждая карточка — своя строка, и grid-auto-rows:1fr растягивал
+     все строки по самой высокой, оставляя в коротких карточках дыру в полэкрана */
+  .grid{grid-template-columns:1fr; grid-auto-rows:auto}
+}
+
+/* ---------- мобильный ---------- */
+@media (max-width:720px){
+  /* Stats: две ячейки по 180px + «End-to-end» в nowrap дают 449px и вылезают
+     за карточку — на узком экране кладём их друг под друга */
+  .stats{display:grid; grid-template-columns:1fr; align-self:stretch; width:100%}
+  .stats > div{min-width:0; padding:14px 20px}
+  .stats > div + div{border-left:0; border-top:1px solid rgba(255,255,255,.14)}
 }
 
 /* ---------- доступность ---------- */
