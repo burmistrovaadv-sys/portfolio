@@ -127,10 +127,10 @@
 
     <div class="flows">
       <video src="/assets/video/ironwallet-in-process.webm" width="556" height="1214"
-             autoplay loop muted playsinline preload="metadata"
+             data-lazy loop muted playsinline preload="none"
              aria-label="IronWallet — состояние In process"></video>
       <video src="/assets/video/slippage-flow.webm" width="1480" height="1850"
-             autoplay loop muted playsinline preload="metadata"
+             data-lazy loop muted playsinline preload="none"
              aria-label="Slippage flow"></video>
     </div>
   </section>
@@ -152,7 +152,7 @@
 
       <div class="shot dark">
         <div class="body">
-          <video src="/assets/video/japan-avtocar.webm" width="2382" height="1574" autoplay loop muted playsinline preload="auto" aria-label="Сайт по привозу авто"></video>
+          <video src="/assets/video/japan-avtocar.webm" width="2382" height="1574" data-lazy loop muted playsinline preload="none" aria-label="Сайт по привозу авто"></video>
           <div class="tags"><span>Desktop</span><span>Mobile</span><span>B2C</span><span>Auto</span></div>
           <h3>Сайт по привозу авто</h3>
           <p>Сайт по привозу авто из Японии, Китая, Кореи<br>End-to-end</p>
@@ -239,5 +239,7 @@
   </footer>
 
 </div></div>
+
+<script src="/assets/video.js" defer></script>
 </body>
 </html>
