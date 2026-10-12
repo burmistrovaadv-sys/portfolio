@@ -95,12 +95,12 @@
   .media .frame.pair img{border-radius:14px; max-width:100%}
   .media .fade{display:none}
 
-  /* обложка кейса: превью — отдельный файл hero-preview, уже обрезанный как в фигме
-     (1227×823, экспорт ×3), поэтому ни кропа по max-height, ни градиента-затухания не нужно.
-     По клику открывается hero-full — вся страница целиком */
+  /* обложка кейса: вместо превью — запись сайта. hero-preview остался постером,
+     он лёгкий (212 КБ) и рисуется мгновенно, пока грузится видео на 5,8 МБ.
+     По клику по-прежнему открывается hero-full — вся страница целиком */
   .frame{position:relative; border-radius:clamp(16px,2vw,26px); overflow:hidden; background:var(--surface);
     cursor:zoom-in; max-width:1227px; margin-inline:auto}
-  .frame img{display:block; width:100%; height:auto}
+  .frame img, .frame video{display:block; width:100%; height:auto}
   .fade{display:none}
   .zoom{position:absolute; right:16px; top:16px; width:46px; height:46px; border-radius:50%;
     display:grid; place-items:center; background:rgba(21,23,27,.72); color:#fff; backdrop-filter:blur(6px);
@@ -201,7 +201,10 @@
 
     <section style="padding-bottom:8px;">
       <div class="frame" data-src="/crypto-directory/img/hero-full.webp" data-title="Crypto Directory — главная страница целиком" tabindex="0">
-        <img src="/crypto-directory/img/hero-preview.webp" width="4320" height="2913" fetchpriority="high" decoding="async" alt="Crypto Directory — главная страница">
+        <video src="/assets/video/crypto-marketplace.webm" width="2096" height="1494"
+               poster="/crypto-directory/img/hero-preview.webp"
+               autoplay loop muted playsinline preload="metadata"
+               aria-label="Crypto Directory — главная страница"></video>
         <div class="fade"></div>
         <div class="zoom" aria-hidden="true">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
