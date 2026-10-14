@@ -2,6 +2,7 @@
   --bg:#f2f1ee; --ink:#15171b; --ink-2:#3a3f45; --ink-3:#5a5f66;
   --line:#dcd9d3; --surface:#e7e5e0; --chip:#e3e3e3;
   --lime:#cdf25e; --lime-ink:#111a0a;
+  --card-light:#dddddc;
 }
 *{box-sizing:border-box}
 html{-webkit-font-smoothing:antialiased; scroll-behavior:smooth}
@@ -111,18 +112,27 @@ mark{background:var(--lime); color:var(--lime-ink); padding:0 .18em; border-radi
 /* Одна колонка: карточка во всю ширину контента (до 1568px).
    grid-auto-rows:auto — каждая карточка своей высоты, иначе 1fr растягивал
    бы все строки по самой высокой и в коротких зияла бы пустота. */
-.grid{display:grid; grid-template-columns:1fr; grid-auto-rows:auto; gap:clamp(36px,4.4vw,84px)}
-/* Без карточки: ни заливки, ни скругления, ни полей — работа лежит прямо на
-   фоне страницы. Отступ между шотами увеличен, потому что раньше границы
-   разделяла сама плашка, а теперь только воздух. */
-.shot{container-type:inline-size; display:flex; color:var(--ink); text-decoration:none}
+.grid{display:grid; grid-template-columns:1fr; grid-auto-rows:auto; gap:clamp(24px,3.2vw,56px)}
+/* Плашка есть, но работа лежит в ней встык: поля только у текста, снизу.
+   Поэтому padding живёт не на .body, а на текстовых детях, а overflow:hidden
+   сам подрезает верхние углы картинки по радиусу карточки — своё скругление
+   медиа не нужно, иначе у верхней кромки вылезли бы серые уголки. */
+.shot{container-type:inline-size; display:flex; border-radius:min(4.22cqw,34px);
+  overflow:hidden; background:var(--card-light); color:var(--ink); text-decoration:none}
 .shot .body{flex:1; display:flex; flex-direction:column;
-  gap:clamp(12px,2.73cqw,24px); min-width:0}
+  gap:clamp(12px,2.73cqw,24px); padding:0 0 clamp(20px,6.95cqw,56px); min-width:0}
 /* картинка не растягивается и не кропится: ширина колонки, высота — натуральная */
 /* видео живёт по тем же правилам, что и картинка: без рамок, фона и отступов */
 .shot .body > img,
-.shot .body > video{display:block; width:100%; height:auto; border-radius:min(3.97cqw,32px);
+.shot .body > video{display:block; width:100%; height:auto; border-radius:0;
   border:0; outline:0; margin:0; padding:0; background:none}
+/* боковые поля — только текстовому блоку */
+.shot .body > .tags,
+.shot .body > h3,
+.shot .body > p{padding-left:clamp(20px,6.95cqw,56px); padding-right:clamp(20px,6.95cqw,56px)}
+/* gap от картинки 24px, а по бокам 56px — добираем воздух сверху, чтобы текст
+   не висел вплотную под кадром */
+.shot .body > .tags{padding-top:clamp(8px,1.6cqw,20px)}
 .shot .tags{display:flex; flex-wrap:wrap; gap:8px}
 /* теги шотов — заливка своего же цвета с малой прозрачностью, текст в цвет карточки */
 /* clamp, а не max: на мобильном карточка ~340px, и чистый cqw давал теги 6px,
@@ -131,12 +141,12 @@ mark{background:var(--lime); color:var(--lime-ink); padding:0 .18em; border-radi
 .shot .tags span{padding:6px 14px; border-radius:999px; background:rgba(20,22,31,.07); color:#14161f;
   font-size:clamp(13px,1.74cqw,15px); font-weight:400}
 /* верхняя граница 46px — ровно как у заголовка секции: подзаголовок карточки
-   не должен звучать громче «Другие работы, шоты» */
+   не должен звучать громче «Web, Analytics» */
 .shot h3{margin:0; font-size:clamp(22px,7.2cqw,46px); font-weight:600; letter-spacing:-.035em; line-height:1.08}
 .shot p{margin:0; font-size:clamp(15px,2.36cqw,20px); line-height:1.4; color:var(--ink-2); max-width:72ch}
 .shot .grow{flex:1; min-height:0}
 
-/* ---------- мобильные флоу ---------- */
+/* ---------- секция Mobile ---------- */
 /* только видео: ни карточки, ни фона, ни подписей */
 /* записи разной пропорции (0.46, 0.8 и 1.0). Если дать видео width:100%,
    телефонный кадр на колонке 696px вытянется в 1520px и порвёт страницу,
