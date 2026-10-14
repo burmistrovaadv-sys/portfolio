@@ -13,8 +13,11 @@ img{max-width:100%}
 
 .mono{font-family:"Martian Mono",ui-monospace,monospace; font-size:12px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-3)}
 .mono-s{font-family:"Martian Mono",ui-monospace,monospace; font-size:11px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-3)}
-.wrap{padding:0 clamp(16px,4vw,56px)}
-.inner{max-width:1680px; margin:0 auto}
+.wrap{padding:0 clamp(20px,5vw,72px)}
+/* Колонка — две трети экрана, но не шире 1080. max(…,640px) не даёт правилу
+   «две трети» душить контент на планшете; на телефоне ни один предел не
+   срабатывает — там ширину задаёт padding у .wrap. */
+.inner{max-width:min(1080px, max(66.67vw, 640px)); margin:0 auto}
 
 /* ---------- header ---------- */
 header{position:sticky; top:0; z-index:30; display:flex; align-items:center; justify-content:space-between;
@@ -58,21 +61,26 @@ section{padding:clamp(28px,4vw,60px) 0}
 
 /* ---------- featured case cards ---------- */
 .cases{display:flex; flex-direction:column; gap:clamp(20px,2.4vw,32px)}
-.case{display:grid; grid-template-columns:1fr 1fr; border-radius:clamp(20px,2.2vw,34px);
+/* container-type, а не vw: колонка сузилась до 1080, и привязанный к окну
+   кегль перестал попадать в карточку — заголовок уезжал в четыре строки,
+   а Stats (450px) не влезал в текстовую колонку (428px). Теперь размеры
+   считаются от самой карточки, как у шотов. */
+.case{container-type:inline-size;
+  display:grid; grid-template-columns:1fr 1fr; border-radius:clamp(20px,2.2vw,34px);
   overflow:hidden; color:#f4f3f0; text-decoration:none}
 .case.c-crypto{background:#15171b}
 .case.c-crypto .media{background:#0f1113}
 .case.c-wallet{background:#1f2a3a}
 .case.c-wallet .media{background:#18212e}
 /* колонка контента в фигме 840 с padding 56 и gap 22 */
-.case .content{display:flex; flex-direction:column; gap:22px; padding:clamp(24px,3.13vw,56px); min-width:0}
+.case .content{display:flex; flex-direction:column; gap:22px; padding:clamp(24px,4.4cqw,56px); min-width:0}
 .case .tags{display:flex; flex-wrap:wrap; gap:8px}
 /* теги на тёмных карточках — полупрозрачный белый, не заливка */
 .case .tags span{padding:6px 14px; border-radius:999px; background:rgba(255,255,255,.09); color:#f4f3f0;
   font-size:14px; font-weight:400}
 .case.c-wallet .tags span{color:#eef1f5}
-.case h3{margin:0; font-size:clamp(28px,3.24vw,58px); font-weight:600; letter-spacing:-.035em; line-height:1.04}
-.case p{margin:0; max-width:46ch; font-size:clamp(16px,1.06vw,19px); line-height:1.45; color:#b0b4b8}
+.case h3{margin:0; font-size:clamp(28px,4.07cqw,58px); font-weight:600; letter-spacing:-.035em; line-height:1.04}
+.case p{margin:0; max-width:46ch; font-size:clamp(16px,1.76cqw,19px); line-height:1.45; color:#b0b4b8}
 .case.c-wallet p{color:#a6b0bf}
 .case .grow{flex:1}
 /* Stats — тоже полупрозрачный белый, текст светлый (как в фигме) */
@@ -81,16 +89,16 @@ section{padding:clamp(28px,4vw,60px) 0}
 .case.c-wallet .stats{color:#eef1f5}
 /* ячейка хагает по контенту (в фигме 180 и 268 при padding 16/28) — поэтому nowrap:
    подписи короткие («Экранов», «Роль», «Флоу»), переносов быть не должно */
-.stats > div{padding:16px 28px; display:flex; flex-direction:column; gap:4px;
-  white-space:nowrap; min-width:180px}
+.stats > div{padding:16px clamp(16px,2.6cqw,28px); display:flex; flex-direction:column; gap:4px;
+  white-space:nowrap; min-width:clamp(120px,14cqw,180px)}
 .stats > div + div{border-left:1px solid rgba(255,255,255,.14)}
 .stats .k{font-size:clamp(13px,.78vw,14px); font-weight:400; line-height:1.4; color:#b0b4b8}
 .case.c-wallet .stats .k{color:#a6b0bf}
-.stats .v{font-size:clamp(26px,2.23vw,40px); font-weight:600; letter-spacing:-.02em; line-height:1.1}
+.stats .v{font-size:clamp(24px,2.96cqw,40px); font-weight:600; letter-spacing:-.02em; line-height:1.1}
 /* CTA в фигме — фиксированные 520 с контентом по центру, не хаг */
 .cta{display:flex; align-self:flex-start; align-items:center; justify-content:center; gap:12px;
   width:min(520px,100%); padding:20px 32px; border-radius:16px; background:var(--lime);
-  color:var(--lime-ink); font-size:clamp(17px,1.34vw,24px); font-weight:600}
+  color:var(--lime-ink); font-size:clamp(17px,1.85cqw,24px); font-weight:600}
 .cta::before{content:""; width:9px; height:9px; border-radius:50%; background:var(--lime-ink)}
 .case:hover .cta{filter:brightness(1.05)}
 .case .media{position:relative; display:grid; place-items:center; padding:clamp(20px,2.4vw,34px); min-height:340px}
@@ -153,7 +161,7 @@ mark{background:var(--lime); color:var(--lime-ink); padding:0 .18em; border-radi
    явно, ширину каждый кадр берёт из своей пропорции (width:auto +
    aspect-ratio). Сетка с равными колонками либо резала бы квадраты, либо
    оставляла вокруг телефона огромные поля. */
-.flows-wrap{position:relative}
+.flows-wrap{position:relative; container-type:inline-size}
 .flows{display:flex; gap:clamp(20px,2.8vw,48px); overflow-x:auto; scroll-behavior:smooth;
   scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch;
   scrollbar-width:none; -ms-overflow-style:none}
@@ -161,10 +169,13 @@ mark{background:var(--lime); color:var(--lime-ink); padding:0 .18em; border-radi
 /* aspect-ratio прописан в CSS, а не выведен из атрибутов: при preload="none"
    браузер ещё не знает натуральных размеров, и без него width:auto схлопнулся
    бы в дефолтные 300px до загрузки метаданных */
-/* верхняя граница 86vw — у квадратной записи ширина равна высоте, и без неё
-   на телефоне кадр (420px) оказывался шире самой ленты (343px): целиком его
-   было не увидеть ни при какой прокрутке. На десктопе предел не срабатывает */
-.flows video{flex:0 0 auto; display:block; height:min(clamp(420px,34vw,640px),86vw); width:auto;
+/* Высота считается от ширины ленты (cqw), а не окна: колонка теперь уже
+   окна, и привязка к vw давала квадрат в 612px на ленте в 1080 — в кадр
+   влезало полтора ролика.
+   Верхняя граница 86vw — у квадратной записи ширина равна высоте, и без неё
+   на телефоне кадр оказывался шире самой ленты: целиком его было не увидеть
+   ни при какой прокрутке. */
+.flows video{flex:0 0 auto; display:block; height:min(clamp(320px,46cqw,520px),86vw); width:auto;
   aspect-ratio:1/1; object-fit:contain; scroll-snap-align:start;
   border:0; outline:0; margin:0; padding:0; background:none}
 .flows video.phone{aspect-ratio:556/1214}
