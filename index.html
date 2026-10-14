@@ -125,16 +125,35 @@
   <section id="flows">
     <div class="sec-head big"><h2>Mobile</h2></div>
 
-    <div class="flows">
-      <video src="/assets/video/ironwallet-in-process.webm" width="556" height="1214"
-             data-lazy loop muted playsinline preload="none"
-             aria-label="IronWallet — состояние In process"></video>
-      <video src="/assets/video/slippage-flow.webm" width="1480" height="1850"
-             data-lazy loop muted playsinline preload="none"
-             aria-label="Slippage flow"></video>
-      <video src="/assets/video/verification.webm" width="640" height="640"
-             data-lazy loop muted playsinline preload="none"
-             aria-label="Верификация — флоу"></video>
+    <div class="flows-wrap" data-scroller>
+      <button class="flows-arrow prev" type="button" aria-label="Предыдущие флоу" hidden>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M15 5l-7 7 7 7"/>
+        </svg>
+      </button>
+
+      <div class="flows">
+        <video class="phone" src="/assets/video/ironwallet-in-process.webm" width="556" height="1214"
+               data-lazy loop muted playsinline preload="none"
+               aria-label="IronWallet — состояние In process"></video>
+        <video src="/assets/video/slippage-flow.webm" width="1920" height="1920"
+               data-lazy loop muted playsinline preload="none"
+               aria-label="Slippage — флоу"></video>
+        <video src="/assets/video/verification.webm" width="640" height="640"
+               data-lazy loop muted playsinline preload="none"
+               aria-label="Верификация — флоу"></video>
+        <video src="/assets/video/delete-wallets.webm" width="1920" height="1920"
+               data-lazy loop muted playsinline preload="none"
+               aria-label="Удаление кошельков — флоу"></video>
+      </div>
+
+      <button class="flows-arrow next" type="button" aria-label="Следующие флоу" hidden>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
     </div>
   </section>
 

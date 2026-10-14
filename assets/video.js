@@ -10,6 +10,54 @@
    качается, пока не понадобится. Этот скрипт включает ролик, когда
    он подъезжает к экрану, и ставит на паузу, когда уходит.
    ========================================================= */
+
+/* =========================================================
+   Горизонтальная лента флоу: стрелки по бокам.
+
+   Лента и без скрипта листается пальцем и колесом — стрелки
+   только для мыши. Поэтому в разметке они стоят с hidden, и
+   если скрипт не выполнился, пользователь не видит мёртвых
+   кнопок.
+   ========================================================= */
+(function(){
+  document.querySelectorAll('[data-scroller]').forEach(function(wrap){
+    var lane = wrap.querySelector('.flows');
+    var prev = wrap.querySelector('.flows-arrow.prev');
+    var next = wrap.querySelector('.flows-arrow.next');
+    if(!lane || !prev || !next) return;
+
+    /* шаг прокрутки — ширина первого кадра с отступом: лента всегда
+       встаёт на границу ролика, а не на случайный пиксель */
+    function step(){
+      var first = lane.querySelector('video');
+      if(!first) return lane.clientWidth * 0.8;
+      var gap = parseFloat(getComputedStyle(lane).columnGap) || 0;
+      return first.getBoundingClientRect().width + gap;
+    }
+
+    /* 2px допуска: при дробном зуме scrollLeft не добирает до максимума
+       ровно и стрелка «вперёд» зависала бы активной в самом конце */
+    function sync(){
+      var max = lane.scrollWidth - lane.clientWidth;
+      var fits = max <= 2;
+      prev.hidden = fits || lane.scrollLeft <= 2;
+      next.hidden = fits || lane.scrollLeft >= max - 2;
+    }
+
+    prev.addEventListener('click', function(){ lane.scrollBy({ left: -step(), behavior: 'smooth' }); });
+    next.addEventListener('click', function(){ lane.scrollBy({ left:  step(), behavior: 'smooth' }); });
+    lane.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
+
+    /* высота кадров зависит от vw, но ширина — от пропорции, которую
+       браузер уточняет после загрузки метаданных; пересчитываем тогда же */
+    lane.querySelectorAll('video').forEach(function(v){
+      v.addEventListener('loadedmetadata', sync);
+    });
+  });
+})();
+
 (function(){
   var vids = document.querySelectorAll('video[data-lazy]');
   if(!vids.length) return;

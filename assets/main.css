@@ -148,14 +148,45 @@ mark{background:var(--lime); color:var(--lime-ink); padding:0 .18em; border-radi
 
 /* ---------- секция Mobile ---------- */
 /* только видео: ни карточки, ни фона, ни подписей */
-/* записи разной пропорции (0.46, 0.8 и 1.0). Если дать видео width:100%,
-   телефонный кадр на колонке 696px вытянется в 1520px и порвёт страницу,
-   поэтому высоту задаём явно, а кадр вписывается в неё через
-   object-fit:contain — пропорции целы, все записи одной высоты.
-   Поля от contain прозрачные, поэтому вокруг видео ничего не видно */
-.flows{display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(20px,2.8vw,48px)}
-.flows video{display:block; width:100%; height:clamp(420px,34vw,640px); object-fit:contain;
+/* Записи разной пропорции: три квадрата и один вертикальный телефон (0.46).
+   Поэтому не сетка, а горизонтальная лента: высота у всех одна и задана
+   явно, ширину каждый кадр берёт из своей пропорции (width:auto +
+   aspect-ratio). Сетка с равными колонками либо резала бы квадраты, либо
+   оставляла вокруг телефона огромные поля. */
+.flows-wrap{position:relative}
+.flows{display:flex; gap:clamp(20px,2.8vw,48px); overflow-x:auto; scroll-behavior:smooth;
+  scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch;
+  scrollbar-width:none; -ms-overflow-style:none}
+.flows::-webkit-scrollbar{display:none}
+/* aspect-ratio прописан в CSS, а не выведен из атрибутов: при preload="none"
+   браузер ещё не знает натуральных размеров, и без него width:auto схлопнулся
+   бы в дефолтные 300px до загрузки метаданных */
+/* верхняя граница 86vw — у квадратной записи ширина равна высоте, и без неё
+   на телефоне кадр (420px) оказывался шире самой ленты (343px): целиком его
+   было не увидеть ни при какой прокрутке. На десктопе предел не срабатывает */
+.flows video{flex:0 0 auto; display:block; height:min(clamp(420px,34vw,640px),86vw); width:auto;
+  aspect-ratio:1/1; object-fit:contain; scroll-snap-align:start;
   border:0; outline:0; margin:0; padding:0; background:none}
+.flows video.phone{aspect-ratio:556/1214}
+
+/* стрелки — поверх ленты по краям; прячутся у соответствующего конца (hidden
+   ставит скрипт), поэтому на коротком списке их не видно вовсе */
+.flows-arrow{position:absolute; top:50%; translate:0 -50%; z-index:2;
+  display:flex; align-items:center; justify-content:center;
+  width:52px; height:52px; padding:0; border:0; border-radius:999px;
+  background:rgba(242,241,238,.92); color:var(--ink); cursor:pointer;
+  box-shadow:0 2px 14px rgba(21,23,27,.16);
+  transition:background .15s ease, box-shadow .15s ease}
+.flows-arrow:hover{background:#fff; box-shadow:0 4px 18px rgba(21,23,27,.22)}
+.flows-arrow:focus-visible{outline:2px solid var(--ink); outline-offset:3px}
+.flows-arrow[hidden]{display:none}
+.flows-arrow.prev{left:0; translate:-40% -50%}
+.flows-arrow.next{right:0; translate:40% -50%}
+/* на узком экране сдвигать стрелки наружу некуда — контент уже у края */
+@media (max-width:980px){
+  .flows-arrow.prev{translate:0 -50%}
+  .flows-arrow.next{translate:0 -50%}
+}
 
 /* ---------- skills ---------- */
 .skills{display:flex; flex-wrap:wrap; gap:10px; padding-top:clamp(24px,3vw,48px)}
@@ -185,8 +216,7 @@ footer .sep{color:#c6c3bc}
   .case{grid-template-columns:1fr}
   /* padding-top освобождает место под бейджем компании — иначе он ложится на картинку */
   .case .media{order:-1; min-height:0; padding-top:76px}
-  /* флоу на мобильном — одна за другой сверху вниз */
-  .flows{grid-template-columns:1fr}
+  /* лента флоу остаётся лентой: на мобильном её листают пальцем */
 }
 
 /* ---------- мобильный ---------- */
