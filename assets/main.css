@@ -109,38 +109,43 @@ section{padding:clamp(28px,4vw,60px) 0}
 mark{background:var(--lime); color:var(--lime-ink); padding:0 .18em; border-radius:4px}
 
 /* ---------- shots grid ---------- */
-/* карточка 806 × отступ 56 × колонка 694, gap 22 — всё в cqw, чтобы пропорции держались */
-.grid{display:grid; grid-template-columns:1fr 1fr; grid-auto-rows:1fr; gap:clamp(20px,2.8vw,48px)}
-.shot{container-type:inline-size; display:flex; border-radius:4.22cqw;
+/* Одна колонка: карточка во всю ширину контента (до 1568px).
+   grid-auto-rows:auto — каждая карточка своей высоты, иначе 1fr растягивал
+   бы все строки по самой высокой и в коротких зияла бы пустота. */
+.grid{display:grid; grid-template-columns:1fr; grid-auto-rows:auto; gap:clamp(20px,2.8vw,48px)}
+.shot{container-type:inline-size; display:flex; border-radius:min(4.22cqw,34px);
   background:var(--card-light); color:#14161f; text-decoration:none}
 .shot.dark{background:var(--card-dark); color:#f4f3f0}
-.shot .body{flex:1; display:flex; flex-direction:column; gap:max(12px,2.73cqw); padding:max(20px,6.95cqw); min-width:0}
+.shot .body{flex:1; display:flex; flex-direction:column;
+  gap:clamp(12px,2.73cqw,24px); padding:clamp(20px,6.95cqw,56px); min-width:0}
 /* картинка не растягивается и не кропится: ширина колонки, высота — натуральная */
 /* видео живёт по тем же правилам, что и картинка: без рамок, фона и отступов */
 .shot .body > img,
-.shot .body > video{display:block; width:100%; height:auto; border-radius:3.97cqw;
+.shot .body > video{display:block; width:100%; height:auto; border-radius:min(3.97cqw,32px);
   border:0; outline:0; margin:0; padding:0; background:none}
 .shot .tags{display:flex; flex-wrap:wrap; gap:8px}
 /* теги шотов — заливка своего же цвета с малой прозрачностью, текст в цвет карточки */
-/* max() обязателен: на мобильном карточка ~340px, и чистый cqw давал теги 6px,
-   описание 8px — нечитаемо. На десктопе (806px) cqw всегда больше порога,
-   поэтому фигмовские размеры 58/19/14 не меняются */
+/* clamp, а не max: на мобильном карточка ~340px, и чистый cqw давал теги 6px,
+   описание 8px — нечитаемо; а в одну колонку карточка 1568px, и тот же cqw
+   раздувал заголовок до 113px. Между порогами живут фигмовские 58/19/14 */
 .shot .tags span{padding:6px 14px; border-radius:999px; background:rgba(20,22,31,.07); color:#14161f;
-  font-size:max(13px,1.74cqw); font-weight:400}
+  font-size:clamp(13px,1.74cqw,15px); font-weight:400}
 .shot.dark .tags span{background:rgba(203,203,203,.07); color:#eef1f5}
-.shot h3{margin:0; font-size:max(22px,7.2cqw); font-weight:600; letter-spacing:-.035em; line-height:1.08}
+/* верхняя граница 46px — ровно как у заголовка секции: подзаголовок карточки
+   не должен звучать громче «Другие работы, шоты» */
+.shot h3{margin:0; font-size:clamp(22px,7.2cqw,46px); font-weight:600; letter-spacing:-.035em; line-height:1.08}
 .shot.dark h3{color:#f4f3f0}
-.shot p{margin:0; font-size:max(15px,2.36cqw); line-height:1.4; color:#4e5464}
+.shot p{margin:0; font-size:clamp(15px,2.36cqw,20px); line-height:1.4; color:#4e5464; max-width:72ch}
 .shot .grow{flex:1; min-height:0}
 
 /* ---------- мобильные флоу ---------- */
 /* только видео: ни карточки, ни фона, ни подписей */
-/* записи вертикальные и разной пропорции (0.46 и 0.8). Если дать видео
-   width:100%, телефонный кадр на колонке 696px вытянется в 1520px и порвёт
-   страницу, поэтому высоту задаём явно, а кадр вписывается в неё
-   через object-fit:contain — пропорции целы, обе записи одной высоты.
+/* записи разной пропорции (0.46, 0.8 и 1.0). Если дать видео width:100%,
+   телефонный кадр на колонке 696px вытянется в 1520px и порвёт страницу,
+   поэтому высоту задаём явно, а кадр вписывается в неё через
+   object-fit:contain — пропорции целы, все записи одной высоты.
    Поля от contain прозрачные, поэтому вокруг видео ничего не видно */
-.flows{display:grid; grid-template-columns:1fr 1fr; gap:clamp(20px,2.8vw,48px)}
+.flows{display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(20px,2.8vw,48px)}
 .flows video{display:block; width:100%; height:clamp(420px,34vw,640px); object-fit:contain;
   border:0; outline:0; margin:0; padding:0; background:none}
 
@@ -172,9 +177,6 @@ footer .sep{color:#c6c3bc}
   .case{grid-template-columns:1fr}
   /* padding-top освобождает место под бейджем компании — иначе он ложится на картинку */
   .case .media{order:-1; min-height:0; padding-top:76px}
-  /* в одну колонку каждая карточка — своя строка, и grid-auto-rows:1fr растягивал
-     все строки по самой высокой, оставляя в коротких карточках дыру в полэкрана */
-  .grid{grid-template-columns:1fr; grid-auto-rows:auto}
   /* флоу на мобильном — одна за другой сверху вниз */
   .flows{grid-template-columns:1fr}
 }
@@ -186,6 +188,106 @@ footer .sep{color:#c6c3bc}
   .stats{display:grid; grid-template-columns:1fr; align-self:stretch; width:100%}
   .stats > div{min-width:0; padding:14px 20px}
   .stats > div + div{border-left:0; border-top:1px solid rgba(255,255,255,.14)}
+}
+
+/* ---------- UX-разбор: камера по записи экрана ---------- */
+/* aspect-ratio держит высоту до загрузки видео — CLS = 0.
+   overflow:hidden обязателен: камера двигает кадр за пределы рамки. */
+/* container-type — чтобы чипы и выводы мерились шириной кадра, а не карточки:
+   один набор cqw-размеров работает и на десктопе, и на телефоне */
+.uxc{position:relative; container-type:inline-size}
+/* aspect-ratio = пропорции самой записи (1632×1080). 16/9, как было у старого
+   ролика, при object-fit:cover срезал бы у нового кадра верх и низ */
+.ux{position:relative; width:100%; aspect-ratio:1632/1080; overflow:hidden;
+  border-radius:min(3.97cqw,32px); background:#0b0d12; isolation:isolate}
+.ux__video{display:block; width:100%; height:100%; object-fit:cover;
+  transform-origin:50% 50%; will-change:transform; backface-visibility:hidden}
+
+/* Оверлеи живут вне трансформируемого видео: иначе зум размывал бы текст
+   и таскал бы чипы вместе с кадром. */
+.ux__layer{position:absolute; inset:0; pointer-events:none;
+  font-family:"Onest",system-ui,sans-serif}
+/* лёгкая подложка сверху и снизу — чипы и кнопка читаются на любом кадре */
+.ux__layer::before{content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(180deg,rgba(8,10,16,.30) 0%,rgba(8,10,16,0) 20%,
+    rgba(8,10,16,0) 62%,rgba(8,10,16,.34) 100%)}
+
+/* ---- чипы ---- */
+.ux__chip{position:absolute; z-index:2; max-width:min(42cqw,420px);
+  padding:min(0.95cqw,9px) min(1.5cqw,15px); border-radius:999px;
+  background:rgba(255,255,255,.82); color:#14161f;
+  font-size:clamp(11px,1.45cqw,15px); font-weight:500; line-height:1.25; letter-spacing:-.01em;
+  white-space:nowrap; text-overflow:ellipsis; overflow:hidden;
+  box-shadow:0 2px 10px rgba(8,10,16,.18), 0 0 0 1px rgba(255,255,255,.5) inset;
+  backdrop-filter:blur(14px) saturate(1.4); -webkit-backdrop-filter:blur(14px) saturate(1.4);
+  opacity:0; transform:translateY(10px); transition:opacity .5s ease, transform .5s cubic-bezier(.22,.8,.26,1)}
+.ux__chip.is-on{opacity:1; transform:translateY(0)}
+.ux__chip--tl{top:min(3.2cqw,26px); left:min(3.2cqw,26px)}
+.ux__chip--tr{top:min(3.2cqw,26px); right:min(3.2cqw,26px)}
+/* 9cqw — выше полосы прогресса и кнопки, чтобы ничего не наезжало */
+.ux__chip--br{bottom:max(44px,min(9cqw,72px)); right:min(3.2cqw,26px)}
+
+/* ---- выводы ---- */
+/* Вывод в три строки — это ~50% ширины и ~20% высоты кадра. Интерфейс на
+   записи плотный, и на зуме под такой блок не остаётся пустого места:
+   в любом углу он закрывает то, ради чего камера туда приехала.
+   Поэтому выводы живут под кадром, в карточке. Поверх записи остаются
+   только чипы — они короткие и встают в свободные зоны.
+   Контейнер с фиксированной высотой, выводы сложены друг на друга и
+   перекрёстно гаснут — при смене текста ничего не прыгает. */
+/* пиксельный пол: на средних ширинах текст переходит на третью строку
+   раньше, чем 8cqw успевает вырасти */
+.ux__notes{position:relative; margin-top:min(1.6cqw,14px); min-height:clamp(92px,8cqw,112px);
+  pointer-events:none}
+.ux__note{position:absolute; inset:0 0 auto 0; margin:0; color:var(--ink);
+  opacity:0; transform:translateY(12px); transition:opacity .55s ease, transform .55s cubic-bezier(.22,.8,.26,1)}
+.ux__note.is-on{opacity:1; transform:translateY(0)}
+.ux__note-k{display:block; margin-bottom:min(.55cqw,6px);
+  font-family:"Martian Mono",ui-monospace,monospace; font-size:clamp(9px,.92cqw,11px);
+  letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)}
+/* через .ux__notes — иначе общее правило .shot p перебивает размер и цвет */
+.ux__notes .ux__note-t{margin:0; font-size:clamp(14px,1.72cqw,22px); font-weight:500;
+  line-height:1.32; letter-spacing:-.02em; text-wrap:balance; color:var(--ink);
+  max-width:min(62cqw,72ch)}
+
+/* ---- прогресс и управление ---- */
+.ux__bar{position:absolute; z-index:3; left:0; right:0; bottom:0; height:2px;
+  background:rgba(244,243,240,.18)}
+/* строго > i: иначе правило ловит и палочки-метки внутри .ux__marks */
+.ux__bar > i{display:block; height:100%; background:var(--lime);
+  transform:scaleX(0); transform-origin:0 50%}
+.ux__marks{position:absolute; inset:0}
+.ux__marks i{position:absolute; top:0; width:1px; height:100%; background:rgba(244,243,240,.5)}
+
+.ux__toggle{position:absolute; z-index:4; right:min(3.2cqw,26px); bottom:min(2.6cqw,22px);
+  display:inline-flex; align-items:center; gap:7px; padding:8px 14px;
+  border:0; border-radius:999px; cursor:pointer;
+  background:rgba(16,18,24,.52); color:#f4f3f0;
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  font-family:"Martian Mono",ui-monospace,monospace; font-size:10px;
+  letter-spacing:.06em; text-transform:uppercase;
+  opacity:0; transition:opacity .25s ease}
+.uxc:hover .ux__toggle,.ux__toggle:focus-visible{opacity:1}
+.ux__toggle::before{content:"Пауза"}
+/* класс is-playing висит на .uxc — его ставит скрипт по событиям video */
+.uxc:not(.is-playing) .ux__toggle{opacity:1}
+.uxc:not(.is-playing) .ux__toggle::before{content:"Смотреть"}
+
+@media (max-width:720px){
+  /* на узкой карточке cqw-высота блока выводов уже не спасает:
+     текст занимает больше строк, поэтому резерв задаём в пикселях */
+  .ux__notes{min-height:100px; margin-top:12px}
+  .ux__notes .ux__note-t{max-width:none}
+  .ux__chip{max-width:70cqw}
+  /* на телефоне кнопка «Смотреть» занимает фиксированные 30px и в cqw
+     не уменьшается — нижние чипы поднимаем выше неё */
+  .ux__chip--br{bottom:14cqw}
+}
+
+@media (prefers-reduced-motion: reduce){
+  /* камера стоит, оверлеи появляются без сдвига, автозапуска нет */
+  .ux__video{transform:none !important}
+  .ux__chip,.ux__note{transform:none !important}
 }
 
 /* ---------- доступность ---------- */
