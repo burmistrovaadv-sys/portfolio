@@ -65,7 +65,7 @@ section{padding:clamp(28px,4vw,60px) 0}
    кегль перестал попадать в карточку — заголовок уезжал в четыре строки,
    а Stats (450px) не влезал в текстовую колонку (428px). Теперь размеры
    считаются от самой карточки, как у шотов. */
-.case{container-type:inline-size;
+.case{container-type:inline-size; position:relative;
   display:grid; grid-template-columns:1fr 1fr; border-radius:clamp(20px,2.2vw,34px);
   overflow:hidden; color:#f4f3f0; text-decoration:none}
 .case.c-crypto{background:#15171b}
@@ -98,9 +98,26 @@ section{padding:clamp(28px,4vw,60px) 0}
 /* CTA в фигме — фиксированные 520 с контентом по центру, не хаг */
 .cta{display:flex; align-self:flex-start; align-items:center; justify-content:center; gap:12px;
   width:min(520px,100%); padding:20px 32px; border-radius:16px; background:var(--lime);
-  color:var(--lime-ink); font-size:clamp(17px,1.85cqw,24px); font-weight:600}
+  color:var(--lime-ink); font-size:clamp(17px,1.85cqw,24px); font-weight:600; text-decoration:none}
 .cta::before{content:""; width:9px; height:9px; border-radius:50%; background:var(--lime-ink)}
-.case:hover .cta{filter:brightness(1.05)}
+.case:hover .cta.stretch{filter:brightness(1.05)}
+
+/* Рядом с «Смотреть кейс» встала вторая, внешняя ссылка — на живой сайт.
+   Вложенные <a> невалидны, поэтому карточка с двумя ссылками перестала быть
+   ссылкой целиком: теперь это div, а кейс открывает растянутый на всю
+   карточку псевдоэлемент основной кнопки. */
+.cta-row{display:flex; align-self:flex-start; align-items:stretch; flex-wrap:wrap; gap:12px; max-width:100%}
+/* боковые поля ужаты с 32 до 24: при 445px текстовой колонки пара кнопок
+   в прежнем размере требовала 461 и уезжала в две строки */
+.cta-row .cta{width:auto; align-self:auto; padding-left:24px; padding-right:24px; white-space:nowrap}
+/* z-index нужен: .media позиционирована и идёт следом по DOM, без слоя
+   она бы легла поверх растяжки и половина карточки не кликалась бы */
+.cta.stretch::after{content:""; position:absolute; inset:0; z-index:1}
+/* внешняя ссылка поверх растяжки, иначе клик по ней ушёл бы в кейс */
+.cta.ghost{position:relative; z-index:2; background:none; color:#f4f3f0;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.26)}
+.cta.ghost::before{background:var(--lime)}
+.cta.ghost:hover{background:rgba(255,255,255,.07)}
 .case .media{position:relative; display:grid; place-items:center; padding:clamp(20px,2.4vw,34px); min-height:340px}
 /* height:auto — картинка тянется только по ширине, пропорции не ломаются */
 .case .media img{border-radius:clamp(14px,1.8vw,32px); display:block; height:auto}
@@ -142,6 +159,16 @@ mark{background:var(--lime); color:var(--lime-ink); padding:0 .18em; border-radi
 .shot .body > .tags,
 .shot .body > h3,
 .shot .body > p{padding-left:clamp(20px,6.95cqw,56px); padding-right:clamp(20px,6.95cqw,56px)}
+/* Ссылка на живой проект: подчёркнутая строка, а не кнопка — шот сам по себе
+   не кликабелен, и кнопка обещала бы переход в кейс, которого нет.
+   Отступ слева — margin, а не padding: иначе lime-подсветка на ховере
+   растянулась бы от самого края карточки. */
+.site-link{align-self:flex-start; display:inline-flex; align-items:center; gap:8px;
+  margin-left:clamp(20px,6.95cqw,56px); max-width:calc(100% - clamp(20px,6.95cqw,56px) * 2);
+  font-size:clamp(15px,2.36cqw,20px); font-weight:500; color:var(--ink);
+  text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:4px}
+.site-link::after{content:"↗"; font-weight:400}
+.site-link:hover{background:var(--lime)}
 /* gap от картинки 24px, а по бокам 56px — добираем воздух сверху, чтобы текст
    не висел вплотную под кадром */
 .shot .body > .tags{padding-top:clamp(8px,1.6cqw,20px)}

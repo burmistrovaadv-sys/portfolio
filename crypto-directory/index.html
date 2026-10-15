@@ -48,6 +48,12 @@
   .tag.hl{background:var(--lime); color:var(--lime-ink)}
   h1{margin:0; max-width:18ch; font-size:clamp(40px,7vw,96px); font-weight:700; letter-spacing:-.045em; line-height:.98}
   .lead{margin:clamp(20px,2.4vw,32px) 0 0; max-width:60ch; font-size:clamp(18px,1.8vw,24px); line-height:1.45; color:var(--ink-2)}
+  /* ссылка на живой сайт проекта — сразу под лидом, до оглавления и блоков */
+  .site-link{display:inline-flex; align-items:center; gap:8px; margin-top:clamp(18px,2vw,26px);
+    padding:12px 22px; border-radius:999px; background:var(--lime); color:var(--lime-ink);
+    font-size:clamp(16px,1.3vw,19px); font-weight:600; text-decoration:none}
+  .site-link::after{content:"↗"; font-weight:400}
+  .site-link:hover{background:var(--lime); filter:brightness(1.05)}
 
   .layout{display:grid; grid-template-columns:minmax(170px,240px) minmax(0,1fr); gap:clamp(20px,3vw,56px);
     align-items:start; padding-top:clamp(28px,3.5vw,48px)}
@@ -197,6 +203,7 @@
       <h1>Каталог, который начинался с идеи «Yellow Pages для крипто»</h1>
       <p class="lead">Изначально мы хотели собрать в одном месте компании и сервисы, связанные с криптовалютой. В процессе исследования стало понятно: пользователю не нужен ещё один каталог криптопроектов — ему нужно быстро понять, где он может использовать свою криптовалюту.</p>
       <p class="lead">Я помогла сфокусировать продукт, определить нужные данные и спроектировать сценарии поиска — от каталога до карты.</p>
+      <a class="site-link" href="https://cryptomarketplacehere.com/" target="_blank" rel="noopener">cryptomarketplacehere.com</a>
     </section>
 
     <section style="padding-bottom:8px;">
