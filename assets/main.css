@@ -72,6 +72,8 @@ section{padding:clamp(28px,4vw,60px) 0}
 .case.c-crypto .media{background:#0f1113}
 .case.c-wallet{background:#1f2a3a}
 .case.c-wallet .media{background:#18212e}
+.case.c-exmo{background:#1b2130}
+.case.c-exmo .media{background:#141927}
 /* колонка контента в фигме 840 с padding 56 и gap 22 */
 .case .content{display:flex; flex-direction:column; gap:22px; padding:clamp(24px,4.4cqw,56px); min-width:0}
 .case .tags{display:flex; flex-wrap:wrap; gap:8px}
@@ -107,9 +109,10 @@ section{padding:clamp(28px,4vw,60px) 0}
    ссылкой целиком: теперь это div, а кейс открывает растянутый на всю
    карточку псевдоэлемент основной кнопки. */
 .cta-row{display:flex; align-self:flex-start; align-items:stretch; flex-wrap:wrap; gap:12px; max-width:100%}
-/* боковые поля ужаты с 32 до 24: при 445px текстовой колонки пара кнопок
-   в прежнем размере требовала 461 и уезжала в две строки */
-.cta-row .cta{width:auto; align-self:auto; padding-left:24px; padding-right:24px; white-space:nowrap}
+/* боковые поля ужаты с 32 до 20: при 445px текстовой колонки пара кнопок
+   в прежнем размере требовала 461 и уезжала в две строки, а у карточки exmo
+   («Смотреть кейс» + «Открыть сайт») даже на 24 не хватало трёх пикселей */
+.cta-row .cta{width:auto; align-self:auto; padding-left:20px; padding-right:20px; white-space:nowrap}
 /* z-index нужен: .media позиционирована и идёт следом по DOM, без слоя
    она бы легла поверх растяжки и половина карточки не кликалась бы */
 .cta.stretch::after{content:""; position:absolute; inset:0; z-index:1}
@@ -123,6 +126,9 @@ section{padding:clamp(28px,4vw,60px) 0}
 .case .media img{border-radius:clamp(14px,1.8vw,32px); display:block; height:auto}
 .case.c-crypto .media img{width:min(775px,100%)}
 .case.c-wallet .media img{width:min(286px,72%)}
+/* обложка exmo почти квадратная (2454×2094) — по полной ширине колонки
+   она перебивала бы текстовую половину по высоте */
+.case.c-exmo .media img{width:min(560px,100%)}
 /* видео в кейсе живёт по тем же правилам, что и картинка; квадратная запись
    занимает колонку целиком — в отличие от прежнего скриншота телефона,
    который был узкой вертикалью на 286px */
