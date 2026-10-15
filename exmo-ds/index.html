@@ -216,7 +216,7 @@
         </div>
         <div class="top-cover">
           <div class="frame cover" data-src="/exmo-ds/img/hero-web.webp" data-title="exmo.me — главная после редизайна" tabindex="0">
-            <img src="/exmo-ds/img/hero-web.webp" width="2454" height="2094" fetchpriority="high" decoding="async" alt="exmo.me — страницы после редизайна">
+            <img src="/exmo-ds/img/hero-web.webp" width="1200" height="1024" fetchpriority="high" decoding="async" alt="exmo.me — страницы после редизайна">
             <div class="zoom" aria-hidden="true"></div>
           </div>
         </div>
@@ -265,14 +265,14 @@
               <figure>
                 <figcaption class="cap">До редизайна</figcaption>
                 <div class="frame tall" data-src="/exmo-ds/img/web-01.webp" data-title="exmo.me — главная до редизайна" tabindex="0">
-                  <img src="/exmo-ds/img/web-01.webp" width="900" height="3512" loading="lazy" decoding="async" alt="exmo.me — главная страница до редизайна">
+                  <img src="/exmo-ds/img/web-01.webp" width="900" height="3512" decoding="async" alt="exmo.me — главная страница до редизайна">
                   <div class="zoom"></div>
                 </div>
               </figure>
               <figure>
                 <figcaption class="cap">После редизайна</figcaption>
                 <div class="frame tall" data-src="/exmo-ds/img/web-02.webp" data-title="exmo.me — главная после редизайна" tabindex="0">
-                  <img src="/exmo-ds/img/web-02.webp" width="900" height="3850" loading="lazy" decoding="async" alt="exmo.me — главная страница после редизайна">
+                  <img src="/exmo-ds/img/web-02.webp" width="900" height="3850" decoding="async" alt="exmo.me — главная страница после редизайна">
                   <div class="zoom"></div>
                 </div>
               </figure>
@@ -315,7 +315,7 @@
             <div class="pair">
               <figure>
                 <div class="frame mid" data-src="/exmo-ds/img/ds-12.webp" data-title="Дизайн-система — компоненты" tabindex="0">
-                  <img src="/exmo-ds/img/ds-12.webp" width="1346" height="1320" loading="lazy" decoding="async" alt="Дизайн-система exmo.me — компоненты">
+                  <img src="/exmo-ds/img/ds-12.webp" width="1240" height="1216" loading="lazy" decoding="async" alt="Дизайн-система exmo.me — компоненты">
                   <div class="zoom"></div>
                 </div>
               </figure>
@@ -329,7 +329,7 @@
             <div class="shots">
               <figure class="shot on">
                 <div class="frame" data-src="/exmo-ds/img/ds-01.webp" data-title="Дизайн-система — стили и токены" tabindex="0">
-                  <img src="/exmo-ds/img/ds-01.webp" width="2264" height="1066" loading="lazy" decoding="async" alt="Дизайн-система exmo.me — стили и токены">
+                  <img src="/exmo-ds/img/ds-01.webp" width="2074" height="977" loading="lazy" decoding="async" alt="Дизайн-система exmo.me — стили и токены">
                   <div class="zoom"></div>
                 </div>
               </figure>
@@ -381,7 +381,7 @@
             <div class="shots">
               <figure class="shot on">
                 <div class="frame mid" data-src="/exmo-ds/img/web-tabs.webp" data-title="Earn promo — страница раздела" tabindex="0">
-                  <img src="/exmo-ds/img/web-tabs.webp" width="1882" height="1928" loading="lazy" decoding="async" alt="exmo.me — страница раздела Earn promo">
+                  <img src="/exmo-ds/img/web-tabs.webp" width="1240" height="1270" loading="lazy" decoding="async" alt="exmo.me — страница раздела Earn promo">
                   <div class="zoom"></div>
                 </div>
                 <figcaption class="cap">Earn promo — одна из страниц, собранных на системе</figcaption>
@@ -455,7 +455,7 @@
             <div class="shots">
               <figure class="shot on">
                 <div class="frame mid" data-src="/exmo-ds/img/pay-08.webp" data-title="Каскад платёжных методов" tabindex="0">
-                  <img src="/exmo-ds/img/pay-08.webp" width="1480" height="1414" loading="lazy" decoding="async" alt="exmo.me — каскад платёжных методов">
+                  <img src="/exmo-ds/img/pay-08.webp" width="1240" height="1185" loading="lazy" decoding="async" alt="exmo.me — каскад платёжных методов">
                   <div class="zoom"></div>
                 </div>
               </figure>
@@ -607,5 +607,26 @@
 </div>
 
 <script src="/assets/case.js" defer></script>
+<script>
+/* Кейс длинный (19 макетов, ~20 000px), и нативный loading="lazy" начинает
+   качать картинку примерно за экран до её появления. Прод отдаёт каждую за
+   0.5–1.5s, поэтому при быстром скролле макеты успевали «догонять» экран.
+   Даю запас в два экрана: как только картинка подходит ближе, перевожу её
+   в eager — этого достаточно, чтобы она была готова к моменту показа.
+   Если IntersectionObserver недоступен, остаётся штатное нативное поведение. */
+(function(){
+  if(!('IntersectionObserver' in window)) return;
+  var imgs = Array.prototype.slice.call(document.querySelectorAll('img[loading="lazy"]'));
+  if(!imgs.length) return;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      e.target.loading = 'eager';
+      io.unobserve(e.target);
+    });
+  }, { rootMargin: '200% 0px' });
+  imgs.forEach(function(i){ io.observe(i); });
+})();
+</script>
 </body>
 </html>
