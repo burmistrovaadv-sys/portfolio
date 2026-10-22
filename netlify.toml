@@ -1,0 +1,67 @@
+# Конфиг Netlify. Повторяет vercel.json один в один — сайт статический,
+# сборки нет, публикуется корень репозитория как есть.
+#
+# vercel.json не удалён намеренно: деплой на Vercel продолжает работать,
+# пока не убедимся, что Netlify решает проблему с доменом.
+
+[build]
+  # команды сборки нет вообще: чистые HTML/CSS/JS без зависимостей,
+  # поэтому указан только каталог публикации
+  publish = "."
+
+# vercel.json → "cleanUrls": true и "trailingSlash": false.
+# На Netlify это post-processing «Pretty URLs», он включён по умолчанию:
+# /send-flow отдаёт send-flow/index.html, а /send-flow/ редиректит на /send-flow.
+# Отдельной настройки в netlify.toml для этого нет.
+
+# --- редиректы (перенос из vercel.json "redirects") ---
+
+# временный: страница под конкретный отклик, регистр адреса
+[[redirects]]
+  from = "/JapanStat"
+  to = "/japanstat"
+  status = 302
+  force = true
+
+# постоянный: старый адрес кейса
+[[redirects]]
+  from = "/cases/sohranenie-kontaktov"
+  to = "/send-flow"
+  status = 301
+  force = true
+
+# постоянный: всё остальное из старого раздела /cases — на главную.
+# Должен идти ПОСЛЕ более точного правила выше: Netlify применяет
+# первое совпавшее правило, а не самое специфичное.
+[[redirects]]
+  from = "/cases/*"
+  to = "/"
+  status = 301
+  force = true
+
+# --- заголовки кеширования (перенос из vercel.json "headers") ---
+
+[[headers]]
+  for = "/assets/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+
+[[headers]]
+  for = "/send-flow/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+
+[[headers]]
+  for = "/crypto-directory/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+
+[[headers]]
+  for = "/exmo-ds/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
