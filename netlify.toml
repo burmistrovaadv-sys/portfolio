@@ -10,9 +10,17 @@
   publish = "."
 
 # vercel.json → "cleanUrls": true и "trailingSlash": false.
-# На Netlify это post-processing «Pretty URLs», он включён по умолчанию:
-# /send-flow отдаёт send-flow/index.html, а /send-flow/ редиректит на /send-flow.
-# Отдельной настройки в netlify.toml для этого нет.
+#
+# Netlify по умолчанию делает ОБРАТНОЕ: /send-flow он редиректит 301 на
+# /send-flow/. У нас канонические адреса, sitemap.xml и все внутренние
+# ссылки — без слеша, поэтому каждый переход получал бы лишний хоп,
+# а canonical расходился бы с фактическим адресом.
+# pretty_urls = false выключает этот автоматический редирект.
+[build.processing]
+  skip_processing = false
+
+[build.processing.html]
+  pretty_urls = false
 
 # --- редиректы (перенос из vercel.json "redirects") ---
 
