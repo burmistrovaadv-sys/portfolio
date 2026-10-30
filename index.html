@@ -25,7 +25,12 @@
 <link rel="stylesheet" href="/assets/fonts/fonts.css">
 <link rel="stylesheet" href="/assets/main.css">
 </head>
-<body>
+<body class="home">
+
+<!-- Декоративный фон главной. Отдельный элемент нужен, чтобы пятна можно
+     было двигать через transform: overflow:hidden на этом контейнере
+     обрезает их по краю окна. Содержимого не несёт, скрыт от скринридеров. -->
+<div class="bg" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
 
 <a class="skip-link" href="#top">Перейти к содержанию</a>
 
@@ -48,7 +53,7 @@
   <main>
 
   <section id="top" class="hero">
-    <img class="ava" src="/assets/img/avatar.webp" width="820" height="800" alt="Анастасия Бурмистрова" fetchpriority="high" decoding="async">
+    <img class="ava" src="/assets/img/avatar-circle.webp" width="800" height="800" alt="Анастасия Бурмистрова" fetchpriority="high" decoding="async">
     <div>
       <h1>Анастасия Бурмистрова</h1>
       <div class="tagline">
@@ -275,5 +280,6 @@
 </div></div>
 
 <script src="/assets/video.js" defer></script>
+<script src="/assets/header-dock.js" defer></script>
 </body>
 </html>

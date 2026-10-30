@@ -1,8 +1,10 @@
 :root{
-  --bg:#f2f1ee; --ink:#15171b; --ink-2:#3a3f45; --ink-3:#5a5f66;
-  --line:#dcd9d3; --surface:#e7e5e0; --chip:#e3e3e3;
+  /* Светлая база. Серые были заметно глуше; подняли светлоту, тон (тёплый
+     беж) сохранили, чтобы не поехали остальные страницы. */
+  --bg:#f8f7f5; --ink:#15171b; --ink-2:#3a3f45; --ink-3:#5a5f66;
+  --line:#e6e3dd; --surface:#efeeea; --chip:#ededeb;
   --lime:#cdf25e; --lime-ink:#111a0a;
-  --card-light:#dddddc;
+  --card-light:#e6e6e5;
 }
 *{box-sizing:border-box}
 html{-webkit-font-smoothing:antialiased; scroll-behavior:smooth}
@@ -10,6 +12,164 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:"Onest",syste
 a{color:inherit; text-decoration-thickness:1px; text-underline-offset:4px}
 ::selection{background:var(--lime)}
 img{max-width:100%}
+
+/* ---------- фон главной ----------
+   Только на главной (body.home); остальные страницы берут сплошной --bg.
+   Три слоя:
+
+     1. фон самого body  — светло-серая макушка, уходящая в --bg;
+     2. .home::before    — основная масса, жёстко прибитая к правому
+                           верхнему углу: цвет максимально плотный ровно
+                           в углу и тянется диагональю вниз-влево;
+     3. .home::after     — подвижные пятна поверх неё, в трёх оттенках.
+
+   Слои 2 и 3 лежат в псевдоэлементах с z-index:-1 — они вне потока и ничего
+   не перекрывают, поэтому разметку трогать не пришлось. Серый вынесен в фон
+   body, чтобы оба псевдоэлемента остались под цветные пятна.
+
+   Почему масса и движение разведены по разным слоям: если двигать саму
+   массу, она отрывается от угла. Поэтому ::before стоит на месте (дышит
+   только плотностью), а перелив целиком отрабатывает ::after.
+
+   Что НЕ анимируем: transform. Сдвиг или поворот абсолютного слоя вынесет
+   его за вьюпорт и даст горизонтальную прокрутку, а overflow-x:hidden на
+   body сломает position:sticky у шапки. Двигаем background-position и
+   background-size: фон всегда рисуется внутри бокса элемента.
+
+   Периоды 9 и 13 секунд не кратны, поэтому цикл на глаз не повторяется. */
+.home{position:relative;
+  background:
+    linear-gradient(180deg,#eff0ed 0%,#f5f5f2 46%,var(--bg) 100%) no-repeat top left /
+      100% clamp(260px,39vh,490px),
+    var(--bg);
+}
+
+/* Контейнер фона. На нём же лежит неподвижная масса в углу: центр каждого
+   градиента вынесен точно в 100% 0% — это и даёт «исходит из угла», а не
+   «светится рядом с углом». Радиусы больше 100%, поэтому цвет уходит далеко
+   по диагонали вниз-влево.
+   Под зелёным два подслоя: тёплый жёлто-песочный и холодный мятный. По
+   отдельности они не читаются, но дают зелёному глубину и перламутр на
+   стыках — без них пятно плоское.
+   overflow:hidden здесь принципиален: он обрезает подвижные пятна по краю
+   окна, поэтому их можно двигать трансформацией, не боясь горизонтальной
+   прокрутки. На body такой трюк не прошёл бы — overflow сломал бы
+   position:sticky у шапки.
+   Но ровно из-за него по нижней кромке шла видимая линия: пятна обрывались
+   на границе контейнера. Поэтому слой дополнительно гасится маской —
+   непрозрачность плавно уходит в ноль к низу, и фон растворяется, а не
+   обрезается. Обрезка при этом никуда не делась, просто её край больше
+   ничего не красит. По правому краю такой линии нет: там граница контейнера
+   совпадает с краем окна. */
+.home .bg{position:absolute; left:0; right:0; top:0;
+  height:clamp(270px,41vh,510px); overflow:hidden; z-index:-1; pointer-events:none;
+  -webkit-mask-image:linear-gradient(180deg, #000 0%, #000 52%, rgba(0,0,0,.5) 78%, transparent 100%);
+          mask-image:linear-gradient(180deg, #000 0%, #000 52%, rgba(0,0,0,.5) 78%, transparent 100%);
+  background:
+    radial-gradient(64% 116% at 100% 0%, rgba(205,242,94,.34) 0%, rgba(205,242,94,.16) 26%, rgba(205,242,94,0) 64%),
+    radial-gradient(52% 92% at 100% 0%, rgba(243,232,122,.42) 0%, rgba(243,232,122,.16) 30%, rgba(243,232,122,0) 66%),
+    radial-gradient(43% 78% at 100% 4%, rgba(146,220,190,.34) 0%, rgba(146,220,190,0) 62%);
+}
+
+/* Подвижные пятна. Каждое — отдельный элемент, который едет через
+   transform. Так браузер переносит его на свой композитный слой и двигает
+   на видеокарте, не перерисовывая градиент каждый кадр.
+   Предыдущая версия анимировала background-size/position на слоях во весь
+   экран — это заставляет CPU заново растрировать все градиенты 60 раз в
+   секунду, и вкладка вставала колом. Записываю, чтобы не повторить.
+   closest-side даёт мягкое затухание ровно до края элемента. */
+.home .bg i{position:absolute; display:block; border-radius:50%;
+  will-change:transform, opacity;}
+
+.home .bg i:nth-child(1){width:36vw; height:29vw; right:-8vw; top:-11vw;
+  background:radial-gradient(closest-side, rgba(205,242,94,.55), rgba(205,242,94,0));
+  animation:bgA 13s ease-in-out infinite alternate}
+.home .bg i:nth-child(2){width:28vw; height:23vw; right:2vw; top:-7vw;
+  background:radial-gradient(closest-side, rgba(243,226,112,.44), rgba(243,226,112,0));
+  animation:bgB 17s ease-in-out infinite alternate}
+.home .bg i:nth-child(3){width:24vw; height:21vw; right:-3vw; top:3vw;
+  background:radial-gradient(closest-side, rgba(138,218,188,.40), rgba(138,218,188,0));
+  animation:bgC 11s ease-in-out infinite alternate}
+.home .bg i:nth-child(4){width:20vw; height:18vw; right:9vw; top:-3vw;
+  background:radial-gradient(closest-side, rgba(176,228,120,.42), rgba(176,228,120,0));
+  animation:bgD 19s ease-in-out infinite alternate}
+
+/* Пятое пятно сидит ровно в углу и никуда не едет — только дышит размером.
+   Без него масса в углу была бы мёртвой: двигались бы одни края, а именно
+   на это и была жалоба. Центр смещён за пределы окна, поэтому при любом
+   масштабе пятно остаётся углом, а не превращается в кружок посреди экрана. */
+.home .bg i:nth-child(5){width:46vw; height:38vw; right:-15vw; top:-17vw;
+  background:radial-gradient(closest-side, rgba(205,242,94,.52) 0%, rgba(205,242,94,.3) 44%, rgba(205,242,94,0) 100%);
+  animation:bgE 9s ease-in-out infinite alternate}
+
+/* Размах пропорционален размеру пятен: когда уменьшили сами пятна вдвое,
+   траектории уменьшили тем же множителем. Иначе пятно уезжало бы далеко за
+   пределы своей зоны и в углу оставалась бы дыра.
+   Периоды 13/17/11/19 с взаимно не кратны, поэтому рисунок не повторяется. */
+@keyframes bgA{
+  0%  {transform:translate3d(0,0,0) scale(1);          opacity:.75}
+  50% {transform:translate3d(-19vw,3vw,0) scale(1.3);  opacity:1}
+  100%{transform:translate3d(-6vw,7vw,0) scale(.85);   opacity:.6}
+}
+@keyframes bgB{
+  0%  {transform:translate3d(0,0,0) scale(.9);         opacity:.6}
+  50% {transform:translate3d(-15vw,6vw,0) scale(1.35); opacity:.95}
+  100%{transform:translate3d(-24vw,1vw,0) scale(1.05); opacity:.7}
+}
+@keyframes bgC{
+  0%  {transform:translate3d(0,0,0) scale(1.15);       opacity:.5}
+  50% {transform:translate3d(-12vw,-4vw,0) scale(.8);  opacity:.9}
+  100%{transform:translate3d(-22vw,3vw,0) scale(1.25); opacity:.62}
+}
+@keyframes bgD{
+  0%  {transform:translate3d(0,0,0) scale(1);          opacity:.7}
+  50% {transform:translate3d(8vw,5vw,0) scale(1.4);    opacity:1}
+  100%{transform:translate3d(-13vw,-2vw,0) scale(.9);  opacity:.55}
+}
+@keyframes bgE{
+  0%  {transform:scale(1);    opacity:.85}
+  100%{transform:scale(1.22); opacity:1}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .home .bg i{animation:none; opacity:.7}
+}
+/* На узком экране «правый верхний угол» физически совпадает с колонкой
+   текста: свечение садится прямо под заголовок и съедает контраст.
+   Гасим весь слой целиком, траектории те же. */
+@media (max-width:700px){
+  .home .bg{opacity:.62}
+}
+
+/* Подложка шапки во всю ширину окна.
+   Сама шапка лежит в колонке .inner, поэтому обычный фон давал бы на
+   градиенте бледный прямоугольник по ширине колонки. Растягиваем заливку
+   через box-shadow с большим spread: он рисуется позади фона, не влияет
+   на поток и, в отличие от width:100vw, не добавляет горизонтальной
+   прокрутки. clip-path обрезает тень сверху и снизу, оставляя ровную
+   полосу высотой со шапку.
+   Фон элемента обязателен и ровно того же цвета: внешняя тень по спецификации
+   не рисуется под border-box элемента, так что без собственного фона в
+   колонке осталась бы дыра — под шапку заезжали бы тёмные карточки кейсов.
+   Одинаковая альфа у фона и тени даёт ровную полосу без шва.
+   backdrop-filter снят: он размывает только бокс элемента, то есть опять
+   по ширине колонки, и проявлял бы её границу.
+
+   Альфа подложки умножена на (1 - --dock): пока шапка широкая, полоса нужна —
+   она лежит поверх градиента и держит навигацию читаемой. Как только шапка
+   ужимается в плавающую панель, полоса во всю ширину окна противоречила бы
+   самой идее «отдельной панели», поэтому к концу трансформации гаснет
+   полностью. К этому моменту верхний градиент уже уехал вверх за край окна,
+   так что читаемость не страдает — под панелью ровный --bg.
+   clip-path оставлен inset(0 …): он режет только по горизонтали за пределами
+   бокса, скруглённые углы и внутренняя обводка внутри высоты шапки и не
+   обрезаются. Собственного падающего тени здесь нет именно поэтому — её бы
+   срезало по нижней кромке. */
+.home header{background:rgba(248,247,245,.94); backdrop-filter:none;
+  box-shadow:
+    inset 0 0 0 1.5px rgba(21,23,27, calc(var(--dock) * .22)),
+    0 0 0 100vmax rgba(248,247,245, calc(.94 * (1 - var(--dock))));
+  clip-path:inset(0 -100vmax)}
 
 .mono{font-family:"Martian Mono",ui-monospace,monospace; font-size:12px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-3)}
 .mono-s{font-family:"Martian Mono",ui-monospace,monospace; font-size:11px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-3)}
@@ -19,10 +179,96 @@ img{max-width:100%}
    срабатывает — там ширину задаёт padding у .wrap. */
 .inner{max-width:min(1080px, max(66.67vw, 640px)); margin:0 auto}
 
-/* ---------- header ---------- */
-header{position:sticky; top:0; z-index:30; display:flex; align-items:center; justify-content:space-between;
-  gap:16px; flex-wrap:wrap; padding:18px 0; background:rgba(242,241,238,.88); backdrop-filter:blur(10px)}
+/* ---------- header ----------
+   Шапка «докируется» при прокрутке: из широкой навигационной полосы во всю
+   колонку превращается в компактную скруглённую панель по центру.
+
+   Прогресс 0…1 лежит в переменной --dock, её на каждом кадре ставит
+   assets/header-dock.js. Все величины ниже — линейные функции от неё, поэтому
+   это не два состояния с переключением класса, а непрерывная трансформация,
+   привязанная к позиции скролла: прокрутка назад проигрывает её в обратную
+   сторону без отдельного кода.
+
+   Про отсутствие сдвига контента. Вертикальные padding уменьшаются на 10px с
+   каждой стороны и ровно столько же прибавляется в margin — сумма высоты
+   margin-box постоянна, страница под шапкой не дёргается.
+
+   Зазор от верхнего края окна задан отдельным top, хотя margin-top уже есть.
+   Это не дублирование: проверено в браузере — в залипшем состоянии margin
+   шапки не участвует в вычислении смещения, border-box прижимается ровно к
+   top, поэтому без него панель липла бы к самой кромке окна. margin отвечает
+   за высоту в потоке, top — за положение при залипании, и оба равны одной и
+   той же величине, так что в начале прокрутки перехода не видно.
+
+   Горизонтально ужимаемся через width в процентах при margin-inline:auto —
+   панель остаётся строго по центру колонки на любом промежуточном кадре.
+   Трансформ тут не годится: scale мял бы текст и обводку. */
+header{--dock:0;
+  position:sticky; top:calc(var(--dock) * 10px); z-index:30;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; flex-wrap:wrap;
+  /* Сужение задано в процентах от колонки, а колонка не шире 1080px — значит
+     компактная ширина сама по себе не превышает 864px. Отдельный max-width в
+     1000px здесь не нужен: проверено, что на экране 1512px он срезал шапку до
+     1000px уже в исходном состоянии, то есть ломал требование «во всю ширину
+     контейнера» ровно там, где оно важнее всего. */
+  width:calc(100% - 20% * var(--dock));
+  margin:calc(var(--dock) * 10px) auto;
+  padding:calc(18px - 10px * var(--dock)) calc(var(--dock) * 26px);
+  border-radius:calc(var(--dock) * 38px);
+  background:rgba(248,247,245,.88); backdrop-filter:blur(10px);
+  box-shadow:inset 0 0 0 1.5px rgba(21,23,27, calc(var(--dock) * .22))}
+
+/* Прокрутка — единственный источник прогресса, никакой самостоятельной
+   анимации у шапки нет. Но «уезжающая» и меняющая форму панель — всё же
+   движение, поэтому при reduce оставляем обычную статичную полосу: скрипт
+   в этом режиме не трогает --dock, а правило ниже страхует, если он
+   почему-то не подключился. */
+@media (prefers-reduced-motion:reduce){
+  header{--dock:0 !important}
+}
+
+/* Телефон. Здесь колонка равна экрану минус padding у .wrap, а содержимое
+   шапки уже переносится на вторую строку. Измерено в браузере на 375px:
+   nav.top требует 313.5px при доступных 335.3px, то есть запаса всего ~21px.
+   Десктопная схема (минус 20% ширины плюс 26px внутренних отступов с каждой
+   стороны) отбирает больше сорока — навигация уезжала на третью строку,
+   высота шапки прыгала с 101px до 121px и весь контент под ней съезжал.
+
+   Поэтому на узком экране компактность набирается не сужением, а наоборот:
+   панель расширяется к краям экрана ровно на столько, сколько забирает себе
+   внутренний отступ. width растёт на 16px, margin по бокам уходит в минус на
+   8px (сумма с containing block сходится, панель остаётся по центру), padding
+   прибавляет те же 8px. Ширина содержимого в итоге не меняется ни на пиксель
+   — перенос строки арифметически невозможен, а не «вроде влез».
+
+   Побочно это и есть «уменьшить боковые отступы» из постановки: зазор от
+   кромки экрана сокращается с 20px до 12px, панель при этом за экран не
+   выходит. Радиус 24px безопасен: внутренний отступ 8px больше, чем закругление
+   съедает на высоте логотипа (~6px), так что логотип не наезжает на скругление. */
+@media (max-width:720px){
+  header{
+    width:calc(100% + 16px * var(--dock));
+    margin:calc(var(--dock) * 10px) calc(var(--dock) * -8px);
+    padding:calc(18px - 10px * var(--dock)) calc(var(--dock) * 8px);
+    border-radius:calc(var(--dock) * 24px);
+  }
+}
 .identity{display:flex; align-items:center; gap:10px}
+
+/* «Москва» уходит в начале прокрутки: в компактной панели это самый
+   необязательный элемент, и без него логотип и контакты читаются спокойнее.
+   Множитель 2.5 нужен, чтобы надпись исчезла раньше самой трансформации —
+   opacity сама обрезает значения ниже нуля, так что к --dock ≈ 0.4 (это
+   примерно 60px прокрутки) её уже нет, а панель ещё только начала собираться.
+
+   Гаснет именно opacity, место при этом сохраняется. Это осознанно: логотип
+   прижат влево, навигация вправо, так что пустое место слева не видно — зато
+   доступная ширина содержимого не меняется. Если бы надпись сворачивалась по
+   ширине, на узком экране навигация в какой-то момент уместилась бы с
+   логотипом в одну строку, высота шапки скакнула бы, и страница под ней
+   дёрнулась. Проверено, что при текущем варианте число строк постоянно. */
+.identity .mono{opacity:calc(1 - var(--dock) * 2.5)}
 .logo{display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:8px;
   background:var(--ink); color:var(--bg); font-weight:700; font-size:13px; text-decoration:none}
 nav.top{display:flex; align-items:center; gap:14px; font-size:15px; font-weight:500}
@@ -36,7 +282,10 @@ nav.top .sep{color:#c6c3bc}
 /* height:auto обязателен: без него атрибут height="800" из разметки задаёт
    высоту блока, aspect-ratio отключается, и object-fit:contain оставляет
    по 300px пустоты сверху и снизу от фото */
-.hero .ava{width:clamp(140px,14vw,205px); height:auto; aspect-ratio:205/200; object-fit:contain}
+/* Кадр теперь квадратный: в avatar-circle.webp круг вписан в рамку впритык,
+   прозрачность по углам уже в самом файле. Прежний 205/200 оставил бы по
+   бокам пустые поля и круг бы «болтался». */
+.hero .ava{width:clamp(140px,14vw,205px); height:auto; aspect-ratio:1/1; object-fit:contain}
 .hero h1{margin:0; font-size:clamp(34px,3.46vw,62px); font-weight:700; letter-spacing:-.03em; line-height:1.02}
 .tagline{display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:14px}
 .tagline .role{color:#5a5f66; font-size:clamp(16px,1.06vw,19px); line-height:1.55}
@@ -222,7 +471,7 @@ mark{background:var(--lime); color:var(--lime-ink); padding:0 .18em; border-radi
 .flows-arrow{position:absolute; top:50%; translate:0 -50%; z-index:2;
   display:flex; align-items:center; justify-content:center;
   width:52px; height:52px; padding:0; border:0; border-radius:999px;
-  background:rgba(242,241,238,.92); color:var(--ink); cursor:pointer;
+  background:rgba(248,247,245,.92); color:var(--ink); cursor:pointer;
   box-shadow:0 2px 14px rgba(21,23,27,.16);
   transition:background .15s ease, box-shadow .15s ease}
 .flows-arrow:hover{background:#fff; box-shadow:0 4px 18px rgba(21,23,27,.22)}

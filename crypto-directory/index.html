@@ -37,8 +37,56 @@
   .wrap{padding:0 clamp(16px,4vw,56px)}
   .inner{max-width:1680px; margin:0 auto}
 
-  header{position:sticky; top:0; z-index:30; display:flex; align-items:center; justify-content:space-between;
-    gap:16px; flex-wrap:wrap; padding:18px 0; background:rgba(242,241,238,.88); backdrop-filter:blur(10px)}
+
+  /* Оформление содержимого шапки — копия правил из assets/main.css, чтобы
+     шапка на кейсе выглядела ровно так же, как на главной. Раньше всё это
+     жило в инлайн-стилях на каждой ссылке по отдельности — именно поэтому у
+     Email оказалось подчёркивание: там text-decoration:none просто забыли.
+     Подсветка при наведении тоже приведена к главной: глобальный a:hover на
+     кейсовых страницах заливает фон лаймом, в шапке же нужно подчёркивание. */
+  .identity{display:flex; align-items:center; gap:10px; font-size:15px; font-weight:500}
+  header nav.top{display:flex; align-items:center; gap:14px; font-size:15px; font-weight:500}
+  header a{text-decoration:none; border-bottom:1px solid transparent}
+  header a.logo{border-bottom:0}
+  header a:hover{background:none}
+  header a:not(.logo):hover{border-bottom-color:var(--ink)}
+  header .sep{color:#c6c3bc}
+
+  /* Шапка «докируется» при прокрутке — та же механика, что на главной
+     (подробные пояснения в assets/main.css). Прогресс 0…1 лежит в --dock,
+     его ставит assets/header-dock.js; всё ниже — линейные функции от него,
+     поэтому переход непрерывный, а не переключение состояний.
+     Вертикальные padding уменьшаются ровно на столько, на сколько растёт
+     margin, — высота margin-box постоянна и контент под шапкой не съезжает.
+     Отдельный top нужен потому, что при залипании margin шапки в смещении
+     не участвует и панель прижималась бы к самой кромке окна. */
+  header{--dock:0;
+    position:sticky; top:calc(var(--dock) * 10px); z-index:30;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px; flex-wrap:wrap;
+    width:calc(100% - 20% * var(--dock));
+    margin:calc(var(--dock) * 10px) auto;
+    padding:calc(18px - 10px * var(--dock)) calc(var(--dock) * 26px);
+    border-radius:calc(var(--dock) * 38px);
+    background:rgba(242,241,238,.88); backdrop-filter:blur(10px);
+    box-shadow:inset 0 0 0 1.5px rgba(21,23,27, calc(var(--dock) * .22))}
+
+  @media (prefers-reduced-motion:reduce){
+    header{--dock:0 !important}
+  }
+
+  /* На телефоне сужать шапку нельзя — навигация уехала бы на лишнюю строку и
+     страница прыгнула бы. Поэтому панель расширяется к краям экрана ровно на
+     столько, сколько забирает внутренний отступ: ширина содержимого не
+     меняется, перенос строки невозможен. */
+  @media (max-width:720px){
+    header{
+      width:calc(100% + 16px * var(--dock));
+      margin:calc(var(--dock) * 10px) calc(var(--dock) * -8px);
+      padding:calc(18px - 10px * var(--dock)) calc(var(--dock) * 8px);
+      border-radius:calc(var(--dock) * 24px);
+    }
+  }
   .logo{display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:8px;
     background:var(--ink); color:var(--bg); font-weight:700; font-size:13px; text-decoration:none}
   .logo:hover{background:var(--ink)}
@@ -179,17 +227,17 @@
 <div class="wrap">
   <div class="inner">
     <header>
-      <div style="display:flex; align-items:center; gap:10px; font-size:17px; font-weight:500;">
-        <a class="logo" href="/">АБ</a>
-        <span style="color:#9a978f;">✦</span>
-        <a href="/" style="text-decoration:none;">Все кейсы</a>
+      <div class="identity">
+        <a class="logo" href="/" aria-label="На главную">АБ</a>
+        <span class="sep" aria-hidden="true">✦</span>
+        <a href="/">Все кейсы</a>
       </div>
-      <nav style="display:flex; align-items:center; gap:18px; font-size:17px; font-weight:500;">
-        <a href="https://t.me/Anastasia_Jay" style="text-decoration:none;">Telegram</a>
-        <span style="color:#c6c3bc;">/</span>
+      <nav class="top" aria-label="Контакты">
+        <a href="https://t.me/Anastasia_Jay" target="_blank" rel="noopener">Telegram @Anastasia_Jay</a>
+        <span class="sep" aria-hidden="true">/</span>
         <a href="mailto:burmistrova.adv@gmail.com">Email</a>
-        <span style="color:#c6c3bc;">/</span>
-        <a href="/assets/cv-anastasia-burmistrova.pdf" target="_blank" rel="noopener" style="text-decoration:none;">CV</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <a href="/assets/cv-anastasia-burmistrova.pdf" target="_blank" rel="noopener">CV</a>
       </nav>
     </header>
 
@@ -481,5 +529,6 @@
 
 <script src="/assets/case.js" defer></script>
 <script src="/assets/video.js" defer></script>
+<script src="/assets/header-dock.js" defer></script>
 </body>
 </html>
