@@ -68,8 +68,12 @@
     margin:calc(var(--dock) * 10px) auto;
     padding:calc(18px - 10px * var(--dock)) calc(var(--dock) * 26px);
     border-radius:calc(var(--dock) * 38px);
-    background:rgba(242,241,238,.88); backdrop-filter:blur(10px);
-    box-shadow:inset 0 0 0 1.5px rgba(21,23,27, calc(var(--dock) * .22))}
+    /* Обводки у собранной панели нет — форму держат скругление, фон и blur.
+       box-shadow убран целиком, а не обнулён по альфе: нулевая тень всё
+       равно остаётся слоем отрисовки, а здесь она не нужна вовсе.
+       То же самое сделано в assets/main.css для главной — вид шапки должен
+       совпадать на всех страницах. */
+    background:rgba(242,241,238,.88); backdrop-filter:blur(10px)}
 
   @media (prefers-reduced-motion:reduce){
     header{--dock:0 !important}
@@ -87,8 +91,22 @@
       border-radius:calc(var(--dock) * 24px);
     }
   }
-  .logo{display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:8px;
-    background:var(--ink); color:var(--bg); font-weight:700; font-size:13px; text-decoration:none}
+  /* В собранной панели монограмма «АБ» сменяется именем целиком — так же,
+     как на главной (assets/main.css). Оба варианта лежат в одной ячейке
+     грида, поэтому не двигают друг друга и кроссфейд идёт на месте.
+     Ширину имени один раз замеряет assets/header-dock.js и кладёт в
+     --logo-w; значение по умолчанию 28px оставляет логотип квадратом, если
+     скрипт ещё не отработал. Множители разводят тексты по времени: «АБ»
+     гаснет к --dock ~0.45, имя проявляется с ~0.55, перекрытия нет. */
+  .logo{--logo-w:28px;
+    display:inline-grid; align-items:center; justify-items:center;
+    width:calc(28px + (var(--logo-w) - 28px) * var(--dock)); height:28px;
+    border-radius:calc(8px + 6px * var(--dock));
+    background:var(--ink); color:var(--bg); font-weight:700; font-size:13px;
+    text-decoration:none; overflow:hidden; white-space:nowrap}
+  .logo > span{grid-area:1/1}
+  .logo .logo-ab{opacity:calc(1 - var(--dock) * 2.2)}
+  .logo .logo-full{opacity:calc(var(--dock) * 2.2 - 1.2)}
   .logo:hover{background:var(--ink)}
 
   .tags{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:clamp(18px,2vw,28px)}
@@ -228,7 +246,7 @@
   <div class="inner">
     <header>
       <div class="identity">
-        <a class="logo" href="/" aria-label="На главную">АБ</a>
+        <a class="logo" href="/" aria-label="На главную"><span class="logo-ab" aria-hidden="true">АБ</span><span class="logo-full" aria-hidden="true">Анастасия</span></a>
         <span class="sep" aria-hidden="true">✦</span>
         <a href="/">Все кейсы</a>
       </div>

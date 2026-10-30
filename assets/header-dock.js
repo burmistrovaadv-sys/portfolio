@@ -28,6 +28,35 @@
      читается как анимация, а не как переключатель. */
   var DIST = 140;
 
+  /* --------- ширина логотипа под полное имя ---------
+     В собранной панели «АБ» сменяется на «Анастасия», и плашка должна
+     доехать ровно до ширины этой надписи. Ширину нельзя записать в CSS
+     константой: она зависит от шрифта, а Onest грузится асинхронно — до его
+     загрузки системный шрифт даёт другую метрику.
+
+     Меряем Range по содержимому span, а не сам span: span лежит в узкой
+     ячейке грида и его бокс равен ячейке, тогда как Range возвращает
+     реальную ширину отрисованного текста (перенос отключён white-space:
+     nowrap, поэтому строка одна). 24px — поля по 12px с каждой стороны,
+     чтобы имя не упиралось в скруглённый край.
+
+     Если разметка старая и span'а нет — не делаем ничего: в CSS у --logo-w
+     значение по умолчанию 28px, логотип остаётся квадратом. */
+  function measureLogo() {
+    var logo = header.querySelector('.logo');
+    if (!logo) return;
+    var full = logo.querySelector('.logo-full');
+    if (!full || !document.createRange) return;
+
+    var range = document.createRange();
+    range.selectNodeContents(full);
+    var w = range.getBoundingClientRect().width;
+    range.detach && range.detach();
+
+    if (!(w > 0)) return;
+    logo.style.setProperty('--logo-w', Math.ceil(w) + 24 + 'px');
+  }
+
   var last = -1;
   var queued = false;
 
@@ -83,13 +112,23 @@
   /* Страницу могли открыть уже прокрученной (возврат по истории, переход
      по якорю) — тогда шапка должна сразу быть в нужной форме, без скачка
      после первого движения колеса. */
+  measureLogo();
   apply();
+
+  /* Onest подключён через @font-face и приезжает позже первого кадра. Пока
+     его нет, текст рисуется подстановочным шрифтом с другой метрикой, и
+     замер получился бы неверным. Перемеряем, когда шрифты готовы. Ошибку
+     промиса тоже ловим вторым аргументом: если шрифт не загрузился, лучше
+     пересчитать по факту, чем остаться со старым числом. */
+  if (document.fonts && document.fonts.ready && document.fonts.ready.then) {
+    document.fonts.ready.then(measureLogo, measureLogo);
+  }
 
   /* Отладочный доступ — только при ?headerdebug в адресе, в обычной жизни
      страница ничего в window не добавляет. Нужен для проверки: в тестовом
      окружении программная прокрутка не всегда порождает событие scroll и не
      всегда вытесняет кадр rAF, поэтому пересчёт приходится вызывать вручную. */
   if (location.search.indexOf('headerdebug') !== -1) {
-    window.__headerDock = { apply: apply, schedule: schedule, header: header };
+    window.__headerDock = { apply: apply, schedule: schedule, header: header, measureLogo: measureLogo };
   }
 })();

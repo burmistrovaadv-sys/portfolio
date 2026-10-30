@@ -24,6 +24,13 @@
 <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/onest-400-cyrillic.woff2" crossorigin>
 <link rel="stylesheet" href="/assets/fonts/fonts.css">
 <link rel="stylesheet" href="/assets/main.css">
+
+<!-- Вступительная анимация первого экрана. Подключена здесь, а не перед
+     </body> и без defer: скрипту нужно поставить класс удержания до
+     первой отрисовки, иначе на мгновение мелькнёт конечный вид текста.
+     Файл крошечный и лежит рядом со стилями, так что задержка рендера
+     от блокирующей загрузки сопоставима с загрузкой самого main.css. -->
+<script src="/assets/hero-intro.js"></script>
 </head>
 <body class="home">
 
@@ -38,7 +45,10 @@
 
   <header>
     <div class="identity">
-      <a class="logo" href="#top" aria-label="Наверх">АБ</a>
+      <!-- Два варианта подписи в одной ссылке: «АБ» в широкой шапке и
+           «Анастасия» в собранной панели. Оба aria-hidden, доступное имя
+           берётся из aria-label — иначе скринридер читал бы «АБ Анастасия». -->
+      <a class="logo" href="#top" aria-label="Наверх"><span class="logo-ab" aria-hidden="true">АБ</span><span class="logo-full" aria-hidden="true">Анастасия</span></a>
       <span class="mono">Москва</span>
     </div>
     <nav class="top" aria-label="Контакты">

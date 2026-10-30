@@ -4,7 +4,11 @@
   --bg:#f8f7f5; --ink:#15171b; --ink-2:#3a3f45; --ink-3:#5a5f66;
   --line:#e6e3dd; --surface:#efeeea; --chip:#ededeb;
   --lime:#cdf25e; --lime-ink:#111a0a;
-  --card-light:#e6e6e5;
+  /* Карточка шота была серой (#e6e6e5) и почти сливалась с фоном страницы.
+     По рефу она белая: чистая плашка на тёплом беже, контраст даёт сама
+     белизна, а не отдельный серый тон. Переменную не переименовывала,
+     чтобы не трогать .shot. */
+  --card-light:#ffffff;
 }
 *{box-sizing:border-box}
 html{-webkit-font-smoothing:antialiased; scroll-behavior:smooth}
@@ -162,13 +166,13 @@ img{max-width:100%}
    полностью. К этому моменту верхний градиент уже уехал вверх за край окна,
    так что читаемость не страдает — под панелью ровный --bg.
    clip-path оставлен inset(0 …): он режет только по горизонтали за пределами
-   бокса, скруглённые углы и внутренняя обводка внутри высоты шапки и не
-   обрезаются. Собственного падающего тени здесь нет именно поэтому — её бы
-   срезало по нижней кромке. */
+   бокса, скруглённые углы внутри высоты шапки не обрезаются. Собственной
+   падающей тени здесь нет именно поэтому — её бы срезало по нижней кромке.
+
+   Обводки у собранной панели больше нет: остался только фон. Поэтому в
+   box-shadow единственный слой — растянутая подложка. */
 .home header{background:rgba(248,247,245,.94); backdrop-filter:none;
-  box-shadow:
-    inset 0 0 0 1.5px rgba(21,23,27, calc(var(--dock) * .22)),
-    0 0 0 100vmax rgba(248,247,245, calc(.94 * (1 - var(--dock))));
+  box-shadow:0 0 0 100vmax rgba(248,247,245, calc(.94 * (1 - var(--dock))));
   clip-path:inset(0 -100vmax)}
 
 .mono{font-family:"Martian Mono",ui-monospace,monospace; font-size:12px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-3)}
@@ -202,7 +206,11 @@ img{max-width:100%}
 
    Горизонтально ужимаемся через width в процентах при margin-inline:auto —
    панель остаётся строго по центру колонки на любом промежуточном кадре.
-   Трансформ тут не годится: scale мял бы текст и обводку. */
+   Трансформ тут не годится: scale мял бы текст.
+
+   Обводки у собранной панели нет — форму держат скругление, фон и blur.
+   box-shadow убран целиком, а не обнулён по альфе: нулевая тень всё равно
+   остаётся слоем отрисовки, а здесь она не нужна вовсе. */
 header{--dock:0;
   position:sticky; top:calc(var(--dock) * 10px); z-index:30;
   display:flex; align-items:center; justify-content:space-between;
@@ -216,8 +224,7 @@ header{--dock:0;
   margin:calc(var(--dock) * 10px) auto;
   padding:calc(18px - 10px * var(--dock)) calc(var(--dock) * 26px);
   border-radius:calc(var(--dock) * 38px);
-  background:rgba(248,247,245,.88); backdrop-filter:blur(10px);
-  box-shadow:inset 0 0 0 1.5px rgba(21,23,27, calc(var(--dock) * .22))}
+  background:rgba(248,247,245,.88); backdrop-filter:blur(10px)}
 
 /* Прокрутка — единственный источник прогресса, никакой самостоятельной
    анимации у шапки нет. Но «уезжающая» и меняющая форму панель — всё же
@@ -269,8 +276,35 @@ header{--dock:0;
    логотипом в одну строку, высота шапки скакнула бы, и страница под ней
    дёрнулась. Проверено, что при текущем варианте число строк постоянно. */
 .identity .mono{opacity:calc(1 - var(--dock) * 2.5)}
-.logo{display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:8px;
-  background:var(--ink); color:var(--bg); font-weight:700; font-size:13px; text-decoration:none}
+/* В собранной панели монограмма «АБ» сменяется именем целиком.
+
+   Оба варианта лежат в одной ячейке грида (grid-area:1/1), поэтому не
+   двигают друг друга и кроссфейд идёт на месте, без скачка базовой линии.
+
+   Ширина плашки едет от 28px (квадрат с монограммой) до --logo-w — ширины
+   надписи, которую один раз замеряет assets/header-dock.js и кладёт в ту же
+   переменную инлайном. Значение по умолчанию здесь тоже 28px, и это важно:
+   пока скрипт не отработал, и на страницах со старой разметкой
+   (<a class="logo">АБ</a> без вложенных span) логотип остаётся прежним
+   квадратом, а не растягивается в пустую плашку.
+
+   Множители 2.2 и смещение 1.2 разводят два текста по времени: «АБ» гаснет
+   к --dock ≈ 0.45, имя начинает проявляться с ≈ 0.55. Между ними короткий
+   зазор, где плашка пустая. Это намеренно: при любом перекрытии в середине
+   видно, как сквозь «АБ» просвечивает «Анастасия».
+
+   overflow:hidden нужен, пока плашка уже, чем надпись, иначе длинное имя
+   вылезало бы за скруглённый край; white-space:nowrap — чтобы оно не
+   переносилось и измерение оставалось верным. */
+.logo{--logo-w:28px;
+  display:inline-grid; align-items:center; justify-items:center;
+  width:calc(28px + (var(--logo-w) - 28px) * var(--dock)); height:28px;
+  border-radius:calc(8px + 6px * var(--dock));
+  background:var(--ink); color:var(--bg); font-weight:700; font-size:13px;
+  text-decoration:none; overflow:hidden; white-space:nowrap}
+.logo > span{grid-area:1/1}
+.logo .logo-ab{opacity:calc(1 - var(--dock) * 2.2)}
+.logo .logo-full{opacity:calc(var(--dock) * 2.2 - 1.2)}
 nav.top{display:flex; align-items:center; gap:14px; font-size:15px; font-weight:500}
 nav.top a{text-decoration:none; border-bottom:1px solid transparent}
 nav.top a:hover{border-bottom-color:var(--ink)}
@@ -296,8 +330,24 @@ nav.top .sep{color:#c6c3bc}
 .statement{margin:0; max-width:820px; font-size:clamp(24px,2.57vw,46px); font-weight:600;
   letter-spacing:-.03em; line-height:1.12}
 .statement .hi{display:block; margin-bottom:.55em}
+/* Удержание первого экрана до запуска вступительной анимации.
+   Ставит класс и снимает его assets/hero-intro.js — правило живёт ровно
+   столько, сколько проходит от первой отрисовки до первого кадра
+   анимации (ожидание document.fonts, не дольше 350мс). Скрыта только
+   прозрачность: раскладка не меняется, поэтому ни измерения, ни
+   положение соседних блоков это правило не искажает. Без JS и при
+   prefers-reduced-motion класс не появляется вовсе, и первый экран
+   отображается обычным образом. */
+.intro-hold .hero{opacity:0}
+
 .chips{display:flex; flex-wrap:wrap; justify-content:center; gap:10px}
-.chip{padding:9px 20px; border-radius:999px; background:var(--chip); color:#4a4f55;
+/* По рефу чип — не серая заливка, а белая пилюля с тонкой обводкой и тёмным
+   текстом. Серый #ededeb почти совпадал с фоном #f8f7f5, и чипы читались как
+   пятна; белое поле + линия дают чёткую форму, а текст можно сделать темнее.
+   border учтён в box-sizing (*{box-sizing:border-box} в начале файла), поэтому
+   высота чипа не выросла. */
+.chip{padding:9px 20px; border-radius:999px; background:#fff; color:var(--ink-2);
+  border:1px solid var(--line);
   font-size:clamp(15px,.95vw,17px); font-weight:400; line-height:1.2}
 
 /* ---------- section heads ---------- */
@@ -401,8 +451,14 @@ mark{background:var(--lime); color:var(--lime-ink); padding:0 .18em; border-radi
    Поэтому padding живёт не на .body, а на текстовых детях, а overflow:hidden
    сам подрезает верхние углы картинки по радиусу карточки — своё скругление
    медиа не нужно, иначе у верхней кромки вылезли бы серые уголки. */
+/* Белая карточка на фоне #f8f7f5 отличается от него всего на пару процентов
+   светлоты — одной заливки мало, край карточки пропадал бы. На рефе плашка
+   читается за счёт мягкой тени, поэтому тень, а не обводка: обводка дала бы
+   жёсткий контур поверх скриншота, а тень оставляет край мягким.
+   Два слоя: короткий плотный для самой кромки и длинный размытый для объёма. */
 .shot{container-type:inline-size; display:flex; border-radius:min(4.22cqw,34px);
-  overflow:hidden; background:var(--card-light); color:var(--ink); text-decoration:none}
+  overflow:hidden; background:var(--card-light); color:var(--ink); text-decoration:none;
+  box-shadow:0 1px 2px rgba(21,23,27,.05), 0 12px 32px -12px rgba(21,23,27,.10)}
 .shot .body{flex:1; display:flex; flex-direction:column;
   gap:clamp(12px,2.73cqw,24px); padding:0 0 clamp(20px,6.95cqw,56px); min-width:0}
 /* картинка не растягивается и не кропится: ширина колонки, высота — натуральная */
@@ -432,7 +488,11 @@ mark{background:var(--lime); color:var(--lime-ink); padding:0 .18em; border-radi
 /* clamp, а не max: на мобильном карточка ~340px, и чистый cqw давал теги 6px,
    описание 8px — нечитаемо; а в одну колонку карточка 1568px, и тот же cqw
    раздувал заголовок до 113px. Между порогами живут фигмовские 58/19/14 */
-.shot .tags span{padding:6px 14px; border-radius:999px; background:rgba(20,22,31,.07); color:#14161f;
+/* Теги на шоте — тот же приём, что у чипов первого экрана: белая пилюля с
+   обводкой. Полупрозрачная заливка rgba(20,22,31,.07) на серой карточке
+   читалась, но на белой карточке превратилась бы в еле заметное пятно. */
+.shot .tags span{padding:6px 14px; border-radius:999px; background:#fff; color:var(--ink);
+  border:1px solid var(--line);
   font-size:clamp(13px,1.74cqw,15px); font-weight:400}
 /* верхняя граница 46px — ровно как у заголовка секции: подзаголовок карточки
    не должен звучать громче «Web, Analytics» */
