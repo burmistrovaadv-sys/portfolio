@@ -170,6 +170,16 @@
       </button>
 
       <div class="flows">
+        <!-- Два горизонтальных промо-ролика открывают ленту: они шире
+             остальных кадров и читаются как вступление, а не как ещё одна
+             запись экрана. Класс wide задаёт им пропорцию 16:9 — у
+             остальных роликов в ленте квадрат или телефон. -->
+        <video class="wide" src="/assets/video/ironwallet-send-promo-clean.webm" width="1920" height="1080"
+               data-lazy loop muted playsinline preload="none"
+               aria-label="IronWallet — отправка с сохранением контакта, промо-ролик флоу"></video>
+        <video class="wide" src="/assets/video/requester-onboarding.webm" width="1920" height="1080"
+               data-lazy loop muted playsinline preload="none"
+               aria-label="A little help — онбординг заказчика"></video>
         <video class="phone" src="/assets/video/ironwallet-in-process.webm" width="556" height="1214"
                data-lazy loop muted playsinline preload="none"
                aria-label="IronWallet — состояние In process"></video>

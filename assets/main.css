@@ -489,7 +489,10 @@ mark{background:var(--lime); color:var(--lime-ink); padding:0 .18em; border-radi
    aspect-ratio). Сетка с равными колонками либо резала бы квадраты, либо
    оставляла вокруг телефона огромные поля. */
 .flows-wrap{position:relative; container-type:inline-size}
-.flows{display:flex; gap:clamp(20px,2.8vw,48px); overflow-x:auto; scroll-behavior:smooth;
+/* align-items:center — высоты в ленте теперь не всегда одинаковые
+   (горизонтальные промо-кадры на телефоне ниже остальных), и по центру
+   разнобой выглядит как ритм, а не как съехавшая вёрстка */
+.flows{display:flex; align-items:center; gap:clamp(20px,2.8vw,48px); overflow-x:auto; scroll-behavior:smooth;
   scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch;
   scrollbar-width:none; -ms-overflow-style:none}
 .flows::-webkit-scrollbar{display:none}
@@ -506,6 +509,13 @@ mark{background:var(--lime); color:var(--lime-ink); padding:0 .18em; border-radi
   aspect-ratio:1/1; object-fit:contain; scroll-snap-align:start;
   border:0; outline:0; margin:0; padding:0; background:none}
 .flows video.phone{aspect-ratio:556/1214}
+/* Горизонтальный кадр 16:9. Ширина считается в два приёма: сначала та,
+   при которой высота совпадёт с соседними роликами (высота × 16/9) —
+   на широком экране лента остаётся ровной по верхнему краю. Второе
+   ограничение, 92cqw, включается на телефоне: без него кадр оказался бы
+   в полтора раза шире ленты и целиком его было бы не увидеть. */
+.flows video.wide{aspect-ratio:16/9; height:auto;
+  width:min(calc(clamp(320px,46cqw,520px) * 16 / 9), 92cqw)}
 
 /* стрелки — поверх ленты по краям; прячутся у соответствующего конца (hidden
    ставит скрипт), поэтому на коротком списке их не видно вовсе */

@@ -26,13 +26,36 @@
     var next = wrap.querySelector('.flows-arrow.next');
     if(!lane || !prev || !next) return;
 
-    /* шаг прокрутки — ширина первого кадра с отступом: лента всегда
-       встаёт на границу ролика, а не на случайный пиксель */
-    function step(){
-      var first = lane.querySelector('video');
-      if(!first) return lane.clientWidth * 0.8;
-      var gap = parseFloat(getComputedStyle(lane).columnGap) || 0;
-      return first.getBoundingClientRect().width + gap;
+    /* Позиции левых краёв всех кадров в системе координат прокрутки.
+       Раньше шаг считался как «ширина первого кадра + отступ». Это
+       работало, пока все кадры были одной ширины. Теперь ленту открывают
+       горизонтальные промо-кадры, они почти вдвое шире квадратов, и
+       фиксированный шаг уводил ленту на середину соседнего ролика.
+       Поэтому шага больше нет: стрелка листает к краю следующего кадра,
+       какой бы ширины он ни был. */
+    function edges(){
+      var laneLeft = lane.getBoundingClientRect().left;
+      var base = lane.scrollLeft;
+      return Array.prototype.map.call(lane.querySelectorAll('video'), function(v){
+        return Math.round(base + v.getBoundingClientRect().left - laneLeft);
+      });
+    }
+
+    /* dir: 1 — вперёд, -1 — назад. 2px допуска — тот же, что в sync():
+       при дробном зуме scrollLeft не совпадает с краем кадра ровно, и без
+       допуска стрелка «вперёд» второй раз никуда бы не сдвинула ленту. */
+    function go(dir){
+      var at = lane.scrollLeft;
+      var list = edges();
+      var target = null;
+      for(var i = 0; i < list.length; i++){
+        if(dir > 0 ? list[i] > at + 2 : list[i] < at - 2){
+          if(target === null || (dir > 0 ? list[i] < target : list[i] > target)) target = list[i];
+        }
+      }
+      /* край не нашёлся — значит мы у конца ленты; доезжаем до упора */
+      if(target === null) target = dir > 0 ? lane.scrollWidth : 0;
+      lane.scrollTo({ left: target, behavior: 'smooth' });
     }
 
     /* 2px допуска: при дробном зуме scrollLeft не добирает до максимума
@@ -44,8 +67,8 @@
       next.hidden = fits || lane.scrollLeft >= max - 2;
     }
 
-    prev.addEventListener('click', function(){ lane.scrollBy({ left: -step(), behavior: 'smooth' }); });
-    next.addEventListener('click', function(){ lane.scrollBy({ left:  step(), behavior: 'smooth' }); });
+    prev.addEventListener('click', function(){ go(-1); });
+    next.addEventListener('click', function(){ go(1); });
     lane.addEventListener('scroll', sync, { passive: true });
     window.addEventListener('resize', sync);
     sync();
