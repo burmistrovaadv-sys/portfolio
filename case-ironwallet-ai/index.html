@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IronWallet для ИИ-агентов — кейс · Анастасия Бурмистрова</title>
+<meta name="description" content="Кейс продуктового дизайнера: лендинг кошелька, которым управляет ИИ-агент через MCP-сервер. Как показать работу агента и снять страх потерять деньги до первого скролла.">
+<link rel="canonical" href="https://www.anastasia-burmistrova.ru/case-ironwallet-ai">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://www.anastasia-burmistrova.ru/case-ironwallet-ai">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="IronWallet для ИИ-агентов — кейс">
+<meta property="og:description" content="Лендинг кошелька под ИИ-агентов: живая демонстрация вместо объяснения MCP и ответ про безопасность в точке тревоги.">
+<meta property="og:image" content="https://www.anastasia-burmistrova.ru/case-ironwallet-ai/img/hero.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<meta name="theme-color" content="#f4f4f6">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/favicon.svg">
+
+<!--
+  ЗАМЕНА КАРТИНКИ НА ВИДЕО
+  Любой <img class="shot" src="img/x.png" alt=""> можно заменить на:
+  <video class="shot" src="img/x.webm" autoplay muted loop playsinline></video>
+  Класс shot один и тот же — размеры, кадрирование и скругления сохранятся.
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --page:#f4f4f6;
+  --surface:#ffffff;
+  --tint:#f4f4f6;
+  --screen:#ececf0;
+  --ink:#0e0e10;
+  --muted:#5e5e66;
+  --muted-2:#8e8e96;
+  --line:#e2e2e8;
+  --lime:#c8f65a;
+  --lime-ring:#c7f559;
+  --olive:#4f7a00;
+  --sparkle:#9a978f;
+  --side:120px;
+  --radius:28px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{
+  background:var(--page);
+  color:var(--ink);
+  font-family:'Onest',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.u{font-family:'Unbounded',system-ui,sans-serif}
+
+/* ---------- Шапка сайта ----------
+   Перенесена с anastasia-burmistrova.ru как есть: та же разметка и то же
+   «докирование» при прокрутке — прогресс 0…1 кладёт в --dock скрипт
+   /assets/header-dock.js, вся геометрия ниже — функции от него.
+   Цвета взяты из токенов этой страницы, чтобы панель совпадала с её фоном. */
+/* обёртка тянется на всю страницу — иначе sticky у шапки некуда липнуть;
+   собственных отступов не даёт, геометрию секций держат их padding */
+.wrap,.wrap > .inner{padding:0;margin:0;max-width:none}
+.skip-link{
+  position:absolute;left:-9999px;top:0;z-index:100;padding:12px 18px;
+  background:var(--ink);color:var(--page);border-radius:0 0 10px 0;
+}
+.skip-link:focus{left:0}
+
+header{--dock:0;
+  position:sticky;top:calc(var(--dock) * 10px);z-index:40;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;flex-wrap:wrap;
+  /* в развёрнутом виде шапка совпадает по ширине с контентом страницы,
+     поэтому из 100% вычитаются поля --side, а не только 20% докирования */
+  width:calc(100% - 2 * var(--side) - 20% * var(--dock));
+  margin:calc(var(--dock) * 10px) auto;
+  padding:calc(18px - 10px * var(--dock)) calc(var(--dock) * 26px);
+  border-radius:calc(var(--dock) * 38px);
+  background:rgba(244,244,246,.88);backdrop-filter:blur(10px);
+}
+@media (prefers-reduced-motion:reduce){header{--dock:0 !important}}
+/* на телефоне панель не сужается, иначе навигация уехала бы на вторую строку */
+@media (max-width:720px){
+  header{
+    width:calc(100% - 2 * var(--side) + 16px * var(--dock));
+    padding:calc(18px - 10px * var(--dock)) calc(var(--dock) * 8px);
+    border-radius:calc(var(--dock) * 24px);
+  }
+}
+.identity{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:500}
+header nav.top{display:flex;align-items:center;gap:14px;font-size:15px;font-weight:500}
+header a{border-bottom:1px solid transparent}
+header a.logo{border-bottom:0}
+header a:not(.logo):hover{border-bottom-color:var(--ink)}
+header .sep{color:#c6c3bc}
+/* в собранной панели монограмма «АБ» сменяется именем целиком;
+   ширину под имя замеряет header-dock.js и кладёт в --logo-w */
+.logo{--logo-w:28px;
+  display:inline-grid;align-items:center;justify-items:center;
+  width:calc(28px + (var(--logo-w) - 28px) * var(--dock));height:28px;
+  border-radius:calc(8px + 6px * var(--dock));
+  background:var(--ink);color:var(--page);font-weight:700;font-size:13px;
+  overflow:hidden;white-space:nowrap;
+}
+.logo > span{grid-area:1/1}
+.logo .logo-ab{opacity:calc(1 - var(--dock) * 2.2)}
+.logo .logo-full{opacity:calc(var(--dock) * 2.2 - 1.2)}
+
+/* ---------- Hero ---------- */
+.hero{display:flex;align-items:center;gap:24px;padding:40px var(--side) 80px}
+.hero__top{flex:1 1 970px;min-width:0;display:flex;flex-direction:column;gap:28px;padding:70px 0 40px}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{
+  display:inline-flex;align-items:center;border-radius:999px;
+  background:rgba(14,14,16,.07);padding:6px 14px;
+  font-size:14px;font-weight:500;line-height:1.4;color:#15171b;white-space:nowrap;
+}
+.tag--accent{background:var(--lime);color:#111a0a;font-size:17px;font-weight:400;padding:3px 10px}
+.hero__title{font-family:'Unbounded';font-weight:600;font-size:78px;line-height:1.1}
+.nb{white-space:nowrap}
+.hero__lead{font-size:22px;font-weight:500;line-height:1.5;color:var(--muted);margin-top:32px}
+.hero__cover{flex:0 0 800px;width:800px}
+.hero__frame{
+  border:2px solid var(--line);border-radius:16px;overflow:hidden;
+  aspect-ratio:16/9;
+}
+.hero__frame .shot{display:block;width:100%;height:100%;object-fit:cover}
+
+/* ---------- Body / layout ---------- */
+.body{display:flex;align-items:flex-start;gap:24px;padding:48px var(--side) 0}
+.sidebar{flex:0 0 260px;width:260px;position:sticky;top:113px}
+.nav-group__title{font-family:'Unbounded';font-weight:600;font-size:17px;padding-bottom:8px}
+.nav{display:flex;flex-direction:column;gap:4px}
+.nav__item{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:10px 12px;border-radius:12px;
+  transition:background-color .18s ease,color .18s ease;
+}
+.nav__num{
+  flex:0 0 24px;width:24px;
+  font-family:'Unbounded';font-weight:500;font-size:13px;line-height:19.5px;color:var(--muted-2);
+  transition:color .18s ease;
+}
+.nav__label{flex:1 1 0;min-width:0;font-size:15px;font-weight:500;line-height:1.3}
+.nav__item:hover{background:rgba(14,14,16,.06)}
+.nav__item.is-active{background:var(--lime)}
+.nav__item.is-active .nav__num{color:var(--ink)}
+
+.main{flex:1 1 1396px;min-width:0}
+
+/* ---------- Sections ---------- */
+.sect{padding:80px 0}
+.sect--flush{padding-bottom:0}
+.eyebrow{font-family:'Unbounded';font-weight:500;font-size:22px;color:var(--olive)}
+.h2{font-family:'Unbounded';font-weight:600;font-size:48px;line-height:1.1;margin-top:23px;max-width:1160px}
+.sect__body{font-size:22px;line-height:1.5;color:var(--muted);max-width:1160px;margin-top:40px}
+.sect__content{margin-top:56px}
+.sect__content--tight{margin-top:40px}
+
+/* ---------- Meta ---------- */
+.meta{display:flex;gap:20px;align-items:stretch}
+.meta__cell{
+  flex:1 1 0;min-width:0;background:var(--surface);border-radius:var(--radius);
+  padding:28px 32px;display:flex;flex-direction:column;gap:10px;
+}
+.meta__label{font-size:16px;font-weight:500;color:var(--muted)}
+.meta__value{font-family:'Unbounded';font-weight:500;font-size:22px;line-height:1.2}
+
+/* ---------- Card rows ---------- */
+.cards{display:flex;gap:20px;align-items:stretch}
+.card{
+  flex:1 1 0;min-width:0;background:var(--surface);border-radius:var(--radius);
+  padding:40px;display:flex;flex-direction:column;gap:14px;
+}
+.card__title{font-family:'Unbounded';font-weight:500;font-size:22px;color:var(--olive)}
+.card__text{font-size:22px;line-height:1.5}
+
+.steps .card{padding:32px}
+.marker{
+  width:52px;height:52px;border-radius:999px;background:var(--lime);
+  display:flex;align-items:center;justify-content:center;flex:none;
+  font-family:'Unbounded';font-weight:600;font-size:22px;color:var(--ink);
+}
+.steps .card__head{font-family:'Unbounded';font-weight:500;font-size:22px;line-height:1.2;color:var(--ink)}
+.steps .card__note{font-size:20px;line-height:1.35;color:var(--muted)}
+
+/* ---------- Split: media + описание ---------- */
+.split{display:flex;gap:20px;align-items:flex-start}
+.split__media{flex:1 1 924px;min-width:0;position:relative}
+.split__aside{flex:0 0 452px;width:452px;display:flex;flex-direction:column;gap:16px}
+.split__aside--wide{gap:28px}
+.stack{display:flex;flex-direction:column;gap:40px}
+
+.frame{
+  position:relative;border:2px solid var(--line);border-radius:var(--radius);
+  overflow:hidden;background:var(--screen);
+}
+.frame .shot{display:block;width:100%;height:100%;object-fit:cover}
+.r-hero{aspect-ratio:16/9}
+.r-install{aspect-ratio:924/638}
+
+/* ---------- Панель: описание и скриншот в одном блоке ---------- */
+.panel{
+  background:var(--screen);border:2px solid var(--line);border-radius:var(--radius);
+  padding:64px 0 0;display:flex;flex-direction:column;align-items:center;gap:48px;
+  overflow:hidden;
+}
+.panel__head{width:90%;display:flex;flex-direction:column;gap:6px}
+.panel__title{font-family:'Unbounded';font-weight:500;font-size:22px;line-height:1.2}
+.panel__text{font-size:20px;line-height:1.35;color:var(--muted);max-width:66.667%}
+/* корпус монитора: нижняя кромка уходит под край карточки и обрезается ею */
+.panel__shot{
+  width:90%;
+  background:#2a2a30;border-radius:20px 20px 0 0;
+  padding:16px;margin-bottom:-16px;
+  box-shadow:0 -10px 30px rgba(14,14,16,.12);
+}
+.panel__screen{border-radius:8px 8px 0 0;overflow:hidden;background:#fff}
+.panel__shot .shot{width:100%;height:auto}
+
+/* ---------- Хотспоты и всплывающие подсказки ---------- */
+.hotspots{position:relative}
+/* left/top на .hot задают центр кружка */
+.hot{position:absolute;width:56px;height:56px;transform:translate(-50%,-50%)}
+.hot:hover,.hot:focus-within{z-index:6}
+.hotspot{
+  width:100%;height:100%;border-radius:999px;
+  background:var(--lime);color:var(--ink);
+  border:0;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Unbounded';font-weight:600;font-size:22px;
+  transition:background-color .2s ease,color .2s ease,box-shadow .2s ease,transform .2s ease;
+}
+.hotspot:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
+.hot:hover .hotspot,.hot:focus-within .hotspot{
+  background:var(--ink);color:var(--lime);
+  box-shadow:0 0 0 6px var(--lime-ring);transform:scale(1.06);
+}
+.tip{
+  position:absolute;bottom:calc(100% + 14px);left:50%;transform:translateX(-50%);
+  width:min(520px,78vw);
+  background:var(--surface);border-radius:var(--radius);padding:28px;
+  box-shadow:0 18px 44px rgba(14,14,16,.16);
+  display:flex;flex-direction:column;gap:6px;
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .2s ease,visibility .2s ease;
+}
+.hot:hover .tip,.hot:focus-within .tip{opacity:1;visibility:visible}
+.tip__title{font-family:'Unbounded';font-weight:500;font-size:22px;line-height:1.2}
+.tip__text{font-size:20px;line-height:1.35;color:var(--muted)}
+/* точка у левого края кадра — подсказку выравниваем по кружку, иначе уедет за кадр */
+.hot--start .tip{left:-8px;transform:none}
+/* точка в верхней части кадра — подсказка снизу */
+.hot--below .tip{bottom:auto;top:calc(100% + 14px)}
+
+/* ---------- Итоги ---------- */
+.results{background:var(--surface);border-radius:var(--radius);padding:56px;display:flex;flex-direction:column;gap:40px}
+.results__head{display:flex;flex-direction:column;gap:14px}
+.results__statement{font-family:'Unbounded';font-weight:600;font-size:48px;line-height:1.1}
+.results__block{display:flex;flex-direction:column;gap:24px}
+.tiles{display:flex;gap:20px;align-items:stretch}
+.tile{flex:1 1 0;min-width:0;background:var(--tint);border-radius:20px;padding:32px;display:flex;flex-direction:column;gap:10px}
+.tile__value{font-family:'Unbounded';font-weight:700;font-size:50px;color:var(--olive)}
+.tile__label{font-size:22px;line-height:1.5;color:var(--muted)}
+.tile--wide{gap:12px}
+.tile--wide .tile__title{font-family:'Unbounded';font-weight:500;font-size:22px;line-height:1.2}
+.tile--wide .tile__text{font-size:20px;line-height:1.35;color:var(--muted);max-width:1000px}
+.chips{display:flex;gap:20px;align-items:stretch}
+.chip{flex:1 1 0;min-width:0;background:var(--lime);border-radius:20px;padding:20px 22px;display:flex;flex-direction:column;gap:6px}
+.chip__label{font-size:16px;font-weight:500;opacity:.6}
+.chip__value{font-family:'Unbounded';font-weight:600;font-size:28px}
+
+/* ---------- Идеи ---------- */
+.ideas{display:flex;gap:20px;align-items:stretch}
+.idea{flex:1 1 0;min-width:0;background:var(--surface);border-radius:var(--radius);padding:40px;display:flex;flex-direction:column;gap:14px}
+.idea__num{font-family:'Unbounded';font-weight:600;font-size:24px;color:var(--olive)}
+.idea__title{font-family:'Unbounded';font-weight:500;font-size:22px;line-height:1.2}
+.idea__text{font-size:20px;line-height:1.35;color:var(--muted)}
+
+/* ---------- Спасибо ---------- */
+.thanks{background:var(--lime);border-radius:var(--radius);padding:64px;display:flex;flex-direction:column;gap:28px}
+.thanks__title{font-family:'Unbounded';font-weight:600;font-size:48px;line-height:1.1}
+.thanks__text{font-size:22px;line-height:1.5;max-width:812px}
+.contacts{display:flex;flex-wrap:wrap;gap:12px}
+.btn{
+  padding:16px 26px;border-radius:16px;background:rgba(14,14,16,.08);
+  font-size:17px;font-weight:500;white-space:nowrap;
+  transition:transform .15s ease,background-color .15s ease;
+}
+.btn--dark{background:var(--ink);color:#fff}
+.btn:hover{transform:translateY(-2px)}
+.btn:hover:not(.btn--dark){background:rgba(14,14,16,.14)}
+
+/* ---------- Подвал сайта (перенесён с anastasia-burmistrova.ru) ---------- */
+footer{
+  border-top:1px solid var(--line);margin:0 var(--side);
+  padding:clamp(28px,3vw,48px) 0 clamp(40px,4vw,64px);
+  display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+}
+footer .headline{font-size:clamp(20px,1.56vw,28px);font-weight:600;letter-spacing:-.025em}
+footer .contacts{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+  font-size:clamp(15px,.95vw,17px);font-weight:500;
+}
+footer .contacts a{border-bottom:1px solid var(--line)}
+footer .contacts a:hover{background:var(--lime);border-bottom-color:transparent}
+footer .sep{color:#c6c3bc}
+
+/* ---------- Адаптив ---------- */
+@media (max-width:1700px){
+  :root{--side:64px}
+  .hero__title{font-size:60px}
+  .hero__cover{flex:0 0 760px;width:760px}
+}
+@media (max-width:1400px){
+  .hero{flex-direction:column;align-items:stretch}
+  .hero__top{padding-top:32px}
+  .hero__cover{flex:none;width:100%}
+  .hero__title{font-size:60px}
+  .h2{font-size:40px}
+  .split{flex-direction:column}
+  .split__media,.split__aside{flex:none;width:100%}
+  .panel__text{max-width:none}
+  .tiles{flex-direction:column}
+  .results{padding:40px}
+  .results__statement{font-size:36px}
+}
+@media (max-width:1100px){
+  :root{--side:24px}
+  .body{flex-direction:column}
+  .sidebar{position:static;width:100%;flex:none}
+  .nav{flex-direction:row;flex-wrap:wrap}
+  .nav__item{width:auto}
+  .nav__label{flex:none}
+  .meta,.cards,.tiles,.chips,.ideas{flex-wrap:wrap}
+  .meta__cell,.card,.tile,.chip,.idea{flex:1 1 300px}
+  .hero__title{font-size:44px}
+  .hero__lead,.sect__body,.card__text,.tile__label,.thanks__text{font-size:19px}
+  .thanks{padding:36px}
+  .hotspot{width:44px;height:44px;font-size:18px}
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#top">Перейти к содержанию</a>
+
+<div class="wrap">
+  <div class="inner">
+    <header>
+      <div class="identity">
+        <a class="logo" href="/" aria-label="На главную"><span class="logo-ab" aria-hidden="true">АБ</span><span class="logo-full" aria-hidden="true">Анастасия</span></a>
+        <span class="sep" aria-hidden="true">✦</span>
+        <a href="/">Все кейсы</a>
+      </div>
+      <nav class="top" aria-label="Контакты">
+        <a href="https://t.me/Anastasia_Jay" target="_blank" rel="noopener">Telegram @Anastasia_Jay</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <a href="mailto:burmistrova.adv@gmail.com">Email</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <a href="/assets/cv-anastasia-burmistrova.pdf" target="_blank" rel="noopener">CV</a>
+      </nav>
+    </header>
+
+<section class="hero" id="top">
+  <div class="hero__top">
+    <div class="tags">
+      <span class="tag">IronWallet</span>
+      <span class="tag">Web</span>
+      <span class="tag">B2C</span>
+      <span class="tag tag--accent">AI-агенты · MCP</span>
+    </div>
+    <div>
+      <h1 class="hero__title">IronWallet<br><span class="nb">для ИИ-агентов</span></h1>
+      <p class="hero__lead">Лендинг кошелька, которым управляет ИИ-агент через MCP-сервер. Задача — показать, как это работает, и снять страх «потеряю деньги» ещё до первого скролла.</p>
+    </div>
+  </div>
+  <div class="hero__cover">
+    <div class="hero__frame">
+      <video class="shot" src="img/hero.webm" autoplay muted loop playsinline poster="img/hero.png"
+             aria-label="Первый экран лендинга IronWallet для ИИ-агентов"></video>
+    </div>
+  </div>
+</section>
+
+<div class="body">
+
+  <aside class="sidebar">
+    <div class="nav-group__title u">IronWallet AI</div>
+    <nav class="nav">
+      <a class="nav__item is-active" href="#s01"><span class="nav__num">01</span><span class="nav__label">Контекст и задача</span></a>
+      <a class="nav__item" href="#s02"><span class="nav__num">02</span><span class="nav__label">Анализ</span></a>
+      <a class="nav__item" href="#s03"><span class="nav__num">03</span><span class="nav__label">Решение: первый экран</span></a>
+      <a class="nav__item" href="#s04"><span class="nav__num">04</span><span class="nav__label">Решение: польза и сценарии</span></a>
+      <a class="nav__item" href="#s05"><span class="nav__num">05</span><span class="nav__label">Решение: снять страх потерять деньги</span></a>
+      <a class="nav__item" href="#s06"><span class="nav__num">06</span><span class="nav__label">Решение: установка</span></a>
+      <a class="nav__item" href="#s07"><span class="nav__num">07</span><span class="nav__label">Итоги</span></a>
+      <a class="nav__item" href="#s08"><span class="nav__num">08</span><span class="nav__label">Что дальше</span></a>
+      <a class="nav__item" href="#s09"><span class="nav__num">09</span><span class="nav__label">Спасибо и контакты</span></a>
+    </nav>
+  </aside>
+
+  <main class="main">
+
+    <!-- 01 Meta -->
+    <div class="meta">
+      <div class="meta__cell"><div class="meta__label">Продукт</div><div class="meta__value">IronWallet AI</div></div>
+      <div class="meta__cell"><div class="meta__label">Роль</div><div class="meta__value">Продуктовый дизайнер</div></div>
+      <div class="meta__cell"><div class="meta__label">Платформа</div><div class="meta__value">Web · лендинг</div></div>
+      <div class="meta__cell"><div class="meta__label">Что делала</div><div class="meta__value">Исследование, тексты, UX/UI</div></div>
+    </div>
+
+    <!-- 01 Контекст и задача -->
+    <section class="sect" id="s01">
+      <div class="eyebrow">КОНТЕКСТ И ЗАДАЧА</div>
+      <h2 class="h2">Как отдать кошелёк ИИ и не бояться</h2>
+      <div class="sect__content cards">
+        <div class="card">
+          <div class="card__title">Контекст</div>
+          <p class="card__text">IronWallet запускал одним из первых MCP с криптокошельком. Это кошелёк, которым управляет ИИ-агент (Cursor, Claude Code) через MCP-сервер.</p>
+        </div>
+        <div class="card">
+          <div class="card__title">Проблема</div>
+          <p class="card__text">MCP и ИИ-агент звучат абстрактно, а крипто-аудитория и так ждёт скама: украдут деньги, сид-фразу, кошелёк. Как отдать всё на откуп ИИ?</p>
+        </div>
+        <div class="card">
+          <div class="card__title">Задача</div>
+          <p class="card__text">Визуализировать, что это и как работает, показать пользу и снять два страха: «потеряю деньги» и «это сложно установить».</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 Анализ -->
+    <section class="sect" id="s02">
+      <div class="eyebrow">Проблема. Анализ</div>
+      <h2 class="h2">«Как это — отдать все деньги на откуп ИИ?»</h2>
+      <p class="sect__body">Провелп несколько глубинок с клиентами IronWallet.<br>Во-первых, многие не понимали механику, как это работает. Во-вторых, поняла, что эмоциональные барьеры сильнее когнитивных: мало объяснить механику — нужно ответить на «а это безопасно?» раньше, чем вопрос возникнет. Отсюда логика страницы:</p>
+      <div class="sect__content--tight sect__content cards steps">
+        <div class="card">
+          <div class="marker">1</div>
+          <div class="card__head">Показать, как это работает</div>
+          <p class="card__note">Живой диалог с агентом вместо абзаца про MCP.</p>
+        </div>
+        <div class="card">
+          <div class="marker">2</div>
+          <div class="card__head">Снять страх потери</div>
+          <p class="card__note">Ответ про безопасность — там, где возникает тревога.</p>
+        </div>
+        <div class="card">
+          <div class="marker">3</div>
+          <div class="card__head">Упростить вход</div>
+          <p class="card__note">Короткая установка на лендинге, детали — отдельно.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 Решение: первый экран -->
+    <section class="sect" id="s03">
+      <div class="eyebrow">Решения</div>
+      <h2 class="h2">Первый экран</h2>
+
+      <div class="sect__content hotspots">
+        <div class="frame r-hero">
+          <video class="shot" src="img/hero.webm" autoplay muted loop playsinline
+                 aria-label="Первый экран лендинга: терминал агента, заголовок, чипсы доверия и плашка «Это безопасно»"></video>
+        </div>
+
+        <div class="hot hot--below" style="left:47.172%;top:23.361%">
+          <button class="hotspot">1</button>
+          <div class="tip">
+            <div class="tip__title">Анимация</div>
+            <p class="tip__text">Визуализировала в виде приближенной к реальности пример использования продукта. Пользователю это визуально понятнее, чем текст. Добавила реальные промпты, чтобы сразу показать, для чего использовать. И процесс — что агент выполняет без вопросов одним ответом done.</p>
+          </div>
+        </div>
+
+        <div class="hot hot--start hot--below" style="left:6.016%;top:32.435%">
+          <button class="hotspot">2</button>
+          <div class="tip">
+            <div class="tip__title">Заголовок от аудитории</div>
+            <p class="tip__text">Назвала в первой строке того, кто читает, а не технологию: «для ИИ-агентов» вместо «MCP-сервер». Человек узнаёт себя и не уходит разбираться в терминах. В подзаголовке — глаголы, которые он уже делает в кошельке: проверять балансы, отправлять, обменивать. Новое читается как знакомое.</p>
+          </div>
+        </div>
+
+        <div class="hot hot--start" style="left:6.016%;top:66.63%">
+          <button class="hotspot">3</button>
+          <div class="tip">
+            <div class="tip__title">Возражения до первого скролла</div>
+            <p class="tip__text">Вынесла три главных страха в чипсы прямо под кнопку. Вопрос «а не украдут ли деньги» возникает раньше, чем человек дочитает страницу, — если ответ лежит в FAQ, он до него не доберётся. Короткие формулировки читаются мельком и работают как гарантии.</p>
+          </div>
+        </div>
+
+        <div class="hot" style="left:47.172%;top:66.98%">
+          <button class="hotspot">4</button>
+          <div class="tip">
+            <div class="tip__title">Ответ в точке тревоги</div>
+            <p class="tip__text">Поставила плашку про безопасность вплотную к терминалу. Тревога появляется ровно в тот момент, когда видишь, как ИИ отправляет деньги, — закрывать её нужно в этом же месте экрана. Ответ через два блока ниже уже не успевает.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 Решение: польза и сценарии -->
+    <section class="sect" id="s04">
+      <div class="eyebrow">Решения</div>
+      <h2 class="h2">Польза и сценарии</h2>
+
+      <div class="sect__content stack">
+        <div class="panel">
+          <div class="panel__head">
+            <div class="panel__title">Блок «До / После»</div>
+            <p class="panel__text">Рутина в кошельке против одной фразы агенту. Разговор переходит из «что это» в «зачем мне»: 1 предложение, 0 экранов для кликов.</p>
+          </div>
+          <div class="panel__shot"><div class="panel__screen">
+            <img class="shot" src="img/benefit.png" alt="Блок «До / После» на лендинге">
+          </div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel__head">
+            <div class="panel__title">Популярные запросы</div>
+            <p class="panel__text">Готовые формулировки показывают, ЧТО можно делать руками агента, и работают как шаблоны для первого запуска.</p>
+          </div>
+          <div class="panel__shot"><div class="panel__screen">
+            <img class="shot" src="img/prompts.png" alt="Блок популярных запросов к агенту">
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 Решение: снять страх потерять деньги -->
+    <section class="sect" id="s05">
+      <div class="eyebrow">Решение</div>
+      <h2 class="h2">Решение: снять страх потерять деньги</h2>
+
+      <div class="sect__content stack">
+        <div class="panel">
+          <div class="panel__head">
+            <div class="panel__title">Визуализация: у агента нет доступа к сид-фразе</div>
+            <p class="panel__text">Иллюстрация вместо обещаний: фраза зашифрована локально, агент получает только инструменты кошелька. Скептики верят архитектуре.</p>
+          </div>
+          <div class="panel__shot"><div class="panel__screen">
+            <img class="shot" src="img/security.png" alt="Визуализация: сид-фраза зашифрована локально, агент получает только инструменты кошелька">
+          </div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel__head">
+            <div class="panel__title">«Не давайте агенту основной кошелёк»</div>
+            <p class="panel__text">Честно про риск: отдельный ИИ-кошелёк с небольшой суммой. Прозрачность повышает доверие сильнее умолчания.</p>
+          </div>
+          <div class="panel__shot"><div class="panel__screen">
+            <img class="shot" src="img/notice.png" alt="Плашка «Не давайте агенту основной кошелёк»">
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 Решение: установка -->
+    <section class="sect" id="s06">
+      <div class="eyebrow">Решение</div>
+      <h2 class="h2">Решение: установка</h2>
+
+      <div class="sect__content hotspots">
+        <div class="frame r-install">
+          <img class="shot" src="img/install.png" alt="Блок установки: 4 шага и вкладки клиентов">
+        </div>
+
+        <div class="hot hot--start hot--below" style="left:3.896%;top:31.349%">
+          <button class="hotspot">1</button>
+          <div class="tip">
+            <div class="tip__title">Установка в 4 шага</div>
+            <p class="tip__text">Разбила установку на четыре коротких шага: добавить сервер → создать отдельный кошелёк → пополнить → попробовать запросы. Процесс объективно непростой, и прятать это бессмысленно — но если показать его как конечный список, он перестаёт пугать. Сложность снимается структурой, а не упрощением.</p>
+          </div>
+        </div>
+
+        <div class="hot hot--below" style="left:48.5%;top:7.7%">
+          <button class="hotspot">2</button>
+          <div class="tip">
+            <div class="tip__title">Выбор сделан за пользователя</div>
+            <p class="tip__text">Отметила Cursor как «Наиболее рекомендуемый». Вкладки клиентов — это развилка, а на развилке человек останавливается и уходит думать. Рекомендация по умолчанию снимает решение: остальные варианты рядом, но выбирать не обязательно.</p>
+          </div>
+        </div>
+
+        <div class="hot" style="left:61.472%;top:73.829%">
+          <button class="hotspot">3</button>
+          <div class="tip">
+            <div class="tip__title">Глубина — на отдельной странице</div>
+            <p class="tip__text">Унесла конфиги и нюансы в «Подробнее». Если положить их на лендинг, страница станет документацией и отпугнёт тех, кто только присматривается. Так лёгкий путь остаётся коротким, а тем, кому нужны детали, есть куда пойти.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 Итоги -->
+    <section class="sect sect--flush" id="s07">
+      <div class="results">
+        <div class="results__head">
+          <div class="eyebrow">РЕЗУЛЬТАТ</div>
+          <p class="results__statement">Лендинг не объясняет MCP — он показывает работу ИИ с кошельком и снимает страх раньше вопроса.</p>
+        </div>
+        <div class="results__block">
+          <div class="tiles">
+            <div class="tile"><div class="tile__value">7%</div><div class="tile__label">конверсия в скачивание</div></div>
+            <div class="tile"><div class="tile__value">30%</div><div class="tile__label">доходят до блока установки</div></div>
+            <div class="tile"><div class="tile__value">8%</div><div class="tile__label">переходов в «Подробнее»</div></div>
+          </div>
+          <div class="tile tile--wide">
+            <div class="tile__title">Проверила на 5 респондентах</div>
+            <p class="tile__text">Показала страницу пятерым людям, не знакомым с продуктом. Суть MCP-агента была понятна всем — вопроса «что это вообще такое» не возникло ни разу. Дальше начинался уже интерес: как это работает и где хранятся ключи.</p>
+          </div>
+        </div>
+        <div class="chips">
+          <div class="chip"><div class="chip__label">Место в продукте</div><div class="chip__value">Лендинг IronWallet AI</div></div>
+          <div class="chip"><div class="chip__label">Отдано в разработку</div><div class="chip__value">Макеты + прототип</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 Что дальше -->
+    <section class="sect sect--flush" id="s08">
+      <div class="eyebrow">ЧТО ДАЛЬШЕ</div>
+      <h2 class="h2" style="margin-top:24px">Куда развивать дальше</h2>
+      <div class="ideas" style="margin-top:40px">
+        <div class="idea">
+          <div class="idea__num">01</div>
+          <div class="idea__title">Сократить путь до установки</div>
+          <p class="idea__text">До блока установки доходят 30% — проверить CTA «Установить» прямо на первом экране и сокращённую версию шагов.</p>
+        </div>
+        <div class="idea">
+          <div class="idea__num">02</div>
+          <div class="idea__title">Проверить блок безопасности на цифрах</div>
+          <p class="idea__text">A/B-тестом замерить, как плашка «Это безопасно» и визуализация сид-фразы влияют на конверсию в скачивание.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 09 Спасибо -->
+    <section class="sect" id="s09">
+      <div class="thanks">
+        <h2 class="thanks__title">Спасибо, что дочитали</h2>
+        <p class="thanks__text">Если хочется подробностей по флоу и решениям — напишите, покажу макеты и прототип и расскажу, что не поместилось в кейс.</p>
+        <div class="contacts">
+          <a class="btn btn--dark" href="https://t.me/Anastasia_Jay">@Anastasia_Jay</a>
+          <a class="btn" href="mailto:burmistrova.adv@gmail.com">burmistrova.adv@gmail.com</a>
+          <a class="btn" href="tel:+79089745517">+7 908 974 55 17</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <div class="headline">Открыта к проектам и разговорам</div>
+  <div class="contacts">
+    <a href="https://t.me/Anastasia_Jay" target="_blank" rel="noopener">@Anastasia_Jay</a>
+    <span class="sep" aria-hidden="true">/</span>
+    <a href="mailto:burmistrova.adv@gmail.com">burmistrova.adv@gmail.com</a>
+    <span class="sep" aria-hidden="true">/</span>
+    <a href="tel:+79089745517">+7 908 974 55 17</a>
+  </div>
+</footer>
+
+  </div>
+</div>
+
+<script src="/assets/header-dock.js" defer></script>
+
+<script>
+// Подсветка пункта меню по текущей секции
+(function () {
+  var items = Array.prototype.slice.call(document.querySelectorAll('.nav__item'));
+  var sections = items.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+
+  function sync() {
+    var line = window.innerHeight * 0.3;
+    var index = 0;
+    sections.forEach(function (s, i) { if (s && s.getBoundingClientRect().top <= line) index = i; });
+    items.forEach(function (a, i) { a.classList.toggle('is-active', i === index); });
+  }
+
+  window.addEventListener('scroll', sync, { passive: true });
+  window.addEventListener('resize', sync);
+  sync();
+})();
+</script>
+
+</body>
+</html>
