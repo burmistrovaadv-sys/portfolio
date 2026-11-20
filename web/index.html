@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Анастасия Бурмистрова — продуктовый дизайнер</title>
-<meta name="description" content="Портфолио продуктового дизайнера. Финтех и сложные интерфейсы: платёжные сценарии, B2B, B2E и B2C продукты, дизайн-системы.">
+<title>Анастасия Бурмистрова — UX/UI дизайнер</title>
+<meta name="description" content="Портфолио UX/UI дизайнера: сайты и лендинги для финтеха, UI-кит, интерактивные механики, motion и AI-визуалы.">
 <!-- Копия главной в стиле кейса IronWallet AI. Закрыта от индексации,
      чтобы не конкурировать с основной главной в поиске. -->
 <meta name="robots" content="noindex">
@@ -12,8 +12,8 @@
 
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_RU">
-<meta property="og:title" content="Анастасия Бурмистрова — продуктовый дизайнер">
-<meta property="og:description" content="Из сложного флоу с кучей условий делаю простое и понятное для пользователя. Финтех, Web, Mobile, дизайн-системы.">
+<meta property="og:title" content="Анастасия Бурмистрова — UX/UI дизайнер">
+<meta property="og:description" content="Делаю лендинги, после которых у пользователя не остаётся вопросов о продукте. Финтех, сайты, UI-кит, AI-визуалы.">
 <meta property="og:image" content="https://www.anastasia-burmistrova.ru/assets/img/c1.png">
 <meta name="twitter:card" content="summary_large_image">
 
@@ -208,12 +208,12 @@ header a:not(.logo):hover{border-bottom-color:var(--ink)}
 /* ---------- Кейсы ---------- */
 .cases{display:flex;flex-direction:column;gap:20px}
 .case{
-  display:flex;align-items:stretch;
+  display:flex;flex-direction:column;align-items:stretch;
   background:var(--surface);border-radius:var(--radius);
   overflow:hidden;transition:transform .2s ease,box-shadow .2s ease;
 }
 .case:hover{transform:translateY(-3px);box-shadow:0 18px 44px rgba(14,14,16,.08)}
-.case__content{flex:0 0 46%;min-width:0;padding:40px;display:flex;flex-direction:column;gap:18px}
+.case__content{flex:1 1 auto;min-width:0;padding:40px;display:flex;flex-direction:column;gap:18px}
 .case__title{font-family:'Unbounded';font-weight:600;font-size:clamp(22px,1.9vw,28px);line-height:1.18}
 .case__text{font-size:18px;line-height:1.45;color:var(--muted)}
 .case__grow{flex:1}
@@ -228,20 +228,20 @@ header a:not(.logo):hover{border-bottom-color:var(--ink)}
 .btn:hover:not(.btn--dark){background:rgba(14,14,16,.14)}
 .case .btn{align-self:flex-start}
 
-/* серый экран справа + корпус монитора, как в панелях кейса */
+/* серый экран сверху + корпус монитора, как в панелях кейса */
 .case__media{
-  flex:1 1 54%;min-width:0;position:relative;background:var(--screen);
+  order:-1;flex:none;min-width:0;position:relative;background:var(--screen);
   display:flex;flex-direction:column;justify-content:flex-end;
-  padding:56px 36px 0;
+  padding:64px 48px 0;
 }
 .case__badge{position:absolute;top:18px;left:20px}
 .monitor{
-  background:#2a2a30;border-radius:20px 20px 0 0;padding:14px 14px 0;
+  background:#2a2a30;border-radius:12px 12px 0 0;padding:6px 6px 0;
   box-shadow:0 -10px 30px rgba(14,14,16,.12);
 }
-.monitor__screen{border-radius:8px 8px 0 0;overflow:hidden;background:#fff}
+.monitor__screen{border-radius:7px 7px 0 0;overflow:hidden;background:#fff}
 .monitor__screen img,.monitor__screen video{width:100%;height:auto}
-.case .monitor__screen{aspect-ratio:16/10}
+.case .monitor__screen{aspect-ratio:16/9}
 .case .monitor__screen img,.case .monitor__screen video{height:100%;object-fit:cover;object-position:top}
 
 /* ---------- О себе ---------- */
@@ -264,17 +264,18 @@ header a:not(.logo):hover{border-bottom-color:var(--ink)}
   display:flex;align-items:center;justify-content:center;
   width:52px;height:52px;padding:0;border:0;border-radius:999px;
   background:var(--lime);color:var(--ink);cursor:pointer;
-  transition:background-color .2s ease,color .2s ease,box-shadow .2s ease}
-.flows-arrow:hover{background:var(--ink);color:var(--lime);box-shadow:0 0 0 6px var(--lime-ring)}
-.flows-arrow:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+  transition:background-color .2s ease}
+.flows-arrow:hover,.flows-arrow:focus-visible{background:#a9d93a}
+.flows-arrow:active{background:#93c22a}
+.flows-arrow:focus,.flows-arrow:focus-visible{outline:none;box-shadow:none}
 .flows-arrow[hidden]{display:none}
 .flows-arrow.prev{left:0;translate:-20% -50%}
 .flows-arrow.next{right:0;translate:20% -50%}
 
 /* ---------- Web, Analytics ---------- */
-.shots{display:flex;gap:20px;align-items:stretch}
+.shots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:stretch}
 .shot{
-  flex:1 1 0;min-width:0;background:var(--surface);
+  min-width:0;background:var(--surface);
   border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;
 }
 .shot__media{background:var(--screen);padding:32px 32px 0}
@@ -295,8 +296,9 @@ header a:not(.logo):hover{border-bottom-color:var(--ink)}
   display:flex;gap:40px;align-items:center;
   background:var(--surface);border-radius:var(--radius);padding:48px;
 }
-.personal__photo{flex:0 0 260px;width:260px;aspect-ratio:1/1;border-radius:var(--radius);overflow:hidden}
-.personal__photo img{width:100%;height:100%;object-fit:cover}
+.personal__photo{flex:0 0 260px;width:260px;aspect-ratio:1/1}
+/* серый квадрат зашит в саму картинку — оставляем только круг */
+.personal__photo img{width:100%;height:100%;object-fit:cover;clip-path:circle(46.5% at 50% 50%)}
 .personal__body{display:flex;flex-direction:column;gap:14px;min-width:0}
 .personal__title{font-family:'Unbounded';font-weight:600;font-size:clamp(28px,2.6vw,40px);line-height:1.1}
 .personal__sub{font-family:'Unbounded';font-weight:500;font-size:18px;line-height:1.35;color:var(--olive)}
@@ -319,13 +321,8 @@ footer .contacts a{border-bottom:1px solid var(--line)}
 footer .contacts a:hover{background:var(--lime);border-bottom-color:transparent}
 
 /* ---------- Адаптив ---------- */
-@media (max-width:1100px){
-  .case{flex-direction:column}
-  .case__content{flex:none}
-  .shots{flex-direction:column}
-  .shot{flex:none}
-}
 @media (max-width:720px){
+  .shots{grid-template-columns:1fr}
   .case__content,.about,.thanks{padding:28px}
   .case__media{padding:48px 20px 0}
   .panel{padding:20px}
@@ -370,38 +367,37 @@ footer .contacts a:hover{background:var(--lime);border-bottom-color:transparent}
     <div>
       <h1>Анастасия Бурмистрова</h1>
       <div class="tagline">
-        <span class="role">Продуктовый дизайнер,</span>
+        <span class="role">UX/UI дизайнер</span>
         <span class="badge">5+ лет</span>
       </div>
     </div>
     <p class="statement">
-      Из сложного флоу с кучей условий делаю простое и понятное для пользователя
+      Делаю лендинги, после которых у пользователя не остаётся вопросов о продукте
     </p>
     <div class="chips">
+      <span class="chip">Веб-дизайн</span>
+      <span class="chip">Лендинги</span>
       <span class="chip">Финтех</span>
-      <span class="chip">Web</span>
-      <span class="chip">Mobile</span>
-      <span class="chip">B2C</span>
-      <span class="chip">B2E</span>
-      <span class="chip">Дизайн-системы</span>
-      <span class="chip">AI-native</span>
+      <span class="chip">UI-кит</span>
+      <span class="chip">Интерактив</span>
+      <span class="chip">Motion</span>
+      <span class="chip">AI-визуалы</span>
+      <span class="chip">Higgsfield</span>
       <span class="chip">Claude</span>
-      <span class="chip">Codex</span>
-      <span class="chip">вайбкодинг</span>
     </div>
   </section>
 
   <section class="sect" id="cases">
-    <div class="eyebrow">Финтех · B2B · B2C</div>
-    <h2 class="h2">Избранные кейсы</h2>
+    <div class="eyebrow">Финтех · Лендинги · Промо</div>
+    <h2 class="h2">Избранные проекты</h2>
 
     <div class="sect__content cases">
 
       <a class="case" href="/crypto-directory">
         <div class="case__content">
-          <div class="tags"><span class="tag">Web</span><span class="tag">Mobile</span><span class="tag">Дизайн-система</span></div>
-          <h3 class="case__title">С нуля собрала каталог ресурсов CryptoMarketplace</h3>
-          <p class="case__text">С нуля, с аналитики разработала и затащила проект каталога ресурсов, которые принимают крипту. Сложный каталог с фильтрами, и карту. End-to-end design</p>
+          <div class="tags"><span class="tag">Web</span><span class="tag">Каталог</span><span class="tag">Интерактив</span><span class="tag">Дизайн-система</span></div>
+          <h3 class="case__title">Сайт-каталог с фильтрами и картой для CryptoMarketplace</h3>
+          <p class="case__text">Начала с аналитики и с нуля спроектировала сайт-каталог мест, где можно платить криптой. Сделала сценарий выбора на фильтрах и интерактивной карте, чтобы пользователь быстро находил нужное. Вела проект от концепции до релиза.</p>
           <div class="case__grow"></div>
           <span class="btn btn--dark">Смотреть кейс</span>
         </div>
@@ -415,9 +411,9 @@ footer .contacts a:hover{background:var(--lime);border-bottom-color:transparent}
 
       <a class="case" href="/case-ironwallet-ai">
         <div class="case__content">
-          <div class="tags"><span class="tag">Web</span><span class="tag">B2C</span><span class="tag tag--accent">AI-агенты · MCP</span></div>
-          <h3 class="case__title">IronWallet для ИИ-агентов</h3>
-          <p class="case__text">Лендинг кошелька, которым управляет ИИ-агент через MCP-сервер. Задача — показать, как это работает, и снять страх «потеряю деньги» ещё до первого скролла.</p>
+          <div class="tags"><span class="tag">Web</span><span class="tag">Лендинг</span><span class="tag tag--accent">AI-агенты · MCP</span></div>
+          <h3 class="case__title">Лендинг IronWallet: кошелёк, которым управляет ИИ-агент</h3>
+          <p class="case__text">Лендинг кошелька, которым управляет ИИ-агент через MCP-сервер. Задача — с первого экрана объяснить, как это работает, и снять страх «потеряю деньги» ещё до первого скролла.</p>
           <div class="case__grow"></div>
           <span class="btn btn--dark">Смотреть кейс</span>
         </div>
@@ -433,9 +429,9 @@ footer .contacts a:hover{background:var(--lime);border-bottom-color:transparent}
 
       <a class="case" href="/exmo-ds">
         <div class="case__content">
-          <div class="tags"><span class="tag">Web</span><span class="tag">App</span><span class="tag">Дизайн-система</span><span class="tag">B2C</span></div>
-          <h3 class="case__title">Дизайн-система, на которой пересобрала 100+ экранов биржи</h3>
-          <p class="case__text">exmo.me — топ-10 биржа в России. Собрала систему под две локали, пересобрала на ней веб и приложение и добавила 60+ адаптивных страниц.</p>
+          <div class="tags"><span class="tag">Дизайн-система</span><span class="tag">UI-кит</span><span class="tag">Адаптив</span><span class="tag">Web</span></div>
+          <h3 class="case__title">UI-кит для биржи из топ-10 и 100+ пересобранных экранов</h3>
+          <p class="case__text">Собрала для exmo.me дизайн-систему под две локали: компоненты, состояния, адаптивы и документацию. На ней пересобрала сайт и приложение и добавила 60+ адаптивных страниц.</p>
           <div class="case__grow"></div>
           <span class="btn btn--dark">Смотреть кейс</span>
         </div>
@@ -452,12 +448,11 @@ footer .contacts a:hover{background:var(--lime);border-bottom-color:transparent}
 
   <section class="sect" id="about">
     <div class="about">
-      <p class="about__text">Продуктовый дизайнер в <mark>финтехе</mark> и сложных интерфейсах: платёжные сценарии, <mark>B2B, B2E и B2C</mark> продукты, <mark>дизайн-системы</mark>. Веду задачу от Discovery до релиза и отдаю разработке не «голую фигму», а прототипы и код.</p>
+      <p class="about__text">UX/UI дизайнер в <mark>финтехе</mark>. Начинаю с того, что пользователю нужно понять о продукте, и уже под это строю структуру, первый экран и визуал. Разработке отдаю прототипы и код, а не «голую фигму».</p>
     </div>
   </section>
 
   <section class="sect" id="flows">
-    <div class="eyebrow">Флоу и промо</div>
     <h2 class="h2">Mobile</h2>
 
     <div class="sect__content panel">
@@ -498,8 +493,7 @@ footer .contacts a:hover{background:var(--lime);border-bottom-color:transparent}
   </section>
 
   <section class="sect" id="shots">
-    <div class="eyebrow">Desktop</div>
-    <h2 class="h2">Web, Analytics</h2>
+    <h2 class="h2">Сайты и data-визуализация</h2>
 
     <div class="sect__content shots">
 
@@ -512,9 +506,9 @@ footer .contacts a:hover{background:var(--lime);border-bottom-color:transparent}
           </div></div>
         </div>
         <div class="shot__body">
-          <div class="tags"><span class="tag">Desktop</span><span class="tag">B2B</span><span class="tag">Концепт</span></div>
-          <h3 class="shot__title">Портрет покупателя Ozon</h3>
-          <p class="shot__text">Спроектировала страницу для аналитики портрета покупателя для озона на их конкурс</p>
+          <div class="tags"><span class="tag">Desktop</span><span class="tag">Концепт</span><span class="tag">Data-визуализация</span></div>
+          <h3 class="shot__title">Концепт страницы «Портрет покупателя» для Ozon</h3>
+          <p class="shot__text">Спроектировала для конкурса Ozon аналитическую страницу, на которой сложные данные о покупателях читаются за пару секунд.</p>
         </div>
       </div>
 
@@ -527,23 +521,39 @@ footer .contacts a:hover{background:var(--lime);border-bottom-color:transparent}
           </div></div>
         </div>
         <div class="shot__body">
-          <div class="tags"><span class="tag">Desktop</span><span class="tag">B2C</span><span class="tag">WEB</span></div>
-          <h3 class="shot__title">Аналитический сайт в блокчейне для B2C</h3>
-          <p class="shot__text">Спроектировала сайт для анализа данных с блокчейна в сети TRON. Сделала данные понятными и логичными для пользователя (Погрузилась в блокчейн и выделила важное и неважное)</p>
+          <div class="tags"><span class="tag">Web</span><span class="tag">B2C</span><span class="tag">Информационный сайт</span></div>
+          <h3 class="shot__title">Сайт-аналитика блокчейна TRON</h3>
+          <p class="shot__text">Разобралась в данных блокчейна, отобрала главное и упаковала его в понятную структуру и визуал. Сайт рассчитан на людей без технической подготовки.</p>
           <a class="site-link" href="https://tronscanner.org/en" target="_blank" rel="noopener">tronscanner.org</a>
+        </div>
+      </div>
+
+      <div class="shot">
+        <div class="shot__media">
+          <div class="monitor"><div class="monitor__screen">
+            <video src="/assets/video/japan-avtocar.webm" width="2382" height="1574"
+                   data-lazy loop muted playsinline preload="none"
+                   aria-label="Сайт по привозу авто из Японии, Китая и Кореи"></video>
+          </div></div>
+        </div>
+        <div class="shot__body">
+          <div class="tags"><span class="tag">Desktop</span><span class="tag">Mobile</span><span class="tag">B2C</span><span class="tag">Auto</span></div>
+          <h3 class="shot__title">Сайт по привозу авто</h3>
+          <p class="shot__text">Сайт по привозу авто из Японии, Китая и Кореи. Вела проект end-to-end.</p>
         </div>
       </div>
 
     </div>
 
     <div class="skills">
-      <span class="tag">Информационная архитектура и user flow</span>
+      <span class="tag">Лендинги и сайты: структура, первый экран, сторителлинг продукта</span>
+      <span class="tag">Интерактивные механики: калькуляторы, сравнения, сценарии выбора</span>
+      <span class="tag">Дизайн-системы и UI-кит: компоненты, состояния, адаптивы, документация</span>
+      <span class="tag">Анимация и микровзаимодействия: ProtoPie, Lottie</span>
+      <span class="tag">AI-визуалы: Higgsfield, генерация изображений, видео и 3D</span>
+      <span class="tag">Moodboard, визуальные концепции, рекламные креативы и баннеры</span>
       <span class="tag">Исследования: JTBD, CJM, юзабилити-тесты</span>
-      <span class="tag">Дизайн-системы: с нуля и доработка</span>
-      <span class="tag">UX-тексты и презентация решений</span>
-      <span class="tag">Figma expert level</span>
-      <span class="tag">Cursor, Claude, AI-агенты, MCP Figma → код</span>
-      <span class="tag">ProtoPie, Lottie, Adobe Ps/Ai</span>
+      <span class="tag">Figma expert level, Adobe Ps/Ai, Cursor + Claude, MCP Figma → код</span>
       <span class="tag">Английский C2</span>
     </div>
   </section>
@@ -556,7 +566,7 @@ footer .contacts a:hover{background:var(--lime);border-bottom-color:transparent}
       <div class="personal__body">
         <span class="tag tag--accent" style="align-self:flex-start">ну а вообще…</span>
         <h2 class="personal__title">я Настя, привет!</h2>
-        <p class="personal__sub">бывший маркетолог — поэтому всегда спрашиваю «а зачем это делаем?»</p>
+        <p class="personal__sub">бывший маркетолог — поэтому думаю не только о красоте, но и о том, продаёт ли лендинг</p>
         <p class="personal__text">Люблю путешествовать, театры и музеи, днд, теннис и гоночки Ф1. В офисе отвечаю за музыку и актуальные мемы</p>
         <p class="personal__text">Люблю собачек: волонтёрю в приюте и выгуливаю их в свободное время</p>
       </div>
@@ -566,7 +576,7 @@ footer .contacts a:hover{background:var(--lime);border-bottom-color:transparent}
   <section class="sect" id="contacts" style="padding-top:0">
     <div class="thanks">
       <h2 class="thanks__title">Открыта к проектам и разговорам</h2>
-      <p class="thanks__text">Напишите — расскажу подробнее о кейсах и о том, что не поместилось на страницу.</p>
+      <p class="thanks__text">Напишите — покажу лендинги, промо и AI-визуалы, которые не поместились на страницу.</p>
       <div class="contacts">
         <a class="btn btn--dark" href="https://t.me/Anastasia_Jay" target="_blank" rel="noopener">Telegram @Anastasia_Jay</a>
         <a class="btn" href="mailto:burmistrova.adv@gmail.com">burmistrova.adv@gmail.com</a>
