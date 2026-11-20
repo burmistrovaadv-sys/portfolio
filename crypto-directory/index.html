@@ -15,222 +15,14 @@
 <meta property="og:image" content="https://www.anastasia-burmistrova.ru/assets/img/c1.png">
 <meta name="twitter:card" content="summary_large_image">
 
-<meta name="theme-color" content="#f2f1ee">
+<meta name="theme-color" content="#f4f4f6">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/favicon.svg">
 
-<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/onest-700-cyrillic.woff2" crossorigin>
-<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/onest-400-cyrillic.woff2" crossorigin>
-<link rel="stylesheet" href="/assets/fonts/fonts.css">
-<style>
-  :root{
-    --bg:#f2f1ee; --ink:#15171b; --ink-2:#3a3f45; --ink-3:#5a5f66;
-    --line:#dcd9d3; --surface:#e7e5e0; --lime:#cdf25e; --lime-ink:#111a0a;
-  }
-  *{box-sizing:border-box}
-  html{-webkit-font-smoothing:antialiased; scroll-behavior:smooth}
-  body{margin:0; background:var(--bg); color:var(--ink); font-family:"Onest",system-ui,sans-serif}
-  a{color:var(--ink); text-decoration-thickness:1px; text-underline-offset:4px}
-  a:hover{background:var(--lime)}
-  ::selection{background:var(--lime)}
-  .mono{font-family:"Martian Mono",ui-monospace,monospace; font-size:12px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-3)}
-  .wrap{padding:0 clamp(16px,4vw,56px)}
-  .inner{max-width:1680px; margin:0 auto}
-
-
-  /* Оформление содержимого шапки — копия правил из assets/main.css, чтобы
-     шапка на кейсе выглядела ровно так же, как на главной. Раньше всё это
-     жило в инлайн-стилях на каждой ссылке по отдельности — именно поэтому у
-     Email оказалось подчёркивание: там text-decoration:none просто забыли.
-     Подсветка при наведении тоже приведена к главной: глобальный a:hover на
-     кейсовых страницах заливает фон лаймом, в шапке же нужно подчёркивание. */
-  .identity{display:flex; align-items:center; gap:10px; font-size:15px; font-weight:500}
-  header nav.top{display:flex; align-items:center; gap:14px; font-size:15px; font-weight:500}
-  header a{text-decoration:none; border-bottom:1px solid transparent}
-  header a.logo{border-bottom:0}
-  header a:hover{background:none}
-  header a:not(.logo):hover{border-bottom-color:var(--ink)}
-  header .sep{color:#c6c3bc}
-
-  /* Шапка «докируется» при прокрутке — та же механика, что на главной
-     (подробные пояснения в assets/main.css). Прогресс 0…1 лежит в --dock,
-     его ставит assets/header-dock.js; всё ниже — линейные функции от него,
-     поэтому переход непрерывный, а не переключение состояний.
-     Вертикальные padding уменьшаются ровно на столько, на сколько растёт
-     margin, — высота margin-box постоянна и контент под шапкой не съезжает.
-     Отдельный top нужен потому, что при залипании margin шапки в смещении
-     не участвует и панель прижималась бы к самой кромке окна. */
-  header{--dock:0;
-    position:sticky; top:calc(var(--dock) * 10px); z-index:30;
-    display:flex; align-items:center; justify-content:space-between;
-    gap:16px; flex-wrap:wrap;
-    width:calc(100% - 20% * var(--dock));
-    margin:calc(var(--dock) * 10px) auto;
-    padding:calc(18px - 10px * var(--dock)) calc(var(--dock) * 26px);
-    border-radius:calc(var(--dock) * 38px);
-    /* Обводки у собранной панели нет — форму держат скругление, фон и blur.
-       box-shadow убран целиком, а не обнулён по альфе: нулевая тень всё
-       равно остаётся слоем отрисовки, а здесь она не нужна вовсе.
-       То же самое сделано в assets/main.css для главной — вид шапки должен
-       совпадать на всех страницах. */
-    background:rgba(242,241,238,.88); backdrop-filter:blur(10px)}
-
-  @media (prefers-reduced-motion:reduce){
-    header{--dock:0 !important}
-  }
-
-  /* На телефоне сужать шапку нельзя — навигация уехала бы на лишнюю строку и
-     страница прыгнула бы. Поэтому панель расширяется к краям экрана ровно на
-     столько, сколько забирает внутренний отступ: ширина содержимого не
-     меняется, перенос строки невозможен. */
-  @media (max-width:720px){
-    header{
-      width:calc(100% + 16px * var(--dock));
-      margin:calc(var(--dock) * 10px) calc(var(--dock) * -8px);
-      padding:calc(18px - 10px * var(--dock)) calc(var(--dock) * 8px);
-      border-radius:calc(var(--dock) * 24px);
-    }
-  }
-  /* В собранной панели монограмма «АБ» сменяется именем целиком — так же,
-     как на главной (assets/main.css). Оба варианта лежат в одной ячейке
-     грида, поэтому не двигают друг друга и кроссфейд идёт на месте.
-     Ширину имени один раз замеряет assets/header-dock.js и кладёт в
-     --logo-w; значение по умолчанию 28px оставляет логотип квадратом, если
-     скрипт ещё не отработал. Множители разводят тексты по времени: «АБ»
-     гаснет к --dock ~0.45, имя проявляется с ~0.55, перекрытия нет. */
-  .logo{--logo-w:28px;
-    display:inline-grid; align-items:center; justify-items:center;
-    width:calc(28px + (var(--logo-w) - 28px) * var(--dock)); height:28px;
-    border-radius:calc(8px + 6px * var(--dock));
-    background:var(--ink); color:var(--bg); font-weight:700; font-size:13px;
-    text-decoration:none; overflow:hidden; white-space:nowrap}
-  .logo > span{grid-area:1/1}
-  .logo .logo-ab{opacity:calc(1 - var(--dock) * 2.2)}
-  .logo .logo-full{opacity:calc(var(--dock) * 2.2 - 1.2)}
-  .logo:hover{background:var(--ink)}
-
-  .tags{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:clamp(18px,2vw,28px)}
-  .tag{padding:6px 14px; border-radius:999px; background:var(--surface); color:#4a4f55; font-size:14px; font-weight:500}
-  .tag.hl{background:var(--lime); color:var(--lime-ink)}
-  h1{margin:0; max-width:18ch; font-size:clamp(40px,7vw,96px); font-weight:700; letter-spacing:-.045em; line-height:.98}
-  .lead{margin:clamp(20px,2.4vw,32px) 0 0; max-width:60ch; font-size:clamp(18px,1.8vw,24px); line-height:1.45; color:var(--ink-2)}
-
-  .layout{display:grid; grid-template-columns:minmax(170px,240px) minmax(0,1fr); gap:clamp(20px,3vw,56px);
-    align-items:start; padding-top:clamp(28px,3.5vw,48px)}
-  aside{position:sticky; top:86px; align-self:start; display:flex; flex-direction:column; gap:4px; min-width:0}
-  aside a{padding:10px 12px; border-radius:10px; font-size:16px; line-height:1.3; text-decoration:none;
-    color:var(--ink-2); transition:background .2s,color .2s}
-  aside a:hover{background:var(--lime); color:var(--lime-ink)}
-  aside a.on{background:var(--lime); color:var(--lime-ink); font-weight:600}
-  .back{margin-top:14px; text-align:center; border:1px solid var(--line); color:var(--ink-3); font-size:15px}
-
-  main{min-width:0; display:flex; flex-direction:column}
-  section{scroll-margin-top:96px}
-  .sec{padding:clamp(24px,3vw,44px) 0 clamp(44px,5.5vw,90px); border-top:1px solid var(--line);
-    display:flex; flex-direction:column; gap:18px}
-  h2{margin:0; font-size:clamp(26px,3.4vw,44px); font-weight:600; letter-spacing:-.035em; line-height:1.05; max-width:22ch}
-  p{margin:0; font-size:clamp(17px,1.5vw,20px); line-height:1.55; color:var(--ink-2); max-width:62ch}
-  .cols{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr)); gap:clamp(16px,2vw,32px)}
-  .col{display:flex; flex-direction:column; gap:10px}
-  .col p{font-size:17px}
-  .card{padding:24px; border-radius:20px; background:var(--surface); display:flex; flex-direction:column; gap:10px}
-  .card .t{font-size:clamp(18px,1.7vw,22px); font-weight:600; letter-spacing:-.02em; line-height:1.2}
-  .card p{font-size:16px; color:#4a4f55}
-  .chips{display:flex; flex-wrap:wrap; gap:8px}
-  .chip{padding:10px 16px; border-radius:999px; background:var(--surface); color:#4a4f55; font-size:15px; line-height:1.3}
-  .flow{padding:18px 22px; border-radius:16px; background:var(--surface); font-size:16px; color:#4a4f55; line-height:1.5}
-
-  /* media block: фон → таб → картинка (ширина ≤1037, вписана в высоту экрана) */
-  .media{background:var(--surface); border-radius:clamp(16px,2vw,26px);
-    padding:clamp(20px,2.4vw,32px); display:flex; flex-direction:column; align-items:center; gap:clamp(20px,2.4vw,32px)}
-  .tabs{display:inline-flex; flex-wrap:wrap; justify-content:center; gap:4px; padding:5px; border-radius:999px; background:var(--ink)}
-  .tabs button{appearance:none; border:0; cursor:pointer; font:inherit; font-size:15px; line-height:1;
-    padding:12px 20px; border-radius:999px; background:transparent; color:#b0b4b8; transition:background .2s,color .2s}
-  .tabs button:hover{color:#f4f3f0}
-  .tabs button[aria-selected="true"]{background:var(--lime); color:var(--lime-ink); font-weight:600}
-
-  .shots{width:100%; display:flex; justify-content:center}
-  .shot{display:none; margin:0; width:100%; flex-direction:column; align-items:center; gap:10px}
-  .shot.on{display:flex}
-
-  /* картинка внутри медиа-блока */
-  .media .frame{position:relative; display:inline-flex; border-radius:14px; overflow:hidden;
-    background:#fff; cursor:zoom-in; max-width:min(1037px,100%); max-height:none}
-  .media .frame img{display:block; width:min(1037px,100%); height:auto}
-  .media .frame.pair{display:grid; grid-template-columns:1fr 1fr; gap:16px; padding:0; background:transparent}
-  .media .frame.pair img{border-radius:14px; max-width:100%}
-  .media .fade{display:none}
-
-  /* обложка кейса: вместо превью — запись сайта. hero-preview остался постером,
-     он лёгкий (212 КБ) и рисуется мгновенно, пока грузится видео на 5,8 МБ.
-     По клику по-прежнему открывается hero-full — вся страница целиком */
-  .frame{position:relative; border-radius:clamp(16px,2vw,26px); overflow:hidden; background:var(--surface);
-    cursor:zoom-in; max-width:1227px; margin-inline:auto}
-  .frame img, .frame video{display:block; width:100%; height:auto}
-  .fade{display:none}
-  .zoom{position:absolute; right:16px; top:16px; width:46px; height:46px; border-radius:50%;
-    display:grid; place-items:center; background:rgba(21,23,27,.72); color:#fff; backdrop-filter:blur(6px);
-    opacity:0; transform:scale(.9); transition:opacity .2s,transform .2s; pointer-events:none}
-  .frame:hover .zoom, .frame:focus-visible .zoom{opacity:1; transform:scale(1)}
-  .cap{font-size:14px; color:var(--ink-3); text-align:center}
-
-  /* results */
-  .results{border-radius:clamp(20px,2.4vw,34px); background:#15171b; color:#f4f3f0;
-    padding:clamp(26px,3.4vw,56px); display:flex; flex-direction:column; gap:clamp(20px,2.4vw,32px)}
-  .results .mono{color:#b0b4b8}
-  /* верх карточки итогов — две колонки как в фигме: текст 613 + скрин 627, gap 32 */
-  .res-top{display:grid; grid-template-columns:minmax(0,613fr) minmax(0,627fr);
-    gap:clamp(20px,2.2vw,32px); align-items:start}
-  .frame.res-shot{max-width:100%; border-radius:clamp(12px,1.2vw,18px); background:#0f1113}
-  @media (max-width:860px){ .res-top{grid-template-columns:1fr} }
-  .results .st{margin:14px 0 0; font-size:clamp(24px,2.8vw,40px); font-weight:600; letter-spacing:-.03em; line-height:1.12; max-width:24ch; color:#f4f3f0}
-  .grid3{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr)); gap:12px}
-  .rcard{padding:20px 22px; border-radius:18px; background:rgba(255,255,255,.09)}
-  .rcard .l{font-size:14px; color:#b0b4b8}
-  .rcard .v{margin-top:6px; font-size:clamp(20px,2vw,28px); font-weight:600; letter-spacing:-.03em}
-
-  .thanks{border-radius:clamp(20px,2.4vw,34px); background:var(--lime); color:var(--lime-ink);
-    padding:clamp(28px,4vw,64px); display:flex; flex-direction:column; gap:clamp(18px,2.2vw,28px)}
-  .thanks h2{font-size:clamp(32px,4.6vw,64px); font-weight:700; letter-spacing:-.04em; line-height:1; max-width:none}
-  .thanks p{color:var(--lime-ink); max-width:48ch; font-size:clamp(17px,1.6vw,21px)}
-  .btns{display:flex; flex-wrap:wrap; gap:12px}
-  .btn{padding:16px 26px; border-radius:16px; background:var(--lime-ink); color:#f4f3f0; font-size:17px;
-    font-weight:600; text-decoration:none; transition:transform .25s cubic-bezier(.2,.8,.2,1)}
-  .btn:hover{transform:translateY(-2px); background:var(--lime-ink)}
-  .btn.ghost{background:rgba(17,26,10,.1); color:var(--lime-ink)}
-  .btn.ghost:hover{background:rgba(17,26,10,.16)}
-
-  /* lightbox */
-  .lb{position:fixed; inset:0; z-index:100; display:none; background:rgba(12,13,15,.94); backdrop-filter:blur(4px)}
-  .lb.on{display:block}
-  .lb-scroll{position:absolute; inset:0; overflow:auto; padding:clamp(16px,4vw,64px); text-align:center}
-  .lb img{max-width:100%; max-height:calc(100vh - 128px); height:auto; border-radius:10px; background:#fff; cursor:zoom-in}
-  .lb img.full{max-width:none; max-height:none; width:auto; cursor:zoom-out}
-  .lb-bar{position:fixed; top:0; left:0; right:0; display:flex; align-items:center; justify-content:space-between;
-    gap:16px; padding:16px clamp(16px,4vw,32px); color:#f4f3f0; font-size:15px;
-    background:linear-gradient(to bottom,rgba(12,13,15,.85),rgba(12,13,15,0))}
-  .lb-bar button{appearance:none; border:0; cursor:pointer; font:inherit; color:#f4f3f0;
-    background:rgba(255,255,255,.12); border-radius:999px; padding:10px 18px}
-  .lb-bar button:hover{background:rgba(255,255,255,.22)}
-
-  @media (max-width:860px){
-    .layout{grid-template-columns:1fr}
-    aside{position:static; flex-direction:row; overflow:auto; gap:6px; padding-bottom:6px}
-    aside .mono, aside .back{display:none}
-    aside a{white-space:nowrap}
-    .media .frame.pair{grid-template-columns:1fr}
-    .media{padding:16px}
-  }
-  /* доступность */
-  :focus-visible{outline:2px solid var(--ink); outline-offset:3px; border-radius:6px}
-  .skip-link{position:absolute; left:-9999px; top:0; z-index:100; padding:12px 18px;
-    background:var(--ink); color:var(--bg); border-radius:0 0 10px 0; text-decoration:none}
-  .skip-link:focus{left:0}
-  @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto}
-    *{animation-duration:.001ms !important; transition-duration:.001ms !important}
-  }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/case-iw.css">
 </head>
 <body>
 
@@ -253,60 +45,58 @@
       </nav>
     </header>
 
-    <section id="top" style="padding:clamp(30px,5vw,70px) 0 clamp(24px,3vw,40px);">
-      <div class="tags">
-        <span class="tag">Crypto Directory</span>
-        <span class="tag">Web + Mobile</span>
-        <span class="tag">0→1</span>
-        <span class="tag hl">Product Discovery</span>
+    <section class="hero" id="top">
+      <div class="hero__top">
+        <div class="tags">
+          <span class="tag">Crypto Directory</span>
+          <span class="tag">Web + Mobile</span>
+          <span class="tag">0→1</span>
+          <span class="tag hl">Product Discovery</span>
+        </div>
+        <div>
+          <h1 class="hero__title">Каталог, который начинался с идеи «Yellow Pages для крипто»</h1>
+          <p class="hero__lead">Изначально мы хотели собрать в одном месте компании и сервисы, связанные с криптовалютой. В процессе исследования стало понятно: пользователю не нужен ещё один каталог криптопроектов — ему нужно быстро понять, где он может использовать свою криптовалюту.</p>
+          <p class="hero__lead">Я помогла сфокусировать продукт, определить нужные данные и спроектировать сценарии поиска — от каталога до карты.</p>
+        </div>
       </div>
-      <h1>Каталог, который начинался с идеи «Yellow Pages для крипто»</h1>
-      <p class="lead">Изначально мы хотели собрать в одном месте компании и сервисы, связанные с криптовалютой. В процессе исследования стало понятно: пользователю не нужен ещё один каталог криптопроектов — ему нужно быстро понять, где он может использовать свою криптовалюту.</p>
-      <p class="lead">Я помогла сфокусировать продукт, определить нужные данные и спроектировать сценарии поиска — от каталога до карты.</p>
-    </section>
-
-    <section style="padding-bottom:8px;">
-      <div class="frame" data-src="/crypto-directory/img/hero-full.webp" data-title="Crypto Directory — главная страница целиком" tabindex="0">
-        <video src="/assets/video/crypto-marketplace.webm" width="2096" height="1494"
-               poster="/crypto-directory/img/hero-preview.webp"
-               data-lazy loop muted playsinline preload="none"
-               aria-label="Crypto Directory — главная страница"></video>
-        <div class="fade"></div>
-        <div class="zoom" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <circle cx="11" cy="11" r="7"/><path d="M20 20l-4.2-4.2M11 8v6M8 11h6"/>
-          </svg>
+      <div class="hero__cover">
+        <div class="hero__frame" data-src="/crypto-directory/img/hero-full.webp" data-title="Crypto Directory — главная страница целиком" tabindex="0">
+          <video src="/assets/video/crypto-marketplace.webm" width="2096" height="1494"
+                 poster="/crypto-directory/img/hero-preview.webp"
+                 data-lazy loop muted playsinline preload="none"
+                 aria-label="Crypto Directory — главная страница"></video>
+          <div class="zoom" aria-hidden="true"></div>
         </div>
       </div>
     </section>
 
-    <div class="layout">
-      <aside>
-        <div class="mono" style="padding:0 12px 10px;">Содержание</div>
-        <a href="#top">Обзор</a>
-        <a href="#context">01 — Контекст</a>
-        <a href="#analysis">02 — Анализ</a>
-        <a href="#data">03 — Данные</a>
-        <a href="#solution">04 — Решение</a>
-        <a href="#map">05 — Поиск и карта</a>
-        <a href="#addcompany">06 — Добавить компанию</a>
-        <a href="#details">07 — Детали</a>
-        <a href="#results">Итог</a>
-        <a href="#next">08 — Что дальше</a>
-        <a href="#thanks">Спасибо и контакты</a>
-        <a class="back" href="/">← Все кейсы</a>
+    <div class="body">
+      <aside class="sidebar">
+        <div class="nav-group__title">Crypto Directory</div>
+        <nav class="nav">
+          <a class="nav__item" href="#context"><span class="nav__num">01</span><span class="nav__label">Контекст</span></a>
+          <a class="nav__item" href="#analysis"><span class="nav__num">02</span><span class="nav__label">Анализ</span></a>
+          <a class="nav__item" href="#data"><span class="nav__num">03</span><span class="nav__label">Данные</span></a>
+          <a class="nav__item" href="#solution"><span class="nav__num">04</span><span class="nav__label">Решение</span></a>
+          <a class="nav__item" href="#map"><span class="nav__num">05</span><span class="nav__label">Поиск и карта</span></a>
+          <a class="nav__item" href="#addcompany"><span class="nav__num">06</span><span class="nav__label">Добавить компанию</span></a>
+          <a class="nav__item" href="#details"><span class="nav__num">07</span><span class="nav__label">Детали</span></a>
+          <a class="nav__item" href="#results"><span class="nav__num">08</span><span class="nav__label">Итог</span></a>
+          <a class="nav__item" href="#next"><span class="nav__num">09</span><span class="nav__label">Что дальше</span></a>
+          <a class="nav__item" href="#thanks"><span class="nav__num">10</span><span class="nav__label">Спасибо и контакты</span></a>
+        </nav>
       </aside>
 
-      <main>
+      <main class="main">
 
-        <section id="meta" style="padding-bottom:clamp(40px,5vw,80px);">
-          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr)); gap:1px; background:var(--line); border-radius:20px; overflow:hidden;">
-            <div style="background:var(--bg); padding:22px 24px;"><div class="mono">Продукт</div><div style="margin-top:8px; font-size:clamp(18px,1.6vw,22px); font-weight:600; letter-spacing:-.02em;">Crypto Directory</div></div>
-            <div style="background:var(--bg); padding:22px 24px;"><div class="mono">Роль</div><div style="margin-top:8px; font-size:clamp(18px,1.6vw,22px); font-weight:600; letter-spacing:-.02em;">Продуктовый дизайнер</div></div>
-            <div style="background:var(--bg); padding:22px 24px;"><div class="mono">Платформа</div><div style="margin-top:8px; font-size:clamp(18px,1.6vw,22px); font-weight:600; letter-spacing:-.02em;">Web · Mobile</div></div>
-            <div style="background:var(--bg); padding:22px 24px;"><div class="mono">Команда</div><div style="margin-top:8px; font-size:clamp(18px,1.6vw,22px); font-weight:600; letter-spacing:-.02em;">PM · Designer</div></div>
-            <div style="background:var(--bg); padding:22px 24px;"><div class="mono">Что делала</div><div style="margin-top:8px; font-size:clamp(18px,1.6vw,22px); font-weight:600; letter-spacing:-.02em;">Discovery, UX, UI</div></div>
-          </div>
+        <section id="meta">
+        <div class="meta">
+          <div class="meta__cell"><div class="meta__label">Продукт</div><div class="meta__value">Crypto Directory</div></div>
+          <div class="meta__cell"><div class="meta__label">Роль</div><div class="meta__value">Продуктовый дизайнер</div></div>
+          <div class="meta__cell"><div class="meta__label">Платформа</div><div class="meta__value">Web · Mobile</div></div>
+          <div class="meta__cell"><div class="meta__label">Команда</div><div class="meta__value">PM · Designer</div></div>
+          <div class="meta__cell"><div class="meta__label">Что делала</div><div class="meta__value">Discovery, UX, UI</div></div>
+        </div>
         </section>
 
         <section id="context" class="sec">
@@ -480,7 +270,7 @@
           </div>
         </section>
 
-        <section id="results" style="padding-bottom:clamp(44px,5.5vw,90px);">
+        <section id="results" class="sec--block">
           <div class="results">
             <div class="res-top">
               <div>
@@ -510,7 +300,7 @@
           </div>
         </section>
 
-        <section id="thanks" style="padding-bottom:clamp(44px,5.5vw,90px);">
+        <section id="thanks" class="sec--block">
           <div class="thanks">
             <h2>Спасибо, что дочитали</h2>
             <p>Если хочется подробностей по исследованию и решениям — напишите: покажу флоу и то, что не поместилось в кейс</p>
@@ -524,6 +314,17 @@
 
       </main>
     </div>
+
+    <footer>
+      <div class="headline">Открыта к проектам и разговорам</div>
+      <div class="contacts">
+        <a href="https://t.me/Anastasia_Jay" target="_blank" rel="noopener">@Anastasia_Jay</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <a href="mailto:burmistrova.adv@gmail.com">burmistrova.adv@gmail.com</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <a href="tel:+79089745517">+7 908 974 55 17</a>
+      </div>
+    </footer>
   </div>
 </div>
 
