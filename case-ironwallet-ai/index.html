@@ -347,6 +347,20 @@ footer .sep{color:#c6c3bc}
   .thanks{padding:36px}
   .hotspot{width:44px;height:44px;font-size:18px}
 }
+
+/* Фиксированная ширина контента, как на /crypto-directory */
+.wrap > .inner{max-width:calc(1680px + 2 * var(--side));margin:0 auto}
+
+/* Скриншоты не шире 900px, по левому краю текста карточки */
+.panel__shot{max-width:900px;align-self:flex-start;margin-left:5%}
+.hotspots{max-width:900px}
+img.shot{width:100%;height:auto;display:block}
+
+/* Видео и картинка с хотспотами в серой карточке с рамкой монитора */
+.panel--hero{overflow:visible}
+.panel--hero .panel__shot{margin-bottom:0;padding:16px 16px 0}
+.panel--hero .hotspots{max-width:none}
+.panel--hero .frame{border:0;border-radius:8px 8px 0 0}
 </style>
 </head>
 <body>
@@ -442,7 +456,7 @@ footer .sep{color:#c6c3bc}
     <section class="sect" id="s02">
       <div class="eyebrow">Проблема. Анализ</div>
       <h2 class="h2">«Как это — отдать все деньги на откуп ИИ?»</h2>
-      <p class="sect__body">Провелп несколько глубинок с клиентами IronWallet.<br>Во-первых, многие не понимали механику, как это работает. Во-вторых, поняла, что эмоциональные барьеры сильнее когнитивных: мало объяснить механику — нужно ответить на «а это безопасно?» раньше, чем вопрос возникнет. Отсюда логика страницы:</p>
+      <p class="sect__body">Провела несколько глубинок с клиентами IronWallet.<br>Во-первых, многие не понимали механику, как это работает. Во-вторых, поняла, что эмоциональные барьеры сильнее когнитивных: мало объяснить механику — нужно ответить на «а это безопасно?» раньше, чем вопрос возникнет. Отсюда логика страницы:</p>
       <div class="sect__content--tight sect__content cards steps">
         <div class="card">
           <div class="marker">1</div>
@@ -467,41 +481,45 @@ footer .sep{color:#c6c3bc}
       <div class="eyebrow">Решения</div>
       <h2 class="h2">Первый экран</h2>
 
-      <div class="sect__content hotspots">
-        <div class="frame r-hero">
-          <video class="shot" src="/case-ironwallet-ai/img/hero.webm" autoplay muted loop playsinline
-                 aria-label="Первый экран лендинга: терминал агента, заголовок, чипсы доверия и плашка «Это безопасно»"></video>
-        </div>
+      <div class="sect__content panel panel--hero">
+        <div class="panel__shot">
+          <div class="hotspots">
+            <div class="frame r-hero">
+              <video class="shot" src="/case-ironwallet-ai/img/hero.webm" autoplay muted loop playsinline
+                     aria-label="Первый экран лендинга: терминал агента, заголовок, чипсы доверия и плашка «Это безопасно»"></video>
+            </div>
 
-        <div class="hot hot--below" style="left:47.172%;top:23.361%">
-          <button class="hotspot">1</button>
-          <div class="tip">
-            <div class="tip__title">Анимация</div>
-            <p class="tip__text">Визуализировала в виде приближенной к реальности пример использования продукта. Пользователю это визуально понятнее, чем текст. Добавила реальные промпты, чтобы сразу показать, для чего использовать. И процесс — что агент выполняет без вопросов одним ответом done.</p>
-          </div>
-        </div>
+            <div class="hot hot--below" style="left:47.172%;top:23.361%">
+              <button class="hotspot">1</button>
+              <div class="tip">
+                <div class="tip__title">Анимация</div>
+                <p class="tip__text">Визуализировала в виде приближенной к реальности пример использования продукта. Пользователю это визуально понятнее, чем текст. Добавила реальные промпты, чтобы сразу показать, для чего использовать. И процесс — что агент выполняет без вопросов одним ответом done.</p>
+              </div>
+            </div>
 
-        <div class="hot hot--start hot--below" style="left:6.016%;top:32.435%">
-          <button class="hotspot">2</button>
-          <div class="tip">
-            <div class="tip__title">Заголовок от аудитории</div>
-            <p class="tip__text">Назвала в первой строке того, кто читает, а не технологию: «для ИИ-агентов» вместо «MCP-сервер». Человек узнаёт себя и не уходит разбираться в терминах. В подзаголовке — глаголы, которые он уже делает в кошельке: проверять балансы, отправлять, обменивать. Новое читается как знакомое.</p>
-          </div>
-        </div>
+            <div class="hot hot--start hot--below" style="left:6.016%;top:32.435%">
+              <button class="hotspot">2</button>
+              <div class="tip">
+                <div class="tip__title">Заголовок от аудитории</div>
+                <p class="tip__text">Назвала в первой строке того, кто читает, а не технологию: «для ИИ-агентов» вместо «MCP-сервер». Человек узнаёт себя и не уходит разбираться в терминах. В подзаголовке — глаголы, которые он уже делает в кошельке: проверять балансы, отправлять, обменивать. Новое читается как знакомое.</p>
+              </div>
+            </div>
 
-        <div class="hot hot--start" style="left:6.016%;top:66.63%">
-          <button class="hotspot">3</button>
-          <div class="tip">
-            <div class="tip__title">Возражения до первого скролла</div>
-            <p class="tip__text">Вынесла три главных страха в чипсы прямо под кнопку. Вопрос «а не украдут ли деньги» возникает раньше, чем человек дочитает страницу, — если ответ лежит в FAQ, он до него не доберётся. Короткие формулировки читаются мельком и работают как гарантии.</p>
-          </div>
-        </div>
+            <div class="hot hot--start" style="left:6.016%;top:66.63%">
+              <button class="hotspot">3</button>
+              <div class="tip">
+                <div class="tip__title">Возражения до первого скролла</div>
+                <p class="tip__text">Вынесла три главных страха в чипсы прямо под кнопку. Вопрос «а не украдут ли деньги» возникает раньше, чем человек дочитает страницу, — если ответ лежит в FAQ, он до него не доберётся. Короткие формулировки читаются мельком и работают как гарантии.</p>
+              </div>
+            </div>
 
-        <div class="hot" style="left:47.172%;top:66.98%">
-          <button class="hotspot">4</button>
-          <div class="tip">
-            <div class="tip__title">Ответ в точке тревоги</div>
-            <p class="tip__text">Поставила плашку про безопасность вплотную к терминалу. Тревога появляется ровно в тот момент, когда видишь, как ИИ отправляет деньги, — закрывать её нужно в этом же месте экрана. Ответ через два блока ниже уже не успевает.</p>
+            <div class="hot" style="left:47.172%;top:66.98%">
+              <button class="hotspot">4</button>
+              <div class="tip">
+                <div class="tip__title">Ответ в точке тревоги</div>
+                <p class="tip__text">Поставила плашку про безопасность вплотную к терминалу. Тревога появляется ровно в тот момент, когда видишь, как ИИ отправляет деньги, — закрывать её нужно в этом же месте экрана. Ответ через два блока ниже уже не успевает.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -568,32 +586,36 @@ footer .sep{color:#c6c3bc}
       <div class="eyebrow">Решение</div>
       <h2 class="h2">Решение: установка</h2>
 
-      <div class="sect__content hotspots">
-        <div class="frame r-install">
-          <img class="shot" src="/case-ironwallet-ai/img/install.png" alt="Блок установки: 4 шага и вкладки клиентов">
-        </div>
+      <div class="sect__content panel panel--hero">
+        <div class="panel__shot">
+          <div class="hotspots">
+            <div class="frame r-install">
+              <img class="shot" src="/case-ironwallet-ai/img/install.png" alt="Блок установки: 4 шага и вкладки клиентов">
+            </div>
 
-        <div class="hot hot--start hot--below" style="left:3.896%;top:31.349%">
-          <button class="hotspot">1</button>
-          <div class="tip">
-            <div class="tip__title">Установка в 4 шага</div>
-            <p class="tip__text">Разбила установку на четыре коротких шага: добавить сервер → создать отдельный кошелёк → пополнить → попробовать запросы. Процесс объективно непростой, и прятать это бессмысленно — но если показать его как конечный список, он перестаёт пугать. Сложность снимается структурой, а не упрощением.</p>
-          </div>
-        </div>
+            <div class="hot hot--start hot--below" style="left:3.896%;top:31.349%">
+              <button class="hotspot">1</button>
+              <div class="tip">
+                <div class="tip__title">Установка в 4 шага</div>
+                <p class="tip__text">Разбила установку на четыре коротких шага: добавить сервер → создать отдельный кошелёк → пополнить → попробовать запросы. Процесс объективно непростой, и прятать это бессмысленно — но если показать его как конечный список, он перестаёт пугать. Сложность снимается структурой, а не упрощением.</p>
+              </div>
+            </div>
 
-        <div class="hot hot--below" style="left:48.5%;top:7.7%">
-          <button class="hotspot">2</button>
-          <div class="tip">
-            <div class="tip__title">Выбор сделан за пользователя</div>
-            <p class="tip__text">Отметила Cursor как «Наиболее рекомендуемый». Вкладки клиентов — это развилка, а на развилке человек останавливается и уходит думать. Рекомендация по умолчанию снимает решение: остальные варианты рядом, но выбирать не обязательно.</p>
-          </div>
-        </div>
+            <div class="hot hot--below" style="left:48.5%;top:7.7%">
+              <button class="hotspot">2</button>
+              <div class="tip">
+                <div class="tip__title">Выбор сделан за пользователя</div>
+                <p class="tip__text">Отметила Cursor как «Наиболее рекомендуемый». Вкладки клиентов — это развилка, а на развилке человек останавливается и уходит думать. Рекомендация по умолчанию снимает решение: остальные варианты рядом, но выбирать не обязательно.</p>
+              </div>
+            </div>
 
-        <div class="hot" style="left:61.472%;top:73.829%">
-          <button class="hotspot">3</button>
-          <div class="tip">
-            <div class="tip__title">Глубина — на отдельной странице</div>
-            <p class="tip__text">Унесла конфиги и нюансы в «Подробнее». Если положить их на лендинг, страница станет документацией и отпугнёт тех, кто только присматривается. Так лёгкий путь остаётся коротким, а тем, кому нужны детали, есть куда пойти.</p>
+            <div class="hot" style="left:61.472%;top:73.829%">
+              <button class="hotspot">3</button>
+              <div class="tip">
+                <div class="tip__title">Глубина — на отдельной странице</div>
+                <p class="tip__text">Унесла конфиги и нюансы в «Подробнее». Если положить их на лендинг, страница станет документацией и отпугнёт тех, кто только присматривается. Так лёгкий путь остаётся коротким, а тем, кому нужны детали, есть куда пойти.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -619,7 +641,7 @@ footer .sep{color:#c6c3bc}
         </div>
         <div class="chips">
           <div class="chip"><div class="chip__label">Место в продукте</div><div class="chip__value">Лендинг IronWallet AI</div></div>
-          <div class="chip"><div class="chip__label">Отдано в разработку</div><div class="chip__value">Макеты + прототип</div></div>
+          <div class="chip"><div class="chip__label">Отдано в разработку</div><div class="chip__value">Макеты + готовая html страница</div></div>
         </div>
       </div>
     </section>
