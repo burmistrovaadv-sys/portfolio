@@ -23,23 +23,24 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
 
 <style>
-/* Токены, шрифты, радиусы и обводки — те же, что в /case-ironwallet-ai */
+/* Токены, шрифты и радиусы — из /case-ironwallet-ai; колонка и первый экран — с главной */
 :root{
   --page:#f4f4f6;
+  --bg:#f4f4f6;
   --surface:#ffffff;
   --tint:#f4f4f6;
   --screen:#ececf0;
   --ink:#0e0e10;
+  --ink-2:#3a3f45;
   --muted:#5e5e66;
-  --muted-2:#8e8e96;
   --line:#e2e2e8;
   --lime:#c8f65a;
+  --lime-ink:#111a0a;
   --lime-ring:#c7f559;
   --olive:#4f7a00;
-  --side:120px;
   --radius:28px;
 }
 
@@ -49,38 +50,107 @@ body{
   background:var(--page);color:var(--ink);
   font-family:'Onest',system-ui,sans-serif;-webkit-font-smoothing:antialiased;
 }
+::selection{background:var(--lime)}
 img,video{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
-mark{background:var(--lime);color:var(--ink);padding:0 .15em;border-radius:6px}
+mark{background:var(--lime);color:var(--lime-ink);padding:0 .15em;border-radius:6px}
 
-/* ---------- Обёртка: фиксированная ширина контента ---------- */
-.wrap > .inner{max-width:calc(1680px + 2 * var(--side));margin:0 auto}
+/* ---------- Колонка по центру, как на главной ---------- */
+.wrap{padding:0 clamp(20px,5vw,72px)}
+.inner{max-width:min(1080px, max(66.67vw, 640px));margin:0 auto}
 .skip-link{
   position:absolute;left:-9999px;top:0;z-index:100;padding:12px 18px;
   background:var(--ink);color:var(--page);border-radius:0 0 10px 0;
 }
 .skip-link:focus{left:0}
 
-/* ---------- Шапка (как в кейсе, докирование — /assets/header-dock.js) ---------- */
+/* ---------- Фон первого экрана (с главной) ---------- */
+.home{position:relative;
+  background:
+    linear-gradient(180deg,#eff0ed 0%,#f5f5f2 46%,var(--bg) 100%) no-repeat top left /
+      100% clamp(260px,39vh,490px),
+    var(--bg);
+}
+.home .bg{position:absolute; left:0; right:0; top:0;
+  height:clamp(270px,41vh,510px); overflow:hidden; z-index:-1; pointer-events:none;
+  -webkit-mask-image:linear-gradient(180deg, #000 0%, #000 52%, rgba(0,0,0,.5) 78%, transparent 100%);
+          mask-image:linear-gradient(180deg, #000 0%, #000 52%, rgba(0,0,0,.5) 78%, transparent 100%);
+  background:
+    radial-gradient(64% 116% at 100% 0%, rgba(205,242,94,.34) 0%, rgba(205,242,94,.16) 26%, rgba(205,242,94,0) 64%),
+    radial-gradient(52% 92% at 100% 0%, rgba(243,232,122,.42) 0%, rgba(243,232,122,.16) 30%, rgba(243,232,122,0) 66%),
+    radial-gradient(43% 78% at 100% 4%, rgba(146,220,190,.34) 0%, rgba(146,220,190,0) 62%);
+}
+.home .bg i{position:absolute; display:block; border-radius:50%;
+  will-change:transform, opacity;}
+.home .bg i:nth-child(1){width:36vw; height:29vw; right:-8vw; top:-11vw;
+  background:radial-gradient(closest-side, rgba(205,242,94,.55), rgba(205,242,94,0));
+  animation:bgA 13s ease-in-out infinite alternate}
+.home .bg i:nth-child(2){width:28vw; height:23vw; right:2vw; top:-7vw;
+  background:radial-gradient(closest-side, rgba(243,226,112,.44), rgba(243,226,112,0));
+  animation:bgB 17s ease-in-out infinite alternate}
+.home .bg i:nth-child(3){width:24vw; height:21vw; right:-3vw; top:3vw;
+  background:radial-gradient(closest-side, rgba(138,218,188,.40), rgba(138,218,188,0));
+  animation:bgC 11s ease-in-out infinite alternate}
+.home .bg i:nth-child(4){width:20vw; height:18vw; right:9vw; top:-3vw;
+  background:radial-gradient(closest-side, rgba(176,228,120,.42), rgba(176,228,120,0));
+  animation:bgD 19s ease-in-out infinite alternate}
+.home .bg i:nth-child(5){width:46vw; height:38vw; right:-15vw; top:-17vw;
+  background:radial-gradient(closest-side, rgba(205,242,94,.52) 0%, rgba(205,242,94,.3) 44%, rgba(205,242,94,0) 100%);
+  animation:bgE 9s ease-in-out infinite alternate}
+@keyframes bgA{
+  0%  {transform:translate3d(0,0,0) scale(1);          opacity:.75}
+  50% {transform:translate3d(-19vw,3vw,0) scale(1.3);  opacity:1}
+  100%{transform:translate3d(-6vw,7vw,0) scale(.85);   opacity:.6}
+}
+@keyframes bgB{
+  0%  {transform:translate3d(0,0,0) scale(.9);         opacity:.6}
+  50% {transform:translate3d(-15vw,6vw,0) scale(1.35); opacity:.95}
+  100%{transform:translate3d(-24vw,1vw,0) scale(1.05); opacity:.7}
+}
+@keyframes bgC{
+  0%  {transform:translate3d(0,0,0) scale(1.15);       opacity:.5}
+  50% {transform:translate3d(-12vw,-4vw,0) scale(.8);  opacity:.9}
+  100%{transform:translate3d(-22vw,3vw,0) scale(1.25); opacity:.62}
+}
+@keyframes bgD{
+  0%  {transform:translate3d(0,0,0) scale(1);          opacity:.7}
+  50% {transform:translate3d(8vw,5vw,0) scale(1.4);    opacity:1}
+  100%{transform:translate3d(-13vw,-2vw,0) scale(.9);  opacity:.55}
+}
+@keyframes bgE{
+  0%  {transform:scale(1);    opacity:.85}
+  100%{transform:scale(1.22); opacity:1}
+}
+@media (prefers-reduced-motion:reduce){
+  .home .bg i{animation:none; opacity:.7}
+}
+@media (max-width:700px){
+  .home .bg{opacity:.62}
+}
+
+/* ---------- Шапка (докирование — /assets/header-dock.js) ---------- */
 header{--dock:0;
   position:sticky;top:calc(var(--dock) * 10px);z-index:40;
   display:flex;align-items:center;justify-content:space-between;
   gap:16px;flex-wrap:wrap;
-  width:calc(100% - 2 * var(--side) - 20% * var(--dock));
+  width:calc(100% - 20% * var(--dock));
   margin:calc(var(--dock) * 10px) auto;
   padding:calc(18px - 10px * var(--dock)) calc(var(--dock) * 26px);
   border-radius:calc(var(--dock) * 38px);
-  background:rgba(244,244,246,.88);backdrop-filter:blur(10px);
+  background:rgba(244,244,246,calc(.94 * var(--dock)));
+  backdrop-filter:blur(calc(var(--dock) * 10px));
 }
 @media (prefers-reduced-motion:reduce){header{--dock:0 !important}}
 @media (max-width:720px){
   header{
-    width:calc(100% - 2 * var(--side) + 16px * var(--dock));
+    width:calc(100% + 16px * var(--dock));
+    margin:calc(var(--dock) * 10px) calc(var(--dock) * -8px);
     padding:calc(18px - 10px * var(--dock)) calc(var(--dock) * 8px);
     border-radius:calc(var(--dock) * 24px);
   }
 }
 .identity{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:500}
+.identity .city{opacity:calc(1 - var(--dock) * 2.5)}
 header nav.top{display:flex;align-items:center;gap:14px;font-size:15px;font-weight:500}
 header a{border-bottom:1px solid transparent}
 header a.logo{border-bottom:0}
@@ -97,6 +167,28 @@ header a:not(.logo):hover{border-bottom-color:var(--ink)}
 .logo .logo-ab{opacity:calc(1 - var(--dock) * 2.2)}
 .logo .logo-full{opacity:calc(var(--dock) * 2.2 - 1.2)}
 
+/* ---------- Первый экран: вёрстка главной, шрифты кейса ---------- */
+.hero{display:flex; flex-direction:column; align-items:center; text-align:center;
+  gap:clamp(20px,2.4vw,34px); padding:clamp(34px,5vw,70px) 0 clamp(40px,5vw,78px)}
+.hero .ava{width:clamp(140px,14vw,205px); height:auto; aspect-ratio:1/1; object-fit:contain}
+.hero h1{margin:0; font-size:clamp(34px,3.46vw,62px); font-weight:700; letter-spacing:-.03em; line-height:1.02}
+.tagline{display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:14px}
+.tagline .role{color:#5a5f66; font-size:clamp(16px,1.06vw,19px); line-height:1.55}
+.badge{display:inline-flex; align-items:center; padding:1px 8px; border-radius:4px;
+  background:var(--lime); color:var(--lime-ink); font-size:clamp(16px,1.06vw,19px); font-weight:400}
+.badge.note{padding:3px 10px; border-radius:5px; font-size:clamp(15px,.95vw,17px)}
+.statement{margin:0; max-width:820px; font-size:clamp(24px,2.57vw,46px); font-weight:600;
+  letter-spacing:-.03em; line-height:1.12}
+.statement .hi{display:block; margin-bottom:.55em}
+.intro-hold .hero{opacity:0}
+.chips{display:flex; flex-wrap:wrap; justify-content:center; gap:10px}
+.chip{padding:9px 20px; border-radius:999px; background:#fff; color:var(--ink-2);
+  border:1px solid var(--line);
+  font-size:clamp(15px,.95vw,17px); font-weight:400; line-height:1.2}
+.hero h1,.statement{font-family:'Unbounded',system-ui,sans-serif;letter-spacing:-.02em}
+.hero h1{font-weight:600}
+.statement{font-weight:600;line-height:1.18}
+
 /* ---------- Теги ---------- */
 .tags{display:flex;flex-wrap:wrap;gap:8px}
 .tag{
@@ -104,45 +196,27 @@ header a:not(.logo):hover{border-bottom-color:var(--ink)}
   background:rgba(14,14,16,.07);padding:6px 14px;
   font-size:14px;font-weight:500;line-height:1.4;color:#15171b;white-space:nowrap;
 }
-.tag--accent{background:var(--lime);color:#111a0a}
+.tag--accent{background:var(--lime);color:var(--lime-ink)}
 .tag--surface{background:var(--surface)}
 
-/* ---------- Hero ---------- */
-.hero{display:flex;align-items:center;gap:56px;padding:40px var(--side) 80px}
-.hero__top{flex:1 1 970px;min-width:0;display:flex;flex-direction:column;gap:28px;padding:70px 0 40px}
-.hero__title{font-family:'Unbounded';font-weight:600;font-size:78px;line-height:1.1}
-.hero__role{display:flex;align-items:center;gap:12px;margin-top:20px;font-size:22px;font-weight:500;color:var(--muted)}
-.hero__lead{font-family:'Unbounded';font-weight:500;font-size:32px;line-height:1.25;max-width:1000px}
-.hero__cover{flex:0 0 420px;width:420px}
-.hero__photo{
-  border:2px solid var(--line);border-radius:var(--radius);overflow:hidden;
-  background:var(--screen);aspect-ratio:1/1;
-}
-.hero__photo img{width:100%;height:100%;object-fit:cover}
-
 /* ---------- Секции ---------- */
-.main{padding:0 var(--side)}
-.sect{padding:80px 0}
-.eyebrow{font-family:'Unbounded';font-weight:500;font-size:22px;color:var(--olive)}
-.h2{font-family:'Unbounded';font-weight:600;font-size:48px;line-height:1.1;margin-top:23px;max-width:1160px}
-.sect__content{margin-top:56px}
+.sect{padding:clamp(48px,6vw,80px) 0}
+.eyebrow{font-family:'Unbounded';font-weight:500;font-size:18px;color:var(--olive)}
+.h2{font-family:'Unbounded';font-weight:600;font-size:clamp(28px,2.6vw,40px);line-height:1.1;margin-top:16px}
+.sect__content{margin-top:40px}
 
 /* ---------- Кейсы ---------- */
-.cases{display:flex;flex-direction:column;gap:24px}
+.cases{display:flex;flex-direction:column;gap:20px}
 .case{
   display:flex;align-items:stretch;
-  background:var(--surface);border:2px solid var(--line);border-radius:var(--radius);
+  background:var(--surface);border-radius:var(--radius);
   overflow:hidden;transition:transform .2s ease,box-shadow .2s ease;
 }
 .case:hover{transform:translateY(-3px);box-shadow:0 18px 44px rgba(14,14,16,.08)}
-.case__content{flex:0 0 46%;min-width:0;padding:48px;display:flex;flex-direction:column;gap:20px}
-.case__title{font-family:'Unbounded';font-weight:600;font-size:36px;line-height:1.15}
-.case__text{font-size:20px;line-height:1.45;color:var(--muted)}
+.case__content{flex:0 0 46%;min-width:0;padding:40px;display:flex;flex-direction:column;gap:18px}
+.case__title{font-family:'Unbounded';font-weight:600;font-size:clamp(22px,1.9vw,28px);line-height:1.18}
+.case__text{font-size:18px;line-height:1.45;color:var(--muted)}
 .case__grow{flex:1}
-.case__stats{display:flex;gap:16px}
-.stat{flex:1 1 0;min-width:0;background:var(--tint);border-radius:20px;padding:20px 22px;display:flex;flex-direction:column;gap:6px}
-.stat__k{font-size:16px;font-weight:500;color:var(--muted)}
-.stat__v{font-family:'Unbounded';font-weight:600;font-size:28px}
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:10px;
   padding:16px 26px;border-radius:16px;background:rgba(14,14,16,.08);
@@ -150,48 +224,42 @@ header a:not(.logo):hover{border-bottom-color:var(--ink)}
   transition:transform .15s ease,background-color .15s ease;
 }
 .btn--dark{background:var(--ink);color:#fff}
-.btn--lime{background:var(--lime);color:var(--ink)}
 .btn:hover{transform:translateY(-2px)}
-.btn:hover:not(.btn--dark):not(.btn--lime){background:rgba(14,14,16,.14)}
+.btn:hover:not(.btn--dark){background:rgba(14,14,16,.14)}
 .case .btn{align-self:flex-start}
 
 /* серый экран справа + корпус монитора, как в панелях кейса */
 .case__media{
-  flex:1 1 54%;min-width:0;position:relative;
-  background:var(--screen);border-left:2px solid var(--line);
+  flex:1 1 54%;min-width:0;position:relative;background:var(--screen);
   display:flex;flex-direction:column;justify-content:flex-end;
-  padding:56px 48px 0;
+  padding:56px 36px 0;
 }
-.case__badge{position:absolute;top:20px;left:24px}
+.case__badge{position:absolute;top:18px;left:20px}
 .monitor{
-  background:#2a2a30;border-radius:20px 20px 0 0;padding:16px 16px 0;
+  background:#2a2a30;border-radius:20px 20px 0 0;padding:14px 14px 0;
   box-shadow:0 -10px 30px rgba(14,14,16,.12);
 }
 .monitor__screen{border-radius:8px 8px 0 0;overflow:hidden;background:#fff}
 .monitor__screen img,.monitor__screen video{width:100%;height:auto}
+.case .monitor__screen{aspect-ratio:16/10}
+.case .monitor__screen img,.case .monitor__screen video{height:100%;object-fit:cover;object-position:top}
 
 /* ---------- О себе ---------- */
-.about{
-  background:var(--surface);border-radius:var(--radius);padding:56px;
-}
-.about__text{font-family:'Unbounded';font-weight:500;font-size:32px;line-height:1.35}
+.about{background:var(--surface);border-radius:var(--radius);padding:48px}
+.about__text{font-family:'Unbounded';font-weight:500;font-size:clamp(20px,1.9vw,28px);line-height:1.4}
 
 /* ---------- Mobile: лента роликов ---------- */
-.panel{
-  background:var(--screen);border:2px solid var(--line);border-radius:var(--radius);
-  padding:48px;
-}
+.panel{background:var(--screen);border-radius:var(--radius);padding:40px}
 .flows-wrap{position:relative;container-type:inline-size}
 .flows{display:flex;align-items:center;gap:clamp(20px,2.8vw,40px);overflow-x:auto;scroll-behavior:smooth;
   scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
   scrollbar-width:none;-ms-overflow-style:none}
 .flows::-webkit-scrollbar{display:none}
-.flows video{flex:0 0 auto;display:block;height:min(clamp(320px,40cqw,480px),86vw);width:auto;
-  aspect-ratio:1/1;object-fit:contain;scroll-snap-align:start;
-  border-radius:20px;background:none}
+.flows video{flex:0 0 auto;display:block;height:min(clamp(300px,46cqw,460px),86vw);width:auto;
+  aspect-ratio:1/1;object-fit:contain;scroll-snap-align:start;border-radius:20px;background:none}
 .flows video.phone{aspect-ratio:556/1214}
 .flows video.wide{aspect-ratio:16/9;height:auto;
-  width:min(calc(clamp(320px,40cqw,480px) * 16 / 9), 92cqw)}
+  width:min(calc(clamp(300px,46cqw,460px) * 16 / 9), 92cqw)}
 .flows-arrow{position:absolute;top:50%;translate:0 -50%;z-index:2;
   display:flex;align-items:center;justify-content:center;
   width:52px;height:52px;padding:0;border:0;border-radius:999px;
@@ -206,98 +274,76 @@ header a:not(.logo):hover{border-bottom-color:var(--ink)}
 /* ---------- Web, Analytics ---------- */
 .shots{display:flex;gap:20px;align-items:stretch}
 .shot{
-  flex:1 1 0;min-width:0;background:var(--surface);border:2px solid var(--line);
+  flex:1 1 0;min-width:0;background:var(--surface);
   border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;
 }
-.shot__media{background:var(--screen);border-bottom:2px solid var(--line);padding:40px 40px 0}
-.shot__body{padding:40px;display:flex;flex-direction:column;gap:14px;flex:1}
+.shot__media{background:var(--screen);padding:32px 32px 0}
 .shot .monitor__screen{aspect-ratio:16/10}
 .shot .monitor__screen video{height:100%;object-fit:cover;object-position:top}
-.shot__title{font-family:'Unbounded';font-weight:500;font-size:22px;line-height:1.2}
-.shot__text{font-size:20px;line-height:1.35;color:var(--muted)}
+.shot__body{padding:32px;display:flex;flex-direction:column;gap:12px;flex:1}
+.shot__title{font-family:'Unbounded';font-weight:500;font-size:20px;line-height:1.25}
+.shot__text{font-size:18px;line-height:1.4;color:var(--muted)}
 .site-link{align-self:flex-start;font-size:17px;font-weight:500;border-bottom:1px solid var(--line)}
 .site-link:hover{background:var(--lime);border-bottom-color:transparent}
 
 /* ---------- Навыки ---------- */
-.skills{display:flex;flex-wrap:wrap;gap:10px;margin-top:40px}
-.skills .tag{font-size:17px;padding:10px 18px;background:var(--surface);border:2px solid var(--line);white-space:normal}
+.skills{display:flex;flex-wrap:wrap;gap:10px;margin-top:32px}
+.skills .tag{font-size:16px;padding:10px 18px;background:var(--surface);white-space:normal}
 
 /* ---------- Личное ---------- */
 .personal{
-  display:flex;gap:48px;align-items:center;
-  background:var(--surface);border-radius:var(--radius);padding:56px;
+  display:flex;gap:40px;align-items:center;
+  background:var(--surface);border-radius:var(--radius);padding:48px;
 }
-.personal__photo{
-  flex:0 0 320px;width:320px;aspect-ratio:1/1;border-radius:var(--radius);
-  border:2px solid var(--line);overflow:hidden;
-}
+.personal__photo{flex:0 0 260px;width:260px;aspect-ratio:1/1;border-radius:var(--radius);overflow:hidden}
 .personal__photo img{width:100%;height:100%;object-fit:cover}
-.personal__body{display:flex;flex-direction:column;gap:16px;min-width:0}
-.personal__title{font-family:'Unbounded';font-weight:600;font-size:48px;line-height:1.1}
-.personal__sub{font-family:'Unbounded';font-weight:500;font-size:22px;line-height:1.3;color:var(--olive)}
-.personal__text{font-size:22px;line-height:1.5;color:var(--muted)}
+.personal__body{display:flex;flex-direction:column;gap:14px;min-width:0}
+.personal__title{font-family:'Unbounded';font-weight:600;font-size:clamp(28px,2.6vw,40px);line-height:1.1}
+.personal__sub{font-family:'Unbounded';font-weight:500;font-size:18px;line-height:1.35;color:var(--olive)}
+.personal__text{font-size:18px;line-height:1.5;color:var(--muted)}
 
 /* ---------- Контакты ---------- */
-.thanks{background:var(--lime);border-radius:var(--radius);padding:64px;display:flex;flex-direction:column;gap:28px}
-.thanks__title{font-family:'Unbounded';font-weight:600;font-size:48px;line-height:1.1}
-.thanks__text{font-size:22px;line-height:1.5;max-width:812px}
+.thanks{background:var(--lime);border-radius:var(--radius);padding:56px;display:flex;flex-direction:column;gap:24px}
+.thanks__title{font-family:'Unbounded';font-weight:600;font-size:clamp(28px,2.6vw,40px);line-height:1.1}
+.thanks__text{font-size:20px;line-height:1.5;max-width:700px}
 .contacts{display:flex;flex-wrap:wrap;gap:12px}
 
 footer{
-  border-top:1px solid var(--line);margin:0 var(--side);
+  border-top:1px solid var(--line);
   padding:clamp(28px,3vw,48px) 0 clamp(40px,4vw,64px);
   display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
 }
-footer .headline{font-family:'Unbounded';font-weight:500;font-size:clamp(18px,1.4vw,24px)}
+footer .headline{font-family:'Unbounded';font-weight:500;font-size:clamp(17px,1.3vw,22px)}
 footer .contacts{align-items:center;gap:10px;font-size:clamp(15px,.95vw,17px);font-weight:500}
 footer .contacts a{border-bottom:1px solid var(--line)}
 footer .contacts a:hover{background:var(--lime);border-bottom-color:transparent}
 
 /* ---------- Адаптив ---------- */
-@media (max-width:1700px){
-  :root{--side:64px}
-  .hero__title{font-size:60px}
-  .hero__cover{flex:0 0 360px;width:360px}
-}
-@media (max-width:1400px){
-  .h2,.personal__title,.thanks__title{font-size:40px}
-  .hero__lead,.about__text{font-size:26px}
+@media (max-width:1100px){
   .case{flex-direction:column}
   .case__content{flex:none}
-  .case__media{border-left:0;border-top:2px solid var(--line)}
-  .case__title{font-size:30px}
-}
-@media (max-width:1100px){
-  :root{--side:24px}
-  .hero{flex-direction:column-reverse;align-items:flex-start;gap:24px;padding-bottom:40px}
-  .hero__top{padding:0}
-  .hero__cover{flex:none;width:200px}
-  .hero__title{font-size:44px}
-  .hero__lead,.about__text{font-size:22px}
-  .sect{padding:56px 0}
   .shots{flex-direction:column}
   .shot{flex:none}
-  .personal{flex-direction:column;align-items:flex-start;padding:32px}
-  .personal__photo{flex:none;width:200px}
-  .about,.thanks{padding:36px}
-  .panel{padding:24px}
-  .case__content{padding:32px}
-  .case__media{padding:48px 24px 0}
-  .shot__media{padding:24px 24px 0}
-  .shot__body{padding:28px}
-  .personal__text,.thanks__text,.case__text,.shot__text{font-size:19px}
 }
-@media (max-width:600px){
-  .h2,.personal__title,.thanks__title{font-size:30px}
-  .hero__title{font-size:36px}
-  .case__title{font-size:24px}
-  .case__stats{flex-direction:column}
-  .stat__v{font-size:22px}
+@media (max-width:720px){
+  .case__content,.about,.thanks{padding:28px}
+  .case__media{padding:48px 20px 0}
+  .panel{padding:20px}
+  .shot__media{padding:20px 20px 0}
+  .shot__body{padding:24px}
+  .personal{flex-direction:column;align-items:flex-start;padding:28px}
+  .personal__photo{flex:none;width:180px}
   .btn{white-space:normal;text-align:center}
 }
 </style>
+
+<!-- Вступительная анимация первого экрана, как на главной: скрипт ставит
+     класс удержания до первой отрисовки, поэтому подключён в head без defer. -->
+<script src="/assets/hero-intro.js"></script>
 </head>
-<body>
+<body class="home">
+
+<div class="bg" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
 
 <a class="skip-link" href="#top">Перейти к содержанию</a>
 
@@ -306,8 +352,7 @@ footer .contacts a:hover{background:var(--lime);border-bottom-color:transparent}
   <header>
     <div class="identity">
       <a class="logo" href="#top" aria-label="Наверх"><span class="logo-ab" aria-hidden="true">АБ</span><span class="logo-full" aria-hidden="true">Анастасия</span></a>
-      <span class="sep" aria-hidden="true">✦</span>
-      <span>Москва</span>
+      <span class="city">Москва</span>
     </div>
     <nav class="top" aria-label="Контакты">
       <a href="https://t.me/Anastasia_Jay" target="_blank" rel="noopener">Telegram @Anastasia_Jay</a>
@@ -318,206 +363,217 @@ footer .contacts a:hover{background:var(--lime);border-bottom-color:transparent}
     </nav>
   </header>
 
-  <section class="hero" id="top">
-    <div class="hero__top">
-      <div class="tags">
-        <span class="tag">Финтех</span>
-        <span class="tag">Web</span>
-        <span class="tag">Mobile</span>
-        <span class="tag">B2C</span>
-        <span class="tag">B2E</span>
-        <span class="tag">Дизайн-системы</span>
-        <span class="tag tag--accent">AI-native · Claude · Codex</span>
-        <span class="tag">вайбкодинг</span>
+  <main>
+
+  <section id="top" class="hero">
+    <img class="ava" src="/assets/img/avatar-circle.webp" width="800" height="800" alt="Анастасия Бурмистрова" fetchpriority="high" decoding="async">
+    <div>
+      <h1>Анастасия Бурмистрова</h1>
+      <div class="tagline">
+        <span class="role">Продуктовый дизайнер,</span>
+        <span class="badge">5+ лет</span>
       </div>
-      <div>
-        <h1 class="hero__title">Анастасия<br>Бурмистрова</h1>
-        <div class="hero__role">Продуктовый дизайнер <span class="tag tag--accent">5+ лет</span></div>
-      </div>
-      <p class="hero__lead">Из сложного флоу с кучей условий делаю простое и понятное для пользователя</p>
     </div>
-    <div class="hero__cover">
-      <div class="hero__photo">
-        <img src="/assets/img/avatar-circle.webp" width="800" height="800" alt="Анастасия Бурмистрова" fetchpriority="high" decoding="async">
+    <p class="statement">
+      Из сложного флоу с кучей условий делаю простое и понятное для пользователя
+    </p>
+    <div class="chips">
+      <span class="chip">Финтех</span>
+      <span class="chip">Web</span>
+      <span class="chip">Mobile</span>
+      <span class="chip">B2C</span>
+      <span class="chip">B2E</span>
+      <span class="chip">Дизайн-системы</span>
+      <span class="chip">AI-native</span>
+      <span class="chip">Claude</span>
+      <span class="chip">Codex</span>
+      <span class="chip">вайбкодинг</span>
+    </div>
+  </section>
+
+  <section class="sect" id="cases">
+    <div class="eyebrow">Финтех · B2B · B2C</div>
+    <h2 class="h2">Избранные кейсы</h2>
+
+    <div class="sect__content cases">
+
+      <a class="case" href="/crypto-directory">
+        <div class="case__content">
+          <div class="tags"><span class="tag">Web</span><span class="tag">Mobile</span><span class="tag">Дизайн-система</span></div>
+          <h3 class="case__title">С нуля собрала каталог ресурсов CryptoMarketplace</h3>
+          <p class="case__text">С нуля, с аналитики разработала и затащила проект каталога ресурсов, которые принимают крипту. Сложный каталог с фильтрами, и карту. End-to-end design</p>
+          <div class="case__grow"></div>
+          <span class="btn btn--dark">Смотреть кейс</span>
+        </div>
+        <div class="case__media">
+          <span class="tag tag--surface case__badge">Marketplace</span>
+          <div class="monitor"><div class="monitor__screen">
+            <img src="/assets/img/c1.webp" width="4320" height="2913" alt="CryptoMarketplace — главная страница" loading="lazy" decoding="async">
+          </div></div>
+        </div>
+      </a>
+
+      <a class="case" href="/case-ironwallet-ai">
+        <div class="case__content">
+          <div class="tags"><span class="tag">Web</span><span class="tag">B2C</span><span class="tag tag--accent">AI-агенты · MCP</span></div>
+          <h3 class="case__title">IronWallet для ИИ-агентов</h3>
+          <p class="case__text">Лендинг кошелька, которым управляет ИИ-агент через MCP-сервер. Задача — показать, как это работает, и снять страх «потеряю деньги» ещё до первого скролла.</p>
+          <div class="case__grow"></div>
+          <span class="btn btn--dark">Смотреть кейс</span>
+        </div>
+        <div class="case__media">
+          <span class="tag tag--surface case__badge">IronWallet</span>
+          <div class="monitor"><div class="monitor__screen">
+            <video src="/case-ironwallet-ai/img/hero.webm" poster="/case-ironwallet-ai/img/hero.png" width="1920" height="1080"
+                   data-lazy loop muted playsinline preload="none"
+                   aria-label="IronWallet для ИИ-агентов — первый экран лендинга"></video>
+          </div></div>
+        </div>
+      </a>
+
+      <a class="case" href="/exmo-ds">
+        <div class="case__content">
+          <div class="tags"><span class="tag">Web</span><span class="tag">App</span><span class="tag">Дизайн-система</span><span class="tag">B2C</span></div>
+          <h3 class="case__title">Дизайн-система, на которой пересобрала 100+ экранов биржи</h3>
+          <p class="case__text">exmo.me — топ-10 биржа в России. Собрала систему под две локали, пересобрала на ней веб и приложение и добавила 60+ адаптивных страниц.</p>
+          <div class="case__grow"></div>
+          <span class="btn btn--dark">Смотреть кейс</span>
+        </div>
+        <div class="case__media">
+          <span class="tag tag--surface case__badge">exmo.me</span>
+          <div class="monitor"><div class="monitor__screen">
+            <img src="/exmo-ds/img/hero-web.webp" width="1200" height="1024" alt="exmo.me — страницы после редизайна" loading="lazy" decoding="async">
+          </div></div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <section class="sect" id="about">
+    <div class="about">
+      <p class="about__text">Продуктовый дизайнер в <mark>финтехе</mark> и сложных интерфейсах: платёжные сценарии, <mark>B2B, B2E и B2C</mark> продукты, <mark>дизайн-системы</mark>. Веду задачу от Discovery до релиза и отдаю разработке не «голую фигму», а прототипы и код.</p>
+    </div>
+  </section>
+
+  <section class="sect" id="flows">
+    <div class="eyebrow">Флоу и промо</div>
+    <h2 class="h2">Mobile</h2>
+
+    <div class="sect__content panel">
+      <div class="flows-wrap" data-scroller>
+        <button class="flows-arrow prev" type="button" aria-label="Предыдущие флоу" hidden>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+
+        <div class="flows">
+          <video class="wide" src="/assets/video/ironwallet-send-promo-clean.webm" width="1920" height="1080"
+                 data-lazy loop muted playsinline preload="none"
+                 aria-label="IronWallet — отправка с сохранением контакта, промо-ролик флоу"></video>
+          <video class="wide" src="/assets/video/requester-onboarding.webm" width="1920" height="1080"
+                 data-lazy loop muted playsinline preload="none"
+                 aria-label="A little help — онбординг заказчика"></video>
+          <video class="wide" src="/assets/video/a-little-help-onboarding.webm" width="1920" height="1080"
+                 data-lazy loop muted playsinline preload="none"
+                 aria-label="A little help — онбординг, промо-ролик флоу"></video>
+          <video class="phone" src="/assets/video/ironwallet-in-process.webm" width="556" height="1214"
+                 data-lazy loop muted playsinline preload="none"
+                 aria-label="IronWallet — состояние In process"></video>
+          <video src="/assets/video/slippage-flow.webm" width="1920" height="1920"
+                 data-lazy loop muted playsinline preload="none"
+                 aria-label="Slippage — флоу"></video>
+          <video src="/assets/video/verification.webm" width="640" height="640"
+                 data-lazy loop muted playsinline preload="none"
+                 aria-label="Верификация — флоу"></video>
+          <video src="/assets/video/delete-wallets.webm" width="1920" height="1920"
+                 data-lazy loop muted playsinline preload="none"
+                 aria-label="Удаление кошельков — флоу"></video>
+        </div>
+
+        <button class="flows-arrow next" type="button" aria-label="Следующие флоу" hidden>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
       </div>
     </div>
   </section>
 
-  <main class="main">
+  <section class="sect" id="shots">
+    <div class="eyebrow">Desktop</div>
+    <h2 class="h2">Web, Analytics</h2>
 
-    <section class="sect" id="cases">
-      <div class="eyebrow">Финтех · B2B · B2C</div>
-      <h2 class="h2">Избранные кейсы</h2>
+    <div class="sect__content shots">
 
-      <div class="sect__content cases">
-
-        <a class="case" href="/crypto-directory">
-          <div class="case__content">
-            <div class="tags"><span class="tag">Web</span><span class="tag">Mobile</span><span class="tag">Дизайн-система</span></div>
-            <h3 class="case__title">С нуля собрала каталог ресурсов CryptoMarketplace</h3>
-            <p class="case__text">С нуля, с аналитики разработала и затащила проект каталога ресурсов, которые принимают крипту. Сложный каталог с фильтрами, и карту. End-to-end design</p>
-            <div class="case__grow"></div>
-            <div class="case__stats">
-              <div class="stat"><div class="stat__k">Экранов</div><div class="stat__v">380+</div></div>
-              <div class="stat"><div class="stat__k">Роль</div><div class="stat__v">End-to-end</div></div>
-            </div>
-            <span class="btn btn--dark">Смотреть кейс</span>
-          </div>
-          <div class="case__media">
-            <span class="tag tag--surface case__badge">Marketplace</span>
-            <div class="monitor"><div class="monitor__screen">
-              <img src="/assets/img/c1.webp" width="4320" height="2913" alt="CryptoMarketplace — главная страница" loading="lazy" decoding="async">
-            </div></div>
-          </div>
-        </a>
-
-        <a class="case" href="/exmo-ds">
-          <div class="case__content">
-            <div class="tags"><span class="tag">Web</span><span class="tag">App</span><span class="tag">Дизайн-система</span><span class="tag">B2C</span></div>
-            <h3 class="case__title">Дизайн-система, на которой пересобрала 100+ экранов биржи</h3>
-            <p class="case__text">exmo.me — топ-10 биржа в России. Собрала систему под две локали, пересобрала на ней веб и приложение и добавила 60+ адаптивных страниц.</p>
-            <div class="case__grow"></div>
-            <div class="case__stats">
-              <div class="stat"><div class="stat__k">Экранов</div><div class="stat__v">100+</div></div>
-              <div class="stat"><div class="stat__k">Адаптив</div><div class="stat__v">60+</div></div>
-            </div>
-            <span class="btn btn--dark">Смотреть кейс</span>
-          </div>
-          <div class="case__media">
-            <span class="tag tag--surface case__badge">exmo.me</span>
-            <div class="monitor"><div class="monitor__screen">
-              <img src="/exmo-ds/img/hero-web.webp" width="1200" height="1024" alt="exmo.me — страницы после редизайна" loading="lazy" decoding="async">
-            </div></div>
-          </div>
-        </a>
-
-      </div>
-    </section>
-
-    <section class="sect" id="about">
-      <div class="about">
-        <p class="about__text">Продуктовый дизайнер в <mark>финтехе</mark> и сложных интерфейсах: платёжные сценарии, <mark>B2B, B2E и B2C</mark> продукты, <mark>дизайн-системы</mark>. Веду задачу от Discovery до релиза и отдаю разработке не «голую фигму», а прототипы и код.</p>
-      </div>
-    </section>
-
-    <section class="sect" id="flows">
-      <div class="eyebrow">Флоу и промо</div>
-      <h2 class="h2">Mobile</h2>
-
-      <div class="sect__content panel">
-        <div class="flows-wrap" data-scroller>
-          <button class="flows-arrow prev" type="button" aria-label="Предыдущие флоу" hidden>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
-          </button>
-
-          <div class="flows">
-            <video class="wide" src="/assets/video/ironwallet-send-promo-clean.webm" width="1920" height="1080"
+      <div class="shot">
+        <div class="shot__media">
+          <div class="monitor"><div class="monitor__screen">
+            <video src="/assets/video/ozon-portrait-customer.webm" width="1632" height="1080"
                    data-lazy loop muted playsinline preload="none"
-                   aria-label="IronWallet — отправка с сохранением контакта, промо-ролик флоу"></video>
-            <video class="wide" src="/assets/video/requester-onboarding.webm" width="1920" height="1080"
-                   data-lazy loop muted playsinline preload="none"
-                   aria-label="A little help — онбординг заказчика"></video>
-            <video class="wide" src="/assets/video/a-little-help-onboarding.webm" width="1920" height="1080"
-                   data-lazy loop muted playsinline preload="none"
-                   aria-label="A little help — онбординг, промо-ролик флоу"></video>
-            <video class="phone" src="/assets/video/ironwallet-in-process.webm" width="556" height="1214"
-                   data-lazy loop muted playsinline preload="none"
-                   aria-label="IronWallet — состояние In process"></video>
-            <video src="/assets/video/slippage-flow.webm" width="1920" height="1920"
-                   data-lazy loop muted playsinline preload="none"
-                   aria-label="Slippage — флоу"></video>
-            <video src="/assets/video/verification.webm" width="640" height="640"
-                   data-lazy loop muted playsinline preload="none"
-                   aria-label="Верификация — флоу"></video>
-            <video src="/assets/video/delete-wallets.webm" width="1920" height="1920"
-                   data-lazy loop muted playsinline preload="none"
-                   aria-label="Удаление кошельков — флоу"></video>
-          </div>
-
-          <button class="flows-arrow next" type="button" aria-label="Следующие флоу" hidden>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
-          </button>
+                   aria-label="Портрет покупателя Ozon — страница аналитики сегмента"></video>
+          </div></div>
+        </div>
+        <div class="shot__body">
+          <div class="tags"><span class="tag">Desktop</span><span class="tag">B2B</span><span class="tag">Концепт</span></div>
+          <h3 class="shot__title">Портрет покупателя Ozon</h3>
+          <p class="shot__text">Спроектировала страницу для аналитики портрета покупателя для озона на их конкурс</p>
         </div>
       </div>
-    </section>
 
-    <section class="sect" id="shots">
-      <div class="eyebrow">Desktop</div>
-      <h2 class="h2">Web, Analytics</h2>
-
-      <div class="sect__content shots">
-
-        <div class="shot">
-          <div class="shot__media">
-            <div class="monitor"><div class="monitor__screen">
-              <video src="/assets/video/ozon-portrait-customer.webm" width="1632" height="1080"
-                     data-lazy loop muted playsinline preload="none"
-                     aria-label="Портрет покупателя Ozon — страница аналитики сегмента"></video>
-            </div></div>
-          </div>
-          <div class="shot__body">
-            <div class="tags"><span class="tag">Desktop</span><span class="tag">B2B</span><span class="tag">Концепт</span></div>
-            <h3 class="shot__title">Портрет покупателя Ozon</h3>
-            <p class="shot__text">Спроектировала страницу для аналитики портрета покупателя для озона на их конкурс</p>
-          </div>
+      <div class="shot">
+        <div class="shot__media">
+          <div class="monitor"><div class="monitor__screen">
+            <video src="/assets/video/tron-analytics.mp4" width="1920" height="1008"
+                   data-lazy loop muted playsinline preload="none"
+                   aria-label="Аналитический сайт в блокчейне — TronScanner"></video>
+          </div></div>
         </div>
-
-        <div class="shot">
-          <div class="shot__media">
-            <div class="monitor"><div class="monitor__screen">
-              <video src="/assets/video/tron-analytics.mp4" width="1920" height="1008"
-                     data-lazy loop muted playsinline preload="none"
-                     aria-label="Аналитический сайт в блокчейне — TronScanner"></video>
-            </div></div>
-          </div>
-          <div class="shot__body">
-            <div class="tags"><span class="tag">Desktop</span><span class="tag">B2C</span><span class="tag">WEB</span></div>
-            <h3 class="shot__title">Аналитический сайт в блокчейне для B2C</h3>
-            <p class="shot__text">Спроектировала сайт для анализа данных с блокчейна в сети TRON. Сделала данные понятными и логичными для пользователя (Погрузилась в блокчейн и выделила важное и неважное)</p>
-            <a class="site-link" href="https://tronscanner.org/en" target="_blank" rel="noopener">tronscanner.org</a>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="skills">
-        <span class="tag">Информационная архитектура и user flow</span>
-        <span class="tag">Исследования: JTBD, CJM, юзабилити-тесты</span>
-        <span class="tag">Дизайн-системы: с нуля и доработка</span>
-        <span class="tag">UX-тексты и презентация решений</span>
-        <span class="tag">Figma expert level</span>
-        <span class="tag">Cursor, Claude, AI-агенты, MCP Figma → код</span>
-        <span class="tag">ProtoPie, Lottie, Adobe Ps/Ai</span>
-        <span class="tag">Английский C2</span>
-      </div>
-    </section>
-
-    <section class="sect" id="personal">
-      <div class="personal">
-        <div class="personal__photo">
-          <img src="/assets/img/life.webp" width="800" height="800" alt="Анастасия вне работы" loading="lazy" decoding="async">
-        </div>
-        <div class="personal__body">
-          <span class="tag tag--accent" style="align-self:flex-start">ну а вообще…</span>
-          <h2 class="personal__title">я Настя, привет!</h2>
-          <p class="personal__sub">бывший маркетолог — поэтому всегда спрашиваю «а зачем это делаем?»</p>
-          <p class="personal__text">Люблю путешествовать, театры и музеи, днд, теннис и гоночки Ф1. В офисе отвечаю за музыку и актуальные мемы</p>
-          <p class="personal__text">Люблю собачек: волонтёрю в приюте и выгуливаю их в свободное время</p>
+        <div class="shot__body">
+          <div class="tags"><span class="tag">Desktop</span><span class="tag">B2C</span><span class="tag">WEB</span></div>
+          <h3 class="shot__title">Аналитический сайт в блокчейне для B2C</h3>
+          <p class="shot__text">Спроектировала сайт для анализа данных с блокчейна в сети TRON. Сделала данные понятными и логичными для пользователя (Погрузилась в блокчейн и выделила важное и неважное)</p>
+          <a class="site-link" href="https://tronscanner.org/en" target="_blank" rel="noopener">tronscanner.org</a>
         </div>
       </div>
-    </section>
 
-    <section class="sect" id="contacts" style="padding-top:0">
-      <div class="thanks">
-        <h2 class="thanks__title">Открыта к проектам и разговорам</h2>
-        <p class="thanks__text">Напишите — расскажу подробнее о кейсах и о том, что не поместилось на страницу.</p>
-        <div class="contacts">
-          <a class="btn btn--dark" href="https://t.me/Anastasia_Jay" target="_blank" rel="noopener">Telegram @Anastasia_Jay</a>
-          <a class="btn" href="mailto:burmistrova.adv@gmail.com">burmistrova.adv@gmail.com</a>
-          <a class="btn" href="tel:+79089745517">+7 908 974 55 17</a>
-        </div>
+    </div>
+
+    <div class="skills">
+      <span class="tag">Информационная архитектура и user flow</span>
+      <span class="tag">Исследования: JTBD, CJM, юзабилити-тесты</span>
+      <span class="tag">Дизайн-системы: с нуля и доработка</span>
+      <span class="tag">UX-тексты и презентация решений</span>
+      <span class="tag">Figma expert level</span>
+      <span class="tag">Cursor, Claude, AI-агенты, MCP Figma → код</span>
+      <span class="tag">ProtoPie, Lottie, Adobe Ps/Ai</span>
+      <span class="tag">Английский C2</span>
+    </div>
+  </section>
+
+  <section class="sect" id="personal">
+    <div class="personal">
+      <div class="personal__photo">
+        <img src="/assets/img/life.webp" width="800" height="800" alt="Анастасия вне работы" loading="lazy" decoding="async">
       </div>
-    </section>
+      <div class="personal__body">
+        <span class="tag tag--accent" style="align-self:flex-start">ну а вообще…</span>
+        <h2 class="personal__title">я Настя, привет!</h2>
+        <p class="personal__sub">бывший маркетолог — поэтому всегда спрашиваю «а зачем это делаем?»</p>
+        <p class="personal__text">Люблю путешествовать, театры и музеи, днд, теннис и гоночки Ф1. В офисе отвечаю за музыку и актуальные мемы</p>
+        <p class="personal__text">Люблю собачек: волонтёрю в приюте и выгуливаю их в свободное время</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sect" id="contacts" style="padding-top:0">
+    <div class="thanks">
+      <h2 class="thanks__title">Открыта к проектам и разговорам</h2>
+      <p class="thanks__text">Напишите — расскажу подробнее о кейсах и о том, что не поместилось на страницу.</p>
+      <div class="contacts">
+        <a class="btn btn--dark" href="https://t.me/Anastasia_Jay" target="_blank" rel="noopener">Telegram @Anastasia_Jay</a>
+        <a class="btn" href="mailto:burmistrova.adv@gmail.com">burmistrova.adv@gmail.com</a>
+        <a class="btn" href="tel:+79089745517">+7 908 974 55 17</a>
+      </div>
+    </div>
+  </section>
 
   </main>
 
