@@ -15,243 +15,14 @@
 <meta property="og:image" content="https://www.anastasia-burmistrova.ru/exmo-ds/img/hero-web.webp">
 <meta name="twitter:card" content="summary_large_image">
 
-<meta name="theme-color" content="#f2f1ee">
+<meta name="theme-color" content="#f4f4f6">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/favicon.svg">
 
-<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/onest-700-cyrillic.woff2" crossorigin>
-<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/onest-400-cyrillic.woff2" crossorigin>
-<link rel="stylesheet" href="/assets/fonts/fonts.css">
-<style>
-  :root{
-    --bg:#f2f1ee; --ink:#15171b; --ink-2:#3a3f45; --ink-3:#5a5f66;
-    --line:#dcd9d3; --surface:#e7e5e0; --lime:#cdf25e; --lime-ink:#111a0a;
-  }
-  *{box-sizing:border-box}
-  html{-webkit-font-smoothing:antialiased; scroll-behavior:smooth}
-  body{margin:0; background:var(--bg); color:var(--ink); font-family:"Onest",system-ui,sans-serif}
-  a{color:var(--ink); text-decoration-thickness:1px; text-underline-offset:4px}
-  a:hover{background:var(--lime)}
-  ::selection{background:var(--lime)}
-  .mono{font-family:"Martian Mono",ui-monospace,monospace; font-size:12px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-3)}
-  .mono-s{font-family:"Martian Mono",ui-monospace,monospace; font-size:11px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-3)}
-  .wrap{padding:0 clamp(16px,4vw,56px)}
-  .inner{max-width:1680px; margin:0 auto}
-
-
-  /* Оформление содержимого шапки — копия правил из assets/main.css, чтобы
-     шапка на кейсе выглядела ровно так же, как на главной. Раньше всё это
-     жило в инлайн-стилях на каждой ссылке по отдельности — именно поэтому у
-     Email оказалось подчёркивание: там text-decoration:none просто забыли.
-     Подсветка при наведении тоже приведена к главной: глобальный a:hover на
-     кейсовых страницах заливает фон лаймом, в шапке же нужно подчёркивание. */
-  .identity{display:flex; align-items:center; gap:10px; font-size:15px; font-weight:500}
-  header nav.top{display:flex; align-items:center; gap:14px; font-size:15px; font-weight:500}
-  header a{text-decoration:none; border-bottom:1px solid transparent}
-  header a.logo{border-bottom:0}
-  header a:hover{background:none}
-  header a:not(.logo):hover{border-bottom-color:var(--ink)}
-  header .sep{color:#c6c3bc}
-
-  /* Шапка «докируется» при прокрутке — та же механика, что на главной
-     (подробные пояснения в assets/main.css). Прогресс 0…1 лежит в --dock,
-     его ставит assets/header-dock.js; всё ниже — линейные функции от него,
-     поэтому переход непрерывный, а не переключение состояний.
-     Вертикальные padding уменьшаются ровно на столько, на сколько растёт
-     margin, — высота margin-box постоянна и контент под шапкой не съезжает.
-     Отдельный top нужен потому, что при залипании margin шапки в смещении
-     не участвует и панель прижималась бы к самой кромке окна. */
-  header{--dock:0;
-    position:sticky; top:calc(var(--dock) * 10px); z-index:30;
-    display:flex; align-items:center; justify-content:space-between;
-    gap:16px; flex-wrap:wrap;
-    width:calc(100% - 20% * var(--dock));
-    margin:calc(var(--dock) * 10px) auto;
-    padding:calc(18px - 10px * var(--dock)) calc(var(--dock) * 26px);
-    border-radius:calc(var(--dock) * 38px);
-    /* Обводки у собранной панели нет — форму держат скругление, фон и blur.
-       box-shadow убран целиком, а не обнулён по альфе: нулевая тень всё
-       равно остаётся слоем отрисовки, а здесь она не нужна вовсе.
-       То же самое сделано в assets/main.css для главной — вид шапки должен
-       совпадать на всех страницах. */
-    background:rgba(242,241,238,.88); backdrop-filter:blur(10px)}
-
-  @media (prefers-reduced-motion:reduce){
-    header{--dock:0 !important}
-  }
-
-  /* На телефоне сужать шапку нельзя — навигация уехала бы на лишнюю строку и
-     страница прыгнула бы. Поэтому панель расширяется к краям экрана ровно на
-     столько, сколько забирает внутренний отступ: ширина содержимого не
-     меняется, перенос строки невозможен. */
-  @media (max-width:720px){
-    header{
-      width:calc(100% + 16px * var(--dock));
-      margin:calc(var(--dock) * 10px) calc(var(--dock) * -8px);
-      padding:calc(18px - 10px * var(--dock)) calc(var(--dock) * 8px);
-      border-radius:calc(var(--dock) * 24px);
-    }
-  }
-  /* В собранной панели монограмма «АБ» сменяется именем целиком — так же,
-     как на главной (assets/main.css). Оба варианта лежат в одной ячейке
-     грида, поэтому не двигают друг друга и кроссфейд идёт на месте.
-     Ширину имени один раз замеряет assets/header-dock.js и кладёт в
-     --logo-w; значение по умолчанию 28px оставляет логотип квадратом, если
-     скрипт ещё не отработал. Множители разводят тексты по времени: «АБ»
-     гаснет к --dock ~0.45, имя проявляется с ~0.55, перекрытия нет. */
-  .logo{--logo-w:28px;
-    display:inline-grid; align-items:center; justify-items:center;
-    width:calc(28px + (var(--logo-w) - 28px) * var(--dock)); height:28px;
-    border-radius:calc(8px + 6px * var(--dock));
-    background:var(--ink); color:var(--bg); font-weight:700; font-size:13px;
-    text-decoration:none; overflow:hidden; white-space:nowrap}
-  .logo > span{grid-area:1/1}
-  .logo .logo-ab{opacity:calc(1 - var(--dock) * 2.2)}
-  .logo .logo-full{opacity:calc(var(--dock) * 2.2 - 1.2)}
-  .logo:hover{background:var(--ink)}
-
-  .tags{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:clamp(18px,2vw,28px)}
-  .tag{padding:6px 14px; border-radius:999px; background:var(--surface); color:#4a4f55; font-size:14px; font-weight:500}
-  .tag.hl{background:var(--lime); color:var(--lime-ink)}
-  h1{margin:0; max-width:20ch; font-size:clamp(36px,5.6vw,76px); font-weight:700; letter-spacing:-.045em; line-height:1}
-  .lead{margin:clamp(20px,2.4vw,32px) 0 0; max-width:60ch; font-size:clamp(18px,1.8vw,24px); line-height:1.45; color:var(--ink-2)}
-
-  .layout{display:grid; grid-template-columns:minmax(170px,240px) minmax(0,1fr); gap:clamp(20px,3vw,56px);
-    align-items:start; padding-top:clamp(28px,3.5vw,48px)}
-  aside{position:sticky; top:86px; align-self:start; display:flex; flex-direction:column; gap:4px; min-width:0}
-  aside a{padding:10px 12px; border-radius:10px; font-size:16px; line-height:1.3; text-decoration:none;
-    color:var(--ink-2); transition:background .2s,color .2s}
-  aside a:hover{background:var(--lime); color:var(--lime-ink)}
-  aside a.on{background:var(--lime); color:var(--lime-ink); font-weight:600}
-  .back{margin-top:14px; text-align:center; border:1px solid var(--line); color:var(--ink-3); font-size:15px}
-
-  main{min-width:0; display:flex; flex-direction:column}
-  section{scroll-margin-top:96px}
-  .sec{padding:clamp(24px,3vw,44px) 0 clamp(44px,5.5vw,90px); border-top:1px solid var(--line);
-    display:flex; flex-direction:column; gap:18px}
-  h2{margin:0; font-size:clamp(26px,3.4vw,44px); font-weight:600; letter-spacing:-.035em; line-height:1.05; max-width:22ch}
-  h3{margin:0; font-size:clamp(18px,1.7vw,22px); font-weight:600; letter-spacing:-.02em; line-height:1.2}
-  p{margin:0; font-size:clamp(17px,1.5vw,20px); line-height:1.55; color:var(--ink-2); max-width:62ch}
-  .cols{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr)); gap:clamp(16px,2vw,32px)}
-  .col{display:flex; flex-direction:column; gap:10px}
-  .col p{font-size:17px}
-  .card{padding:24px; border-radius:20px; background:var(--surface); display:flex; flex-direction:column; gap:10px}
-  .card p{font-size:16px; color:#4a4f55}
-  .list{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:10px}
-  .list li{font-size:16px; line-height:1.5; color:#4a4f55; display:flex; gap:10px}
-  .list li::before{content:"—"; color:var(--ink-3); flex:none}
-  .divider{height:1px; background:#d2cfc8}
-  .grid-ins{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr)); gap:12px}
-
-  /* флоу-строка: шаги процесса одной линией, с переносом на узких экранах */
-  .flow{display:flex; flex-direction:column; gap:12px; padding:22px 24px; border-radius:20px;
-    background:var(--surface)}
-  .flow-line{display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; font-size:16px; line-height:1.4; color:#333}
-  .flow-line b{font-weight:500}
-  .flow-line i{font-style:normal; color:var(--ink-3)}
-
-  .media{background:var(--surface); border-radius:clamp(16px,2vw,26px);
-    padding:clamp(20px,2.4vw,32px); display:flex; flex-direction:column; align-items:center; gap:clamp(20px,2.4vw,32px)}
-  /* тёмная пилюля переключателя — как в макете: активная вкладка лаймовая */
-  .tabs{display:inline-flex; flex-wrap:wrap; gap:4px; padding:5px; border-radius:999px; background:var(--ink)}
-  .tabs button{appearance:none; border:0; cursor:pointer; font:inherit; font-size:15px; line-height:1;
-    padding:12px 20px; border-radius:999px; background:transparent; color:#b0b4b8; transition:background .2s,color .2s}
-  .tabs button:hover{color:#f4f3f0}
-  .tabs button[aria-selected="true"]{background:var(--lime); color:var(--lime-ink); font-weight:600}
-  .shots{width:100%; display:flex; justify-content:center}
-  .shot{display:none; margin:0; width:100%; flex-direction:column; align-items:center; gap:10px}
-  .shot.on{display:flex}
-  .frame{position:relative; display:inline-flex; border-radius:14px; overflow:hidden; cursor:zoom-in;
-    max-width:min(1037px,100%); background:#fff}
-  .frame img{display:block; width:min(1037px,100%); height:auto}
-  /* высокие узкие скриншоты страниц: по ширине колонки они вырастают
-     на несколько экранов, поэтому ограничиваю их отдельно */
-  .frame.tall{max-width:min(420px,100%)}
-  .frame.tall img{width:min(420px,100%)}
-  .frame.mid{max-width:min(620px,100%)}
-  .frame.mid img{width:min(620px,100%)}
-  .zoom{position:absolute; right:14px; top:14px; width:46px; height:46px; border-radius:50%;
-    display:grid; place-items:center; background:rgba(21,23,27,.72); color:#fff; backdrop-filter:blur(6px);
-    opacity:0; transform:scale(.9); transition:opacity .2s,transform .2s; pointer-events:none}
-  .frame:hover .zoom, .frame:focus-visible .zoom{opacity:1; transform:scale(1)}
-  .cap{font-size:14px; color:var(--ink-3); text-align:center}
-  /* пара макетов рядом — «до / после» и два фрагмента библиотеки */
-  /* ровно две колонки: auto-fit оставлял третий схлопнутый трек, а вместе
-     с ним — лишний gap пустого места справа */
-  .pair{width:100%; display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:clamp(18px,2.4vw,36px); align-items:start; justify-items:center}
-  @media (max-width:620px){ .pair{grid-template-columns:1fr} }
-  .pair .cap{order:-1; font-family:"Martian Mono",ui-monospace,monospace; font-size:11px;
-    letter-spacing:.04em; text-transform:uppercase}
-  .pair > figure{display:flex; flex-direction:column; align-items:center; gap:10px; margin:0; width:100%}
-
-  .top-row{display:grid; grid-template-columns:minmax(0,1081fr) minmax(0,599fr);
-    gap:clamp(24px,3vw,48px); align-items:center}
-  .top-text{min-width:0}
-  .top-cover{min-width:0; display:flex; justify-content:center}
-  .frame.cover{max-width:min(600px,100%); border-radius:20px; background:transparent}
-  .frame.cover img{width:min(600px,100%)}
-  @media (max-width:900px){
-    .top-row{grid-template-columns:1fr}
-    .top-cover{order:-1}
-  }
-
-  .results{border-radius:clamp(20px,2.4vw,34px); background:#15171b; color:#f4f3f0;
-    padding:clamp(26px,3.4vw,56px); display:flex; flex-direction:column; gap:clamp(20px,2.4vw,32px)}
-  .results .mono{color:#b0b4b8}
-  .results .st{margin:14px 0 0; font-size:clamp(24px,2.8vw,40px); font-weight:600; letter-spacing:-.03em; line-height:1.12; max-width:24ch; color:#f4f3f0}
-  .grid3{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr)); gap:12px}
-  .rcard{padding:20px 22px; border-radius:18px; background:rgba(255,255,255,.09)}
-  .rcard .l{font-size:14px; color:#b0b4b8}
-  .rcard .v{margin-top:6px; font-size:clamp(17px,1.4vw,20px); font-weight:600; letter-spacing:-.02em; line-height:1.35}
-  /* макет итога внутри тёмного блока: подложка светлая, чтобы скриншот не «проваливался» */
-  .results .frame{background:#fff}
-
-  .thanks{border-radius:clamp(20px,2.4vw,34px); background:var(--lime); color:var(--lime-ink);
-    padding:clamp(28px,4vw,64px); display:flex; flex-direction:column; gap:clamp(18px,2.2vw,28px)}
-  .thanks h2{font-size:clamp(32px,4.6vw,64px); font-weight:700; letter-spacing:-.04em; line-height:1; max-width:none}
-  .thanks p{color:var(--lime-ink); max-width:48ch; font-size:clamp(17px,1.6vw,21px)}
-  .btns{display:flex; flex-wrap:wrap; gap:12px}
-  .btn{padding:16px 26px; border-radius:16px; background:var(--lime-ink); color:#f4f3f0; font-size:17px;
-    font-weight:600; text-decoration:none; transition:transform .25s cubic-bezier(.2,.8,.2,1)}
-  .btn:hover{transform:translateY(-2px); background:var(--lime-ink)}
-  .btn.ghost{background:rgba(17,26,10,.1); color:var(--lime-ink)}
-  .btn.ghost:hover{background:rgba(17,26,10,.16)}
-
-  .others{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); gap:12px}
-  .others a, .others .soon{display:flex; flex-direction:column; gap:6px; padding:20px; border-radius:20px; text-decoration:none;
-    transition:transform .3s cubic-bezier(.2,.8,.2,1)}
-  .others a:hover{transform:translateY(-4px)}
-  .others .soon{cursor:default; opacity:.55}
-  .soon-label{margin-top:4px}
-
-  .lb{position:fixed; inset:0; z-index:100; display:none; background:rgba(12,13,15,.94); backdrop-filter:blur(4px)}
-  .lb.on{display:block}
-  .lb-scroll{position:absolute; inset:0; overflow:auto; padding:clamp(16px,4vw,64px); text-align:center}
-  .lb img{max-width:100%; max-height:calc(100vh - 128px); height:auto; border-radius:10px; background:#fff; cursor:zoom-in}
-  .lb img.full{max-width:none; max-height:none; width:auto; cursor:zoom-out}
-  .lb-bar{position:fixed; top:0; left:0; right:0; display:flex; align-items:center; justify-content:space-between;
-    gap:16px; padding:16px clamp(16px,4vw,32px); color:#f4f3f0; font-size:15px;
-    background:linear-gradient(to bottom,rgba(12,13,15,.85),rgba(12,13,15,0))}
-  .lb-bar button{appearance:none; border:0; cursor:pointer; font:inherit; color:#f4f3f0;
-    background:rgba(255,255,255,.12); border-radius:999px; padding:10px 18px}
-  .lb-bar button:hover{background:rgba(255,255,255,.22)}
-
-  @media (max-width:860px){
-    .layout{grid-template-columns:1fr}
-    aside{position:static; flex-direction:row; overflow:auto; gap:6px; padding-bottom:6px}
-    aside .mono, aside .back{display:none}
-    aside a{white-space:nowrap}
-  }
-  :focus-visible{outline:2px solid var(--ink); outline-offset:3px; border-radius:6px}
-  .skip-link{position:absolute; left:-9999px; top:0; z-index:100; padding:12px 18px;
-    background:var(--ink); color:var(--bg); border-radius:0 0 10px 0; text-decoration:none}
-  .skip-link:focus{left:0}
-  @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto}
-    *{animation-duration:.001ms !important; transition-duration:.001ms !important}
-  }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/case-iw.css">
 </head>
 <body>
 
@@ -274,58 +45,58 @@
       </nav>
     </header>
 
-    <section id="top" style="padding:clamp(30px,5vw,70px) 0 clamp(24px,3vw,40px);">
-      <div class="top-row">
-        <div class="top-text">
-          <div class="tags">
-            <span class="tag">exmo.me</span>
-            <span class="tag">Топ-10 биржа в РФ</span>
-            <span class="tag">Design System</span>
-            <span class="tag hl">Web + App + Адаптив</span>
-          </div>
-          <h1>Дизайн-система, на которой пересобрала 100+ экранов биржи</h1>
-          <p class="lead">exmo.me входит в топ-10 крупнейших криптобирж России. Биржа отделила российскую часть продукта, и ей нужен был собственный полноценный сайт. На старте существовали только согласованная стилистика, визуальный код и часть основных экранов — на английском языке, без адаптивов и без системы. Я собрала дизайн-систему под две локали, пересобрала на ней веб и приложение, добавила 60+ адаптивных страниц и довела редизайн до состояния, в котором его можно отдавать в разработку частями.</p>
+    <section class="hero" id="top">
+      <div class="hero__top">
+        <div class="tags">
+          <span class="tag">exmo.me</span>
+          <span class="tag">Топ-10 биржа в РФ</span>
+          <span class="tag">Design System</span>
+          <span class="tag hl">Web + App + Адаптив</span>
         </div>
-        <div class="top-cover">
-          <div class="frame cover" data-src="/exmo-ds/img/hero-web.webp" data-title="exmo.me — главная после редизайна" tabindex="0">
-            <img src="/exmo-ds/img/hero-web.webp" width="1200" height="1024" fetchpriority="high" decoding="async" alt="exmo.me — страницы после редизайна">
-            <div class="zoom" aria-hidden="true"></div>
-          </div>
+        <div>
+          <h1 class="hero__title">Дизайн-система, на которой пересобрала 100+ экранов биржи</h1>
+          <p class="hero__lead">exmo.me входит в топ-10 крупнейших криптобирж России. Биржа отделила российскую часть продукта, и ей нужен был собственный полноценный сайт. На старте существовали только согласованная стилистика, визуальный код и часть основных экранов — на английском языке, без адаптивов и без системы. Я собрала дизайн-систему под две локали, пересобрала на ней веб и приложение, добавила 60+ адаптивных страниц и довела редизайн до состояния, в котором его можно отдавать в разработку частями.</p>
+        </div>
+      </div>
+      <div class="hero__cover">
+        <div class="hero__frame" data-src="/exmo-ds/img/hero-web.webp" data-title="exmo.me — главная после редизайна" tabindex="0">
+          <img src="/exmo-ds/img/hero-web.webp" width="1200" height="1024" fetchpriority="high" decoding="async" alt="exmo.me — страницы после редизайна">
+          <div class="zoom" aria-hidden="true"></div>
         </div>
       </div>
     </section>
 
-    <div class="layout">
-      <aside>
-        <div class="mono" style="padding:0 12px 10px;">Содержание</div>
-        <a href="#top">Обзор</a>
-        <a href="#context">01 — Контекст</a>
-        <a href="#limits">02 — Ограничения</a>
-        <a href="#system">03 — Дизайн-система</a>
-        <a href="#web">04 — Редизайн веба</a>
-        <a href="#engage">05 — Вовлечение</a>
-        <a href="#security">06 — Безопасность</a>
-        <a href="#payments">07 — Платежи</a>
-        <a href="#i18n">08 — Локализация</a>
-        <a href="#graphics">09 — Графика</a>
-        <a href="#adaptive">10 — Адаптив</a>
-        <a href="#results">Итог</a>
-        <a href="#now">11 — Что бы сделала сейчас</a>
-        <a href="#thanks">Спасибо и контакты</a>
-        <a href="#other">Другие кейсы</a>
-        <a class="back" href="/">← Все кейсы</a>
+    <div class="body">
+      <aside class="sidebar">
+        <div class="nav-group__title">exmo.me</div>
+        <nav class="nav">
+          <a class="nav__item" href="#context"><span class="nav__num">01</span><span class="nav__label">Контекст</span></a>
+          <a class="nav__item" href="#limits"><span class="nav__num">02</span><span class="nav__label">Ограничения</span></a>
+          <a class="nav__item" href="#system"><span class="nav__num">03</span><span class="nav__label">Дизайн-система</span></a>
+          <a class="nav__item" href="#web"><span class="nav__num">04</span><span class="nav__label">Редизайн веба</span></a>
+          <a class="nav__item" href="#engage"><span class="nav__num">05</span><span class="nav__label">Вовлечение</span></a>
+          <a class="nav__item" href="#security"><span class="nav__num">06</span><span class="nav__label">Безопасность</span></a>
+          <a class="nav__item" href="#payments"><span class="nav__num">07</span><span class="nav__label">Платежи</span></a>
+          <a class="nav__item" href="#i18n"><span class="nav__num">08</span><span class="nav__label">Локализация</span></a>
+          <a class="nav__item" href="#graphics"><span class="nav__num">09</span><span class="nav__label">Графика</span></a>
+          <a class="nav__item" href="#adaptive"><span class="nav__num">10</span><span class="nav__label">Адаптив</span></a>
+          <a class="nav__item" href="#results"><span class="nav__num">11</span><span class="nav__label">Итог</span></a>
+          <a class="nav__item" href="#now"><span class="nav__num">12</span><span class="nav__label">Что бы сделала сейчас</span></a>
+          <a class="nav__item" href="#thanks"><span class="nav__num">13</span><span class="nav__label">Спасибо и контакты</span></a>
+          <a class="nav__item" href="#other"><span class="nav__num">14</span><span class="nav__label">Другие кейсы</span></a>
+        </nav>
       </aside>
 
-      <main>
+      <main class="main">
 
-        <section id="meta" style="padding-bottom:clamp(40px,5vw,80px);">
-          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr)); gap:1px; background:var(--line); border-radius:20px; overflow:hidden;">
-            <div style="background:var(--bg); padding:22px 24px;"><div class="mono">Продукт</div><div style="margin-top:8px; font-size:clamp(18px,1.6vw,22px); font-weight:600; letter-spacing:-.02em;">exmo.me, топ-10 в России</div></div>
-            <div style="background:var(--bg); padding:22px 24px;"><div class="mono">Роль</div><div style="margin-top:8px; font-size:clamp(18px,1.6vw,22px); font-weight:600; letter-spacing:-.02em;">Продуктовый дизайнер</div></div>
-            <div style="background:var(--bg); padding:22px 24px;"><div class="mono">Платформа</div><div style="margin-top:8px; font-size:clamp(18px,1.6vw,22px); font-weight:600; letter-spacing:-.02em;">Web · Адаптив · App</div></div>
-            <div style="background:var(--bg); padding:22px 24px;"><div class="mono">Команда</div><div style="margin-top:8px; font-size:clamp(18px,1.6vw,22px); font-weight:600; letter-spacing:-.02em;">CPO · продакты · фронтенд</div></div>
-            <div style="background:var(--bg); padding:22px 24px;"><div class="mono">Период</div><div style="margin-top:8px; font-size:clamp(18px,1.6vw,22px); font-weight:600; letter-spacing:-.02em;">Октябрь 2024 — февраль 2026</div></div>
-          </div>
+        <section id="meta">
+        <div class="meta">
+          <div class="meta__cell"><div class="meta__label">Продукт</div><div class="meta__value">exmo.me, топ-10 в России</div></div>
+          <div class="meta__cell"><div class="meta__label">Роль</div><div class="meta__value">Продуктовый дизайнер</div></div>
+          <div class="meta__cell"><div class="meta__label">Платформа</div><div class="meta__value">Web · Адаптив · App</div></div>
+          <div class="meta__cell"><div class="meta__label">Команда</div><div class="meta__value">CPO · продакты · фронтенд</div></div>
+          <div class="meta__cell"><div class="meta__label">Период</div><div class="meta__value">Октябрь 2024 — февраль 2026</div></div>
+        </div>
         </section>
 
         <section id="context" class="sec">
@@ -423,7 +194,7 @@
               <b>Задача</b> <i>→</i> <b>проверка в системе</b> <i>→</i> <b>собрать из готового / добавить компонент</b> <i>→</i> <b>описать состояния</b> <i>→</i> <b>отдать в разработку</b>
             </div>
             <div class="divider"></div>
-            <div style="font-size:15px; line-height:1.5; color:#4a4f55;">Новый компонент добавляем только если паттерн повторяется минимум в двух сценариях</div>
+            <div style="font-size:17px; line-height:1.5; color:var(--muted);">Новый компонент добавляем только если паттерн повторяется минимум в двух сценариях</div>
           </div>
         </section>
 
@@ -626,7 +397,7 @@
           </div>
         </section>
 
-        <section id="results" style="padding-bottom:clamp(44px,5.5vw,90px);">
+        <section id="results" class="sec--block">
           <div class="results">
             <div>
               <span class="mono">Итог. Общий scope задачи</span>
@@ -655,7 +426,7 @@
           </div>
         </section>
 
-        <section id="thanks" style="padding-bottom:clamp(44px,5.5vw,90px);">
+        <section id="thanks" class="sec--block">
           <div class="thanks">
             <h2>Спасибо, что дочитали</h2>
             <p>Если хочется подробностей по дизайн-системе, адаптиву или флоу Passkey — напишите: покажу процесс, компоненты и то, что не поместилось в кейс.</p>
@@ -667,30 +438,41 @@
           </div>
         </section>
 
-        <section id="other" class="sec" style="padding-bottom:clamp(40px,5vw,80px);">
-          <div style="display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap;">
-            <h2 style="font-size:clamp(22px,2.6vw,30px);">Другие кейсы</h2>
-            <a href="/" style="font-size:16px;">Все работы</a>
+        <section id="other" class="sec">
+          <div class="others-head">
+            <h2>Другие кейсы</h2>
+            <a href="/">Все работы</a>
           </div>
           <div class="others">
-            <a href="/crypto-directory" style="background:#15171b; color:#f4f3f0;">
-              <span class="mono" style="color:#b0b4b8;">Crypto Directory</span>
-              <span style="font-size:19px; font-weight:600; letter-spacing:-.02em; line-height:1.15;">Каталог бизнесов, принимающих криптовалюту</span>
+            <a href="/crypto-directory">
+              <span class="mono">Crypto Directory</span>
+              <span class="others__title">Каталог бизнесов, принимающих криптовалюту</span>
             </a>
-            <a href="/send-flow" style="background:#d8e3dc; color:#131a17;">
-              <span class="mono" style="color:#4a5550;">IronWallet</span>
-              <span style="font-size:19px; font-weight:600; letter-spacing:-.02em; line-height:1.15;">Сохранение контактов в Send-флоу</span>
+            <a href="/send-flow">
+              <span class="mono">IronWallet</span>
+              <span class="others__title">Сохранение контактов в Send-флоу</span>
             </a>
-            <div class="soon" style="background:#dbe0ec; color:#14161f;" aria-disabled="true">
-              <span class="mono" style="color:#4a4f5f;">IronWallet</span>
-              <span style="font-size:19px; font-weight:600; letter-spacing:-.02em; line-height:1.15;">SWAP: редизайн</span>
-              <span class="mono-s soon-label">Скоро</span>
+            <div class="soon" aria-disabled="true">
+              <span class="mono">IronWallet</span>
+              <span class="others__title">SWAP: редизайн</span>
+              <span class="mono">Скоро</span>
             </div>
           </div>
         </section>
 
       </main>
     </div>
+
+    <footer>
+      <div class="headline">Открыта к проектам и разговорам</div>
+      <div class="contacts">
+        <a href="https://t.me/Anastasia_Jay" target="_blank" rel="noopener">@Anastasia_Jay</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <a href="mailto:burmistrova.adv@gmail.com">burmistrova.adv@gmail.com</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <a href="tel:+79089745517">+7 908 974 55 17</a>
+      </div>
+    </footer>
   </div>
 </div>
 
