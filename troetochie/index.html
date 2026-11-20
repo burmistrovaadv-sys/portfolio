@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Троеточие — редизайн пользовательских сценариев</title>
+<meta name="description" content="UX/UI case study: редизайн онбординга и настроек стиля AI-помощника «Троеточие». Сравнение Before / After.">
+<link rel="canonical" href="https://www.anastasia-burmistrova.ru/troetochie">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://www.anastasia-burmistrova.ru/troetochie">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="Троеточие — редизайн пользовательских сценариев">
+<meta property="og:description" content="Пересмотр первого знакомства с продуктом и персонализации AI-помощника: онбординг и настройки стиля, Before / After и интерактивные прототипы.">
+<meta property="og:image" content="https://www.anastasia-burmistrova.ru/troetochie/assets/after/onb-1.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/favicon.svg">
+
+<link rel="stylesheet" href="/troetochie/vendor/onest/onest-local.css">
+<link rel="stylesheet" href="/troetochie/styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#top">Перейти к содержанию</a>
+
+<div class="progress" aria-hidden="true"><i></i></div>
+
+<div class="chrome chrome--head"><div class="chrome__inner">
+  <header>
+    <div class="identity">
+      <a class="logo" href="/" aria-label="На главную"><span class="logo-ab" aria-hidden="true">АБ</span><span class="logo-full" aria-hidden="true">Анастасия</span></a>
+      <span class="sep" aria-hidden="true">✦</span>
+      <a href="/">Все кейсы</a>
+    </div>
+    <nav class="top" aria-label="Контакты">
+      <a href="https://t.me/Anastasia_Jay" target="_blank" rel="noopener">Telegram @Anastasia_Jay</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="mailto:burmistrova.adv@gmail.com">Email</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="/assets/cv-anastasia-burmistrova.pdf" target="_blank" rel="noopener">CV</a>
+    </nav>
+  </header>
+</div></div>
+
+<main id="top">
+
+  <section class="hero reveal">
+    <p class="hero__eyebrow">UX/UI redesign · Анастасия Бурмистрова</p>
+    <h1 class="hero__title">Троеточие — редизайн<br>пользовательских сценариев</h1>
+    <p class="hero__sub">Пересмотр первого знакомства с продуктом и персонализации AI-помощника.</p>
+    <ul class="chips">
+      <li class="chip">UX/UI redesign</li>
+      <li class="chip">Onboarding</li>
+      <li class="chip">Settings / Personalization</li>
+    </ul>
+    <p class="hero__scroll">Листайте — экраны прототипа меняются вместе со скроллом</p>
+  </section>
+
+  <!-- ====================== СКРОЛЛ-ТУР ====================== -->
+  <section class="tour" id="tour" data-steps="7">
+    <div class="tour__stage">
+      <div class="stage">
+        <div class="stage__device">
+          <div class="frame frame--ba is-on" data-frame="ba">
+            <div class="ba">
+              <div class="ba__media" data-ba>
+                <img src="/troetochie/assets/before/onb-1-tone.jpg" alt="Текущий онбординг, первый экран">
+                <img class="ba__after" src="/troetochie/assets/after/onb-1.png" alt="Новый онбординг, первый экран">
+                <span class="ba__tag ba__tag--after">После</span>
+                <span class="ba__tag ba__tag--before">До</span>
+                <div class="ba__handle"><i aria-hidden="true"></i></div>
+              </div>
+            </div>
+          </div>
+          <div class="frame" data-frame="onb">
+            <iframe src="/troetochie/proto/onboarding.html" title="Новый онбординг — интерактивный прототип"></iframe>
+          </div>
+          <div class="frame" data-frame="set">
+            <iframe src="/troetochie/proto/settings.html" title="Новые настройки стиля — интерактивный прототип" loading="lazy"></iframe>
+          </div>
+        </div>
+
+        <div class="stage__copy">
+          <article class="step is-on" data-frame="ba">
+            <p class="step__eyebrow"><span>01</span> Onboarding<i>·</i>Экран 1 — Ценность</p>
+            <h2 class="step__title">Сначала — зачем это нужно</h2>
+            <p class="step__text">Переработан первый пользовательский опыт: вместо перегруженного экрана
+              с большим количеством текста — три последовательных экрана, которые объясняют ценность
+              продукта, демонстрируют возможности AI и подводят пользователя к подключению клавиатуры.</p>
+            <ul class="step__list">
+              <li>Сформулирована понятная ценность продукта.</li>
+              <li>Показан основной сценарий использования.</li>
+            </ul>
+            <p class="step__hint">Потяните ползунок, чтобы сравнить старый и новый первый экран.</p>
+          </article>
+
+          <article class="step" data-frame="onb" data-nav="2 · Тон">
+            <p class="step__eyebrow"><span>01</span> Onboarding<i>·</i>Экран 2 — Тон</p>
+            <h2 class="step__title">Возможности AI показаны, а не описаны</h2>
+            <p class="step__text">Вместо перечисления функций — демонстрация: одно и то же сообщение
+              переписывается в разных тонах прямо на экране.</p>
+            <ul class="step__list">
+              <li>Добавлена интерактивная демонстрация тональности ответов.</li>
+              <li>Реализована визуальная навигация с помощью подсветки элементов и анимированных стрелок.</li>
+            </ul>
+          </article>
+
+          <article class="step" data-frame="onb" data-nav="3 · Клавиатура">
+            <p class="step__eyebrow"><span>01</span> Onboarding<i>·</i>Экран 3 — Клавиатура</p>
+            <h2 class="step__title">Техническая настройка — отдельным шагом</h2>
+            <p class="step__text">Подключение клавиатуры вынесено на последний экран: к этому моменту
+              пользователь уже понимает ценность, и инструкция не конкурирует со знакомством с продуктом.</p>
+            <ul class="step__list">
+              <li>Сокращена структура onboarding до 3 экранов.</li>
+              <li>Техническая настройка отделена от знакомства с продуктом.</li>
+            </ul>
+          </article>
+
+          <article class="step" data-frame="set" data-nav="Настройки стиля">
+            <p class="step__eyebrow"><span>02</span> Настройки стиля<i>·</i>Экран «Ваш стиль»</p>
+            <h2 class="step__title">Главное — на первом экране</h2>
+            <p class="step__text">Переработан перегруженный экран персонализации AI-помощника.
+              Настройки разделены по смыслу, добавлена визуальная иерархия и выделены основные параметры.</p>
+            <ul class="step__list">
+              <li>Выделены наиболее значимые параметры.</li>
+              <li>Сокращено количество одновременно отображаемых контролов.</li>
+            </ul>
+          </article>
+
+          <article class="step" data-frame="set" data-nav="▶ Смена тона">
+            <p class="step__eyebrow"><span>02</span> Настройки стиля<i>·</i>Смена тона</p>
+            <h2 class="step__title">Результат виден сразу</h2>
+            <p class="step__text">Тон и манера выбираются в верхней части экрана, а под ними — предпросмотр:
+              сообщение перестраивается под выбранный стиль, не выходя из настроек.</p>
+            <ul class="step__list">
+              <li>Добавлен предпросмотр результата персонализации.</li>
+              <li>Использованы более подходящие компоненты для выбора параметров.</li>
+            </ul>
+          </article>
+
+          <article class="step" data-frame="set" data-nav="Доп. настройки">
+            <p class="step__eyebrow"><span>02</span> Настройки стиля<i>·</i>Доп. настройки</p>
+            <h2 class="step__title">Второстепенное — под раскрытие</h2>
+            <p class="step__text">Длина ответа, обращение, эмодзи и пунктуация остались доступны,
+              но собраны в один раскрывающийся блок.</p>
+            <ul class="step__list">
+              <li>Второстепенные настройки перенесены в раскрывающийся блок.</li>
+            </ul>
+          </article>
+
+          <article class="step" data-frame="set" data-nav="Все настройки">
+            <p class="step__eyebrow"><span>02</span> Настройки стиля<i>·</i>Экран «Все настройки»</p>
+            <h2 class="step__title">Настройки разделены по смыслу</h2>
+            <p class="step__text">Корневой экран больше не смешивает сущности: AI, клавиатура,
+              профиль и аккаунт — отдельные разделы со своими экранами.</p>
+            <ul class="step__list">
+              <li>Разделены настройки AI, клавиатуры, профиля и аккаунта.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+
+      <div class="tour__ctl">
+        <button class="ctl__arrow" data-tour="prev" aria-label="Предыдущий экран">‹</button>
+        <button class="ctl__open" data-proto="/troetochie/proto/onboarding.html" data-proto-title="Onboarding — интерактивный прототип">Исследовать прототип</button>
+        <button class="ctl__arrow" data-tour="next" aria-label="Следующий экран">›</button>
+        <span class="ctl__count"><b data-tour="now">1</b> / <span data-tour="total">7</span></span>
+      </div>
+    </div>
+    <div class="tour__rail" aria-hidden="true"></div>
+  </section>
+
+  <section class="divider reveal">
+    <p class="divider__eyebrow">Дальше</p>
+    <h2 class="divider__title">Полное сравнение Before / After</h2>
+    <p class="divider__sub">Оригинальные экраны из прода рядом с прототипом, в одном масштабе.</p>
+  </section>
+
+  <!-- ====================== 01 ONBOARDING ====================== -->
+  <section class="case" id="onboarding">
+    <div class="case__head reveal">
+      <p class="case__num">01</p>
+      <h2 class="case__title">Onboarding</h2>
+      <p class="case__lead">Переработан первый пользовательский опыт: вместо перегруженного экрана
+        с большим количеством текста — три последовательных экрана, которые объясняют ценность
+        продукта, демонстрируют возможности AI и подводят пользователя к подключению клавиатуры.</p>
+    </div>
+
+    <div class="compare reveal">
+      <!-- BEFORE -->
+      <div class="pane pane--before">
+        <div class="pane__head">
+          <span class="tag tag--before">Before</span>
+          <span class="pane__note">Текущая версия в проде</span>
+        </div>
+        <div class="rack" data-rack>
+          <figure class="shot">
+            <div class="bezel"><img src="/troetochie/assets/before/onb-1-tone.jpg" alt="Текущий онбординг, экран 1 из 3: «И что на это ответить?»" loading="lazy" data-zoom></div>
+            <figcaption>1 / 3 — «Попробовать»</figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="bezel"><img src="/troetochie/assets/before/onb-2-consent.png" alt="Текущий онбординг: нижняя часть экрана с юридическим текстом и четырьмя кнопками" loading="lazy" data-zoom></div>
+            <figcaption>Тот же экран, прокрутка вниз</figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="bezel"><img src="/troetochie/assets/before/onb-3-keyboard.png" alt="Текущий онбординг: экран «Добавить клавиатуру» со сплошным текстом" loading="lazy" data-zoom></div>
+            <figcaption>«Добавить клавиатуру»</figcaption>
+          </figure>
+        </div>
+        <details class="more">
+          <summary>Ещё состояния того же экрана</summary>
+          <div class="rack rack--sm">
+            <figure class="shot">
+              <div class="bezel"><img src="/troetochie/assets/before/onb-1-tone-calm.png" alt="Текущий онбординг: выбран тон «Спокойно»" loading="lazy" data-zoom></div>
+              <figcaption>Тон «Спокойно»</figcaption>
+            </figure>
+            <figure class="shot">
+              <div class="bezel"><img src="/troetochie/assets/before/onb-1-tone-short.png" alt="Текущий онбординг: выбран тон «Коротко»" loading="lazy" data-zoom></div>
+              <figcaption>Тон «Коротко»</figcaption>
+            </figure>
+          </div>
+        </details>
+        <ul class="probs">
+          <li>Ценность продукта не сформулирована — пользователь сразу попадает в настройку.</li>
+          <li>Демонстрация, юридический текст, согласие на аналитику и четыре кнопки живут на одном экране.</li>
+          <li>Непонятно, какое действие основное.</li>
+        </ul>
+      </div>
+
+      <!-- AFTER -->
+      <div class="pane pane--after">
+        <div class="pane__head">
+          <span class="tag tag--after">After</span>
+          <span class="pane__note">Новый прототип</span>
+        </div>
+        <div class="rack rack--live" data-rack>
+          <figure class="shot">
+            <div class="live" data-screen="1 · Ценность"><iframe src="/troetochie/proto/onboarding.html" title="Новый онбординг, экран 1: Ценность" loading="lazy"></iframe></div>
+            <figcaption>1 · Ценность</figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="live" data-screen="2 · Тон"><iframe src="/troetochie/proto/onboarding.html" title="Новый онбординг, экран 2: Тон ответа" loading="lazy"></iframe></div>
+            <figcaption>2 · Тон</figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="live" data-screen="3 · Клавиатура"><iframe src="/troetochie/proto/onboarding.html" title="Новый онбординг, экран 3: Подключение клавиатуры" loading="lazy"></iframe></div>
+            <figcaption>3 · Клавиатура</figcaption>
+          </figure>
+        </div>
+        <p class="pane__hint">Экраны идут последовательно: ценность → демонстрация → техническая настройка.</p>
+      </div>
+    </div>
+
+    <div class="changed reveal">
+      <h3 class="changed__title">Что изменилось</h3>
+      <ul class="changed__list">
+        <li>Сокращена структура onboarding до 3 экранов.</li>
+        <li>Сформулирована понятная ценность продукта.</li>
+        <li>Показан основной сценарий использования.</li>
+        <li>Добавлена интерактивная демонстрация тональности ответов.</li>
+        <li>Реализована визуальная навигация с помощью подсветки элементов и анимированных стрелок.</li>
+        <li>Техническая настройка отделена от знакомства с продуктом.</li>
+      </ul>
+      <button class="btn" data-proto="/troetochie/proto/onboarding.html" data-proto-title="Onboarding — интерактивный прототип">
+        Посмотреть интерактивный прототип
+      </button>
+    </div>
+  </section>
+
+  <!-- ====================== 02 НАСТРОЙКИ СТИЛЯ ====================== -->
+  <section class="case" id="settings">
+    <div class="case__head reveal">
+      <p class="case__num">02</p>
+      <h2 class="case__title">Настройки стиля</h2>
+      <p class="case__lead">Переработан перегруженный экран персонализации AI-помощника.
+        Настройки разделены по смыслу, добавлена визуальная иерархия и выделены основные параметры.</p>
+    </div>
+
+    <div class="compare reveal">
+      <!-- BEFORE -->
+      <div class="pane pane--before">
+        <div class="pane__head">
+          <span class="tag tag--before">Before</span>
+          <span class="pane__note">Текущая версия в проде</span>
+        </div>
+        <div class="rack" data-rack>
+          <figure class="shot">
+            <div class="bezel"><img src="/troetochie/assets/before/set-1-style.jpg" alt="Текущие настройки: верх экрана «Ваш стиль» — тон по умолчанию и список тонов" loading="lazy" data-zoom></div>
+            <figcaption>«Ваш стиль» — верх экрана</figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="bezel"><img src="/troetochie/assets/before/set-2-about.jpg" alt="Текущие настройки: блок «О себе» и начало блока «Как бы вы ответили?»" loading="lazy" data-zoom></div>
+            <figcaption>«О себе» и «Как бы вы ответили?»</figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="bezel"><img src="/troetochie/assets/before/set-3-answers.jpg" alt="Текущие настройки: пары вариантов ответа и блок «Пара ваших сообщений»" loading="lazy" data-zoom></div>
+            <figcaption>Варианты ответа и «Пара ваших сообщений»</figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="bezel"><img src="/troetochie/assets/before/set-4-fine.jpg" alt="Текущие настройки: блок «Тонкая настройка» — длина, обращение, эмодзи, пунктуация, юмор — и согласие на аналитику" loading="lazy" data-zoom></div>
+            <figcaption>«Тонкая настройка» и согласие на аналитику</figcaption>
+          </figure>
+        </div>
+        <p class="pane__hint">Один экран, прокрученный сверху вниз.</p>
+        <ul class="probs">
+          <li>Настройки AI, клавиатуры, профиля и аккаунта перемешаны в одном списке.</li>
+          <li>Все контролы показаны одновременно, иерархии нет.</li>
+          <li>Результат персонализации не виден до выхода из настроек.</li>
+        </ul>
+      </div>
+
+      <!-- AFTER -->
+      <div class="pane pane--after">
+        <div class="pane__head">
+          <span class="tag tag--after">After</span>
+          <span class="pane__note">Новый прототип</span>
+        </div>
+        <div class="rack rack--live" data-rack>
+          <figure class="shot">
+            <div class="live" data-screen="Настройки стиля"><iframe src="/troetochie/proto/settings.html" title="Новый экран «Ваш стиль»" loading="lazy"></iframe></div>
+            <figcaption>«Ваш стиль» — тон, манера, предпросмотр</figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="live" data-screen="Доп. настройки"><iframe src="/troetochie/proto/settings.html" title="Новый экран: раскрытый блок дополнительных настроек" loading="lazy"></iframe></div>
+            <figcaption>«Доп. настройки» — раскрывающийся блок</figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="live" data-screen="Все настройки"><iframe src="/troetochie/proto/settings.html" title="Новый экран «Все настройки»" loading="lazy"></iframe></div>
+            <figcaption>«Все настройки» — разделённые сущности</figcaption>
+          </figure>
+        </div>
+        <p class="pane__hint">Дополнительные параметры спрятаны в раскрывающийся блок «Доп. настройки».</p>
+      </div>
+    </div>
+
+    <div class="changed reveal">
+      <h3 class="changed__title">Что изменилось</h3>
+      <ul class="changed__list">
+        <li>Разделены настройки AI, клавиатуры, профиля и аккаунта.</li>
+        <li>Выделены наиболее значимые параметры.</li>
+        <li>Второстепенные настройки перенесены в раскрывающийся блок.</li>
+        <li>Сокращено количество одновременно отображаемых контролов.</li>
+        <li>Добавлен предпросмотр результата персонализации.</li>
+        <li>Использованы более подходящие компоненты для выбора параметров.</li>
+      </ul>
+      <button class="btn" data-proto="/troetochie/proto/settings.html" data-proto-title="Настройки стиля — интерактивный прототип">
+        Посмотреть новый интерфейс
+      </button>
+    </div>
+  </section>
+
+</main>
+
+<div class="chrome"><div class="chrome__inner">
+  <footer>
+    <div class="headline">Открыта к проектам и разговорам</div>
+    <div class="contacts">
+      <a href="https://t.me/Anastasia_Jay" target="_blank" rel="noopener">@Anastasia_Jay</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="mailto:burmistrova.adv@gmail.com">burmistrova.adv@gmail.com</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="tel:+79089745517">+7 908 974 55 17</a>
+    </div>
+  </footer>
+</div></div>
+
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lightbox__close" aria-label="Закрыть">✕</button>
+  <div class="lightbox__body"></div>
+  <p class="lightbox__cap"></p>
+</div>
+
+<script src="/assets/header-dock.js" defer></script>
+<script src="/troetochie/app.js"></script>
+</body>
+</html>

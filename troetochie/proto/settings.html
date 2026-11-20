@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>window.__resources={
+"https://unpkg.com/react@18.3.1/umd/react.production.min.js":"../vendor/react.production.min.js",
+"https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"../vendor/react-dom.production.min.js"};</script><script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../vendor/onest/onest-local.css">
+<style>
+html,body{margin:0;min-height:100%;background:#E8E8ED;}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Onest',system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+a{color:#1C8A3E;} a:hover{color:#136B2E;}
+@keyframes pvA{from{opacity:0;filter:blur(4px);transform:translateY(4px)}to{opacity:1;filter:blur(0);transform:none}}
+@keyframes pvB{from{opacity:0;filter:blur(4px);transform:translateY(4px)}to{opacity:1;filter:blur(0);transform:none}}
+</style>
+</helmet>
+<div ref="{{ root }}" style="min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; padding:16px 0; box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Onest',system-ui,sans-serif; color:#1D1D1F">
+  <div style="position:relative; width:{{ dev.w }}; height:{{ dev.h }}">
+    <div style="position:absolute; left:0; top:0; width:410px; height:864px; transform:scale({{ scale }}); transform-origin:0 0; border-radius:64px; background:#111113; padding:10px; box-sizing:border-box; box-shadow:0 50px 100px -40px rgba(0,0,0,.45), 0 0 0 1px rgba(0,0,0,.2)">
+      <div style="position:relative; width:390px; height:844px; border-radius:55px; overflow:hidden; background:#F5F5F7">
+
+        <div style="position:absolute; top:0; left:0; right:0; height:54px; display:flex; align-items:center; justify-content:space-between; padding:0 34px 0 50px; font-size:17px; font-weight:600; letter-spacing:-0.02em; z-index:30; background:#F5F5F7">
+          <span>9:41</span>
+          <div style="display:flex; align-items:center; gap:6px">
+            <div style="display:flex; align-items:flex-end; gap:1.5px; height:11px">
+              <div style="width:3px; height:4px; background:#1D1D1F; border-radius:1px"></div>
+              <div style="width:3px; height:6px; background:#1D1D1F; border-radius:1px"></div>
+              <div style="width:3px; height:8.5px; background:#1D1D1F; border-radius:1px"></div>
+              <div style="width:3px; height:11px; background:#1D1D1F; border-radius:1px"></div>
+            </div>
+            <div style="width:15px; height:11px; position:relative; overflow:hidden"><div style="position:absolute; left:0; top:0; width:15px; height:15px; border-radius:50%; background:#1D1D1F; clip-path:polygon(50% 100%, 0 0, 100% 0)"></div></div>
+            <div style="display:flex; align-items:center; gap:1px"><div style="width:24px; height:12px; border:1px solid rgba(29,29,31,.4); border-radius:4px; padding:1.5px; box-sizing:border-box"><div style="width:80%; height:100%; background:#1D1D1F; border-radius:2px"></div></div><div style="width:1.5px; height:4px; background:rgba(29,29,31,.4); border-radius:0 1px 1px 0"></div></div>
+          </div>
+        </div>
+        <div style="position:absolute; top:11px; left:133px; width:124px; height:36px; border-radius:20px; background:#000000; z-index:31"></div>
+
+        <div data-screen-label="01 Настройки" style="position:absolute; top:54px; left:0; right:0; bottom:0; transform:{{ nav.rootT }}; opacity:{{ nav.rootO }}; transition:transform 460ms cubic-bezier(.22,1,.36,1), opacity 460ms ease; pointer-events:{{ nav.rootPE }}">
+          <div style="position:absolute; inset:0; overflow-y:auto; scrollbar-width:none; padding:0 20px 40px; box-sizing:border-box">
+            <h1 style="margin:52px 0 18px; font-size:34px; line-height:1.05; font-weight:700; letter-spacing:-0.035em">Настройки</h1>
+
+            <div style="font-size:13px; color:#6E6E73; margin:0 4px 8px">Ответы</div>
+            <div style="background:#FFFFFF; border-radius:24px; overflow:hidden; margin-bottom:22px">
+              <button onClick="{{ openStyle }}" style="width:100%; min-height:60px; border:0; background:transparent; padding:10px 16px; display:flex; align-items:center; gap:10px; font-family:inherit; text-align:left; cursor:pointer" style-hover="background:#FAFAFC">
+                <div style="flex:1; display:flex; flex-direction:column; gap:1px">
+                  <span style="font-size:16px; font-weight:600; color:#1D1D1F">Стиль ответов</span>
+                  <span style="font-size:13px; color:#86868B">Тон, длина, обращение</span>
+                </div>
+                <span style="font-size:15px; color:#1C8A3E; font-weight:500">{{ toneName }}</span>
+                <div style="width:8px; height:8px; border-top:2px solid #C7C7CC; border-right:2px solid #C7C7CC; transform:rotate(45deg); margin-left:2px"></div>
+              </button>
+              <div style="height:1px; background:#E5E5EA; margin-left:16px"></div>
+              <div style="min-height:60px; padding:10px 16px; display:flex; align-items:center; gap:12px; box-sizing:border-box">
+                <div style="flex:1; display:flex; flex-direction:column; gap:1px">
+                  <span style="font-size:16px; color:#1D1D1F">Спросить Троеточие</span>
+                  <span style="font-size:13px; color:#86868B; line-height:1.3">Отдельный диалог с помощником в клавиатуре</span>
+                </div>
+                <button onClick="{{ tg.ask.on }}" aria-label="Спросить Троеточие" style="flex:none; width:51px; height:31px; border-radius:16px; border:0; padding:0; position:relative; background:{{ tg.ask.bg }}; cursor:pointer; transition:background-color 250ms ease"><div style="position:absolute; top:2px; left:2px; width:27px; height:27px; border-radius:50%; background:#FFFFFF; box-shadow:0 3px 8px rgba(0,0,0,.15), 0 1px 1px rgba(0,0,0,.08); transform:{{ tg.ask.t }}; transition:transform 300ms cubic-bezier(.34,1.3,.64,1)"></div></button>
+              </div>
+            </div>
+
+            <div style="font-size:13px; color:#6E6E73; margin:0 4px 8px">Клавиатура</div>
+            <div style="background:#FFFFFF; border-radius:24px; overflow:hidden; margin-bottom:22px">
+              <div style="min-height:52px; padding:0 16px; display:flex; align-items:center; gap:12px">
+                <span style="flex:1; font-size:16px">Автоисправление опечаток</span>
+                <button onClick="{{ tg.auto.on }}" aria-label="Автоисправление" style="flex:none; width:51px; height:31px; border-radius:16px; border:0; padding:0; position:relative; background:{{ tg.auto.bg }}; cursor:pointer; transition:background-color 250ms ease"><div style="position:absolute; top:2px; left:2px; width:27px; height:27px; border-radius:50%; background:#FFFFFF; box-shadow:0 3px 8px rgba(0,0,0,.15), 0 1px 1px rgba(0,0,0,.08); transform:{{ tg.auto.t }}; transition:transform 300ms cubic-bezier(.34,1.3,.64,1)"></div></button>
+              </div>
+              <div style="height:1px; background:#E5E5EA; margin-left:16px"></div>
+              <div style="min-height:52px; padding:0 16px; display:flex; align-items:center; gap:12px">
+                <span style="flex:1; font-size:16px">Виброотклик</span>
+                <button onClick="{{ tg.vibro.on }}" aria-label="Виброотклик" style="flex:none; width:51px; height:31px; border-radius:16px; border:0; padding:0; position:relative; background:{{ tg.vibro.bg }}; cursor:pointer; transition:background-color 250ms ease"><div style="position:absolute; top:2px; left:2px; width:27px; height:27px; border-radius:50%; background:#FFFFFF; box-shadow:0 3px 8px rgba(0,0,0,.15), 0 1px 1px rgba(0,0,0,.08); transform:{{ tg.vibro.t }}; transition:transform 300ms cubic-bezier(.34,1.3,.64,1)"></div></button>
+              </div>
+            </div>
+
+            <div style="font-size:13px; color:#6E6E73; margin:0 4px 8px">Персонализация</div>
+            <div style="background:#FFFFFF; border-radius:24px; overflow:hidden; margin-bottom:22px">
+              <div style="min-height:52px; padding:0 16px; display:flex; align-items:center; gap:10px">
+                <span style="flex:1; font-size:16px">Примеры ваших сообщений</span>
+                <div style="width:8px; height:8px; border-top:2px solid #C7C7CC; border-right:2px solid #C7C7CC; transform:rotate(45deg)"></div>
+              </div>
+              <div style="height:1px; background:#E5E5EA; margin-left:16px"></div>
+              <div style="min-height:60px; padding:10px 16px; display:flex; align-items:center; gap:10px; box-sizing:border-box">
+                <div style="flex:1; display:flex; flex-direction:column; gap:1px">
+                  <span style="font-size:16px">Профиль</span>
+                  <span style="font-size:13px; color:#86868B">Имя, интересы, о себе</span>
+                </div>
+                <div style="width:8px; height:8px; border-top:2px solid #C7C7CC; border-right:2px solid #C7C7CC; transform:rotate(45deg)"></div>
+              </div>
+            </div>
+
+            <div style="font-size:13px; color:#6E6E73; margin:0 4px 8px">Аккаунт</div>
+            <div style="background:#FFFFFF; border-radius:24px; overflow:hidden; margin-bottom:22px">
+              <div style="min-height:52px; padding:0 16px; display:flex; align-items:center; gap:10px">
+                <span style="flex:1; font-size:16px">Аккаунт и синхронизация</span>
+                <div style="width:8px; height:8px; border-top:2px solid #C7C7CC; border-right:2px solid #C7C7CC; transform:rotate(45deg)"></div>
+              </div>
+              <div style="height:1px; background:#E5E5EA; margin-left:16px"></div>
+              <div style="min-height:52px; padding:0 16px; display:flex; align-items:center; gap:10px">
+                <span style="flex:1; font-size:16px">Статистика</span>
+                <div style="width:8px; height:8px; border-top:2px solid #C7C7CC; border-right:2px solid #C7C7CC; transform:rotate(45deg)"></div>
+              </div>
+            </div>
+
+            <div style="font-size:13px; color:#6E6E73; margin:0 4px 8px">Приватность и аналитика</div>
+            <div style="background:#FFFFFF; border-radius:24px; overflow:hidden">
+              <div style="min-height:52px; padding:0 16px; display:flex; align-items:center; gap:12px">
+                <span style="flex:1; font-size:16px">Статистика Яндекс AppMetrica</span>
+                <button onClick="{{ tg.metrica.on }}" aria-label="AppMetrica" style="flex:none; width:51px; height:31px; border-radius:16px; border:0; padding:0; position:relative; background:{{ tg.metrica.bg }}; cursor:pointer; transition:background-color 250ms ease"><div style="position:absolute; top:2px; left:2px; width:27px; height:27px; border-radius:50%; background:#FFFFFF; box-shadow:0 3px 8px rgba(0,0,0,.15), 0 1px 1px rgba(0,0,0,.08); transform:{{ tg.metrica.t }}; transition:transform 300ms cubic-bezier(.34,1.3,.64,1)"></div></button>
+              </div>
+            </div>
+            <div style="font-size:12.5px; line-height:1.4; color:#86868B; margin:8px 4px 0">Технические данные устройства и события использования передаются Яндексу. Без текстов сообщений, фото и буфера обмена.</div>
+          </div>
+        </div>
+
+        <div data-screen-label="02 Настройки стиля" style="position:absolute; top:54px; left:0; right:0; bottom:0; background:#F5F5F7; transform:{{ nav.styleT }}; transition:transform 460ms cubic-bezier(.22,1,.36,1); box-shadow:-20px 0 40px -20px rgba(0,0,0,.18); pointer-events:{{ nav.stylePE }}">
+          <div style="position:absolute; top:0; left:0; right:0; height:44px; display:flex; align-items:center; padding:0 8px; z-index:10; background:#F5F5F7">
+            <button onClick="{{ openRoot }}" style="height:44px; border:0; background:transparent; padding:0 10px; display:flex; align-items:center; gap:6px; font-family:inherit; font-size:17px; color:#1C8A3E; cursor:pointer">
+              <div style="width:10px; height:10px; border-left:2.5px solid #1C8A3E; border-bottom:2.5px solid #1C8A3E; transform:rotate(45deg); margin-left:4px"></div>Настройки
+            </button>
+          </div>
+          <div ref="{{ scroller }}" style="position:absolute; top:44px; left:0; right:0; bottom:0; overflow-y:auto; scrollbar-width:none; padding:0 20px 48px; box-sizing:border-box">
+            <h1 style="margin:4px 0 6px; font-size:32px; line-height:1.05; font-weight:700; letter-spacing:-0.035em">Настройки стиля</h1>
+            <div style="display:flex; align-items:center; gap:6px; font-size:13px; color:#86868B; margin-bottom:6px">
+              <span style="width:6px; height:6px; border-radius:50%; background:#34C759"></span>Сохраняется автоматически
+            </div>
+
+            <div style="position:sticky; top:0; z-index:5; padding:8px 0 14px; margin:0 -4px; padding-left:4px; padding-right:4px; background:linear-gradient(#F5F5F7 82%, rgba(245,245,247,0))">
+              <div style="background:#FFFFFF; border-radius:24px; padding:14px 16px 16px; box-shadow:0 1px 2px rgba(0,0,0,.05), 0 16px 32px -22px rgba(0,0,0,.3); display:flex; flex-direction:column; gap:8px">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:8px">
+                  <span style="font-size:13px; font-weight:600; color:#6E6E73">Предпросмотр</span>
+                  <span style="font-size:12px; font-weight:600; color:#136B2E; background:#E4F1E6; border-radius:10px; padding:3px 9px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{{ pv.sum }}</span>
+                </div>
+                <div style="align-self:flex-start; max-width:270px; background:#F2F2F7; border-radius:18px 18px 18px 6px; padding:8px 12px; font-size:14px; line-height:1.35">Сможешь помочь с переездом в субботу?</div>
+                <div style="align-self:flex-end; max-width:280px; background:#DCEEDD; border-radius:18px 18px 6px 18px; padding:9px 13px; font-size:15px; line-height:1.38; min-height:21px">
+                  <span style="display:block; animation:{{ pv.an }}">{{ pv.text }}</span>
+                </div>
+              </div>
+            </div>
+
+            <h2 style="margin:10px 0 4px; font-size:20px; font-weight:700; letter-spacing:-0.02em">Тон общения</h2>
+            <p style="margin:0 0 12px; font-size:14px; line-height:1.4; color:#6E6E73">Выберите, как Троеточие будет формулировать ответы</p>
+            <div style="display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; margin-bottom:28px">
+              <sc-for list="{{ tones }}" as="t" hint-placeholder-count="6">
+                <button onClick="{{ t.on }}" style="position:relative; min-height:66px; border-radius:18px; border:1.5px solid {{ t.bd }}; background:{{ t.bg }}; padding:11px 14px; box-sizing:border-box; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:2px; font-family:inherit; text-align:left; cursor:pointer; transform:{{ t.tf }}; transition:background-color 220ms ease, border-color 220ms ease, transform 360ms cubic-bezier(.34,1.3,.64,1)">
+                  <span style="font-size:15.5px; font-weight:600; color:{{ t.c }}; letter-spacing:-0.01em">{{ t.n }}</span>
+                  <span style="font-size:12.5px; color:#86868B">{{ t.h }}</span>
+                  <span style="position:absolute; top:10px; right:10px; width:18px; height:18px; border-radius:50%; background:#1C8A3E; color:#FFFFFF; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; opacity:{{ t.ck }}; transform:{{ t.ckT }}; transition:opacity 200ms ease, transform 320ms cubic-bezier(.34,1.5,.64,1)">✓</span>
+                </button>
+              </sc-for>
+            </div>
+
+            <h2 style="margin:0 0 12px; font-size:20px; font-weight:700; letter-spacing:-0.02em">Манера общения</h2>
+            <div style="background:#FFFFFF; border-radius:24px; padding:4px 16px; margin-bottom:14px">
+              <sc-for list="{{ manner }}" as="g" hint-placeholder-count="2">
+                <div style="padding:14px 0; border-top:{{ g.bt }}; display:flex; flex-direction:column; gap:10px">
+                  <div style="display:flex; flex-direction:column; gap:2px">
+                    <span style="font-size:15px; font-weight:600">{{ g.title }}</span>
+                    <span style="font-size:12.5px; color:#86868B">{{ g.hint }}</span>
+                  </div>
+                  <div style="position:relative; height:34px; background:rgba(118,118,128,.12); border-radius:10px; padding:2px; box-sizing:border-box; display:flex">
+                    <div style="position:absolute; top:2px; left:2px; bottom:2px; width:{{ g.w }}; border-radius:8px; background:#FFFFFF; box-shadow:0 3px 8px rgba(0,0,0,.12), 0 3px 1px rgba(0,0,0,.04); transform:translateX({{ g.x }}); transition:transform 420ms cubic-bezier(.34,1.2,.64,1)"></div>
+                    <sc-for list="{{ g.opts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.on }}" style="position:relative; flex:1; min-width:0; border:0; background:transparent; padding:0 2px; font-family:inherit; font-size:13px; font-weight:600; color:{{ o.c }}; white-space:nowrap; cursor:pointer; transition:color 250ms ease">{{ o.l }}</button></sc-for>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+
+            <div ref="{{ advRef }}" style="background:#FFFFFF; border-radius:24px; margin-bottom:22px; overflow:hidden">
+              <button onClick="{{ toggleAdv }}" style="width:100%; min-height:64px; border:0; background:transparent; padding:12px 16px; display:flex; align-items:center; gap:12px; font-family:inherit; text-align:left; cursor:pointer">
+                <div style="flex:1; display:flex; flex-direction:column; gap:2px">
+                  <span style="font-size:16px; font-weight:600; color:#1D1D1F">Дополнительные настройки</span>
+                  <span style="font-size:12.5px; color:{{ adv.sc }}">{{ adv.sum }}</span>
+                </div>
+                <div style="width:28px; height:28px; border-radius:50%; background:rgba(118,118,128,.12); display:flex; align-items:center; justify-content:center">
+                  <div style="width:7px; height:7px; border-right:2px solid #6E6E73; border-bottom:2px solid #6E6E73; transform:{{ adv.chev }}; transition:transform 360ms cubic-bezier(.22,1,.36,1)"></div>
+                </div>
+              </button>
+              <div style="display:grid; grid-template-rows:{{ adv.rows }}; transition:grid-template-rows 460ms cubic-bezier(.22,1,.36,1)">
+                <div style="min-height:0; overflow:hidden">
+                  <div style="padding:0 16px 6px; opacity:{{ adv.o }}; transition:opacity 300ms ease">
+                    <sc-for list="{{ extras }}" as="g" hint-placeholder-count="5">
+                      <div style="padding:12px 0; border-top:1px solid #E5E5EA; display:flex; flex-direction:column; gap:8px">
+                        <span style="font-size:14.5px; font-weight:500">{{ g.title }}</span>
+                        <div style="position:relative; height:32px; background:rgba(118,118,128,.12); border-radius:10px; padding:2px; box-sizing:border-box; display:flex">
+                          <div style="position:absolute; top:2px; left:2px; bottom:2px; width:{{ g.w }}; border-radius:8px; background:#FFFFFF; box-shadow:0 3px 8px rgba(0,0,0,.12), 0 3px 1px rgba(0,0,0,.04); transform:translateX({{ g.x }}); transition:transform 420ms cubic-bezier(.34,1.2,.64,1)"></div>
+                          <sc-for list="{{ g.opts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.on }}" style="position:relative; flex:1; min-width:0; border:0; background:transparent; padding:0 2px; font-family:inherit; font-size:12.5px; font-weight:600; color:{{ o.c }}; white-space:nowrap; cursor:pointer; transition:color 250ms ease">{{ o.l }}</button></sc-for>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button onClick="{{ reset }}" style="display:block; margin:0 auto; height:44px; padding:0 16px; border:0; border-radius:22px; background:transparent; font-family:inherit; font-size:15px; font-weight:500; color:{{ rs.c }}; cursor:{{ rs.cur }}" style-hover="background:rgba(118,118,128,.08)">Сбросить к значениям по умолчанию</button>
+          </div>
+          <div style="position:absolute; left:50%; bottom:46px; transform:{{ toast.t }}; opacity:{{ toast.o }}; transition:opacity 300ms ease, transform 460ms cubic-bezier(.22,1,.36,1); background:rgba(44,44,46,.94); color:#FFFFFF; font-size:14px; padding:10px 16px; border-radius:20px; white-space:nowrap; z-index:20; pointer-events:none">Восстановлены значения по умолчанию</div>
+        </div>
+
+        <div style="position:absolute; bottom:8px; left:128px; width:134px; height:5px; border-radius:3px; background:#000000; z-index:40"></div>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:6px; padding:0 12px">
+    <sc-for list="{{ jumps }}" as="j" hint-placeholder-count="4">
+      <button onClick="{{ j.on }}" style="height:32px; padding:0 14px; white-space:nowrap; flex-shrink:0; border-radius:16px; border:1px solid #D2D2D7; background:{{ j.bg }}; color:{{ j.c }}; font-family:inherit; font-size:13px; font-weight:500; cursor:pointer">{{ j.l }}</button>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startView&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Настройки стиля&quot;,&quot;Все настройки&quot;],&quot;default&quot;:&quot;Настройки стиля&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Preview&quot;}}">
+class Component extends DCLogic {
+  DEF = { tone: 0, len: 0, addr: 0, emoji: 0, caseS: 0, period: 0, brackets: 0, humor: 0 };
+  state = { ...this.DEF, view: 'style', adv: false, toast: false, gen: 0, scale: 1, tg: { ask: true, auto: true, vibro: true, metrica: false } };
+  root = React.createRef(); scroller = React.createRef(); advRef = React.createRef();
+  timers = [];
+  TONES = [['Уверенно', 'Чётко и по делу'], ['Спокойно', 'Мягко и вежливо'], ['Коротко', 'Одной фразой'], ['С юмором', 'С лёгкой шуткой'], ['Флирт', 'Игриво и тепло'], ['Рабочий', 'Деловой тон']];
+  LEN = ['Авто', 'Коротко', 'Средне', 'Развёрнуто'];
+  ADDR = ['Авто', 'На ты', 'На вы'];
+  EX = [['emoji', 'Эмодзи', ['Авто', 'Без', 'Иногда', 'Часто']], ['caseS', 'Начало предложения', ['Авто', 'С маленькой', 'С заглавной']], ['period', 'Точка в конце', ['Авто', 'Ставлю', 'Не ставлю']], ['brackets', 'Скобочки', ['Авто', 'Да', 'Нет']], ['humor', 'Юмор', ['Авто', 'Редко', 'Люблю']]];
+  TXT = [
+    [['В субботу не смогу.', 'В субботу не смогу.'],
+     ['В субботу не смогу. Если нужна помощь в другой день, напиши.', 'В субботу не смогу. Если нужна помощь в другой день, напишите.'],
+     ['В субботу не смогу — день уже занят. Если нужна помощь в другой день, напиши, постараюсь выбраться.', 'В субботу не смогу — день уже занят. Если нужна помощь в другой день, напишите, постараюсь выбраться.']],
+    [['В эту субботу не получится, извини.', 'В эту субботу не получится, извините.'],
+     ['В эту субботу не получится, извини. Надеюсь, найдёшь помощников!', 'В эту субботу не получится, извините. Надеюсь, найдёте помощников!'],
+     ['В эту субботу не получится, извини — у меня уже есть планы. Надеюсь, найдёшь помощников! Если что-то останется на потом, дай знать.', 'В эту субботу не получится, извините — у меня уже есть планы. Надеюсь, найдёте помощников! Если что-то останется на потом, дайте знать.']],
+    [['Не смогу, извини.', 'Не смогу, извините.'],
+     ['В субботу не смогу, извини.', 'В субботу не смогу, извините.'],
+     ['В субботу не смогу, извини. Удачи с переездом!', 'В субботу не смогу, извините. Удачи с переездом!']],
+    [['В субботу никак — только морально.', 'В субботу никак — только морально.'],
+     ['В субботу никак — руки уже заняты другими коробками. Но морально я с тобой!', 'В субботу никак — руки уже заняты другими коробками. Но морально я с вами!'],
+     ['В субботу никак — руки уже заняты другими коробками. Но морально я с тобой! Если в другой день понадобится грузчик-любитель, зови.', 'В субботу никак — руки уже заняты другими коробками. Но морально я с вами! Если в другой день понадобится грузчик-любитель, зовите.']],
+    [['В субботу не выйдет. Но на новоселье позови.', 'В субботу не выйдет. Но на новоселье позовите.'],
+     ['В субботу не выйдет, жаль. Но на новоселье позови — приду обязательно.', 'В субботу не выйдет, жаль. Но на новоселье позовите — приду обязательно.'],
+     ['В субботу не выйдет, жаль. Но на новоселье позови — приду обязательно. С меня что-нибудь вкусное.', 'В субботу не выйдет, жаль. Но на новоселье позовите — приду обязательно. С меня что-нибудь вкусное.']],
+    [['К сожалению, в субботу не смогу.', 'К сожалению, в субботу не смогу.'],
+     ['К сожалению, в субботу не смогу помочь. Если удобно, могу в другой день.', 'К сожалению, в субботу не смогу помочь. Если удобно, могу в другой день.'],
+     ['К сожалению, в субботу не смогу помочь с переездом. Если можно перенести, подключусь в другой день — напиши, какой удобен.', 'К сожалению, в субботу не смогу помочь с переездом. Если можно перенести, подключусь в другой день — напишите, какой удобен.']]
+  ];
+
+  componentDidMount() {
+    try { const sv = JSON.parse(localStorage.getItem('troe-style-v1') || 'null'); if (sv) this.setState({ ...sv.style, tg: { ...this.state.tg, ...(sv.tg || {}) } }); } catch (e) {}
+    if (this.props.startView === 'Все настройки') this.setState({ view: 'root' });
+    this.fit = () => {
+      const h = window.innerHeight || 0, w = window.innerWidth || 0;
+      if (h < 200 || w < 200) return;
+      this.setState({ scale: Math.max(0.3, Math.min(1, (h - 90) / 864, (w - 24) / 410)) });
+    };
+    this.fit(); this.fitN = 0;
+    this.fitI = setInterval(() => { this.fit(); if ((window.innerHeight || 0) >= 200 && ++this.fitN > 3) clearInterval(this.fitI); }, 150);
+    window.addEventListener('resize', this.fit);
+    if (window.ResizeObserver && this.root.current) { this.ro = new ResizeObserver(this.fit); this.ro.observe(this.root.current); }
+  }
+  componentWillUnmount() { this.stopDemo(); clearInterval(this.fitI); window.removeEventListener('resize', this.fit); if (this.ro) this.ro.disconnect(); }
+  save(next) {
+    const st = { ...this.state, ...next };
+    const style = {}; Object.keys(this.DEF).forEach(k => { style[k] = st[k]; });
+    try { localStorage.setItem('troe-style-v1', JSON.stringify({ style, tg: st.tg })); } catch (e) {}
+  }
+  set(patch, user = true) {
+    if (user) this.stopDemo();
+    const affects = Object.keys(patch).some(k => k in this.DEF && patch[k] !== this.state[k]);
+    const next = affects ? { ...patch, gen: this.state.gen + 1 } : patch;
+    this.setState(next); this.save(next);
+  }
+  stopDemo() { this.timers.forEach(clearTimeout); this.timers = []; }
+  demoTones() {
+    this.stopDemo();
+    this.setState({ view: 'style' });
+    if (this.scroller.current) this.scroller.current.scrollTo({ top: 0, behavior: 'smooth' });
+    [1, 2, 3, 4, 5, 0].forEach((t, i) => this.timers.push(setTimeout(() => this.set({ tone: t }, false), 700 + i * 1700)));
+  }
+  demoAdv() {
+    this.stopDemo();
+    this.setState({ view: 'style', adv: true });
+    this.timers.push(setTimeout(() => {
+      const sc = this.scroller.current, el = this.advRef.current;
+      if (sc && el) sc.scrollTo({ top: el.offsetTop - 230, behavior: 'smooth' });
+    }, 380));
+  }
+  text(st) {
+    const li = st.len === 0 ? 1 : st.len - 1, ai = st.addr === 2 ? 1 : 0;
+    let t = this.TXT[st.tone][li][ai];
+    if (st.humor === 2 && st.tone !== 3) t += ai ? ' Морально я с вами!' : ' Морально я с тобой!';
+    if (st.brackets === 1) t = t.replace(/[.!]$/, ')');
+    if (st.period === 2) t = t.replace(/\.$/, '');
+    if (st.period === 1 && /[а-яё]$/i.test(t)) t += '.';
+    if (st.caseS === 1) t = t.charAt(0).toLowerCase() + t.slice(1);
+    if (st.emoji === 2) t += ' 🙂';
+    if (st.emoji === 3) t = '🙈 ' + t + ' 🙏';
+    return t;
+  }
+  seg(key, title, hint, opts, i, first) {
+    const v = this.state[key], n = opts.length;
+    return {
+      title, hint, bt: first ? '0' : '1px solid #E5E5EA',
+      w: `calc((100% - 4px) / ${n})`, x: (v * 100) + '%',
+      opts: opts.map((l, j) => ({ l, c: j === v ? '#1D1D1F' : '#6E6E73', on: () => this.set({ [key]: j }) }))
+    };
+  }
+  renderVals() {
+    const st = this.state;
+    const changed = this.EX.filter(([k]) => st[k] !== 0).length;
+    const isDef = Object.keys(this.DEF).every(k => st[k] === this.DEF[k]);
+    const lenL = st.len === 0 ? 'длина авто' : this.LEN[st.len].toLowerCase();
+    const addrL = st.addr === 0 ? 'обращение авто' : this.ADDR[st.addr].toLowerCase();
+    const tgv = k => ({ bg: st.tg[k] ? '#34C759' : 'rgba(120,120,128,.16)', t: st.tg[k] ? 'translateX(20px)' : 'translateX(0px)', on: () => { const tg = { ...st.tg, [k]: !st.tg[k] }; this.setState({ tg }); this.save({ tg }); } });
+    const isStyle = st.view === 'style';
+    return {
+      root: this.root, scroller: this.scroller, advRef: this.advRef,
+      scale: st.scale, dev: { w: Math.round(410 * st.scale) + 'px', h: Math.round(864 * st.scale) + 'px' },
+      nav: {
+        rootT: isStyle ? 'translateX(-30%)' : 'translateX(0%)', rootO: isStyle ? 0.6 : 1, rootPE: isStyle ? 'none' : 'auto',
+        styleT: isStyle ? 'translateX(0%)' : 'translateX(104%)', stylePE: isStyle ? 'auto' : 'none'
+      },
+      toneName: this.TONES[st.tone][0],
+      openStyle: () => { this.stopDemo(); this.setState({ view: 'style' }); },
+      openRoot: () => { this.stopDemo(); this.setState({ view: 'root' }); },
+      tg: { ask: tgv('ask'), auto: tgv('auto'), vibro: tgv('vibro'), metrica: tgv('metrica') },
+      pv: { text: this.text(st), an: `${st.gen % 2 ? 'pvA' : 'pvB'} 520ms cubic-bezier(.22,1,.36,1) both`, sum: `${this.TONES[st.tone][0]} · ${lenL} · ${addrL}` },
+      tones: this.TONES.map(([n, h], i) => {
+        const on = i === st.tone;
+        return { n, h, on: () => this.set({ tone: i }), bd: on ? '#1C8A3E' : '#E5E5EA', bg: on ? '#E4F1E6' : '#FFFFFF', c: on ? '#136B2E' : '#1D1D1F', tf: on ? 'scale(1)' : 'scale(.985)', ck: on ? 1 : 0, ckT: on ? 'scale(1)' : 'scale(.4)' };
+      }),
+      manner: [this.seg('len', 'Длина ответа', 'Авто — как принято в этой переписке', this.LEN, 0, true), this.seg('addr', 'Обращение', 'Авто — как обращается собеседник', this.ADDR, 1, false)],
+      extras: this.EX.map(([k, title, opts], i) => this.seg(k, title, '', opts, i, false)),
+      adv: {
+        rows: st.adv ? '1fr' : '0fr', o: st.adv ? 1 : 0, chev: st.adv ? 'translateY(-2px) rotate(225deg)' : 'translateY(-2px) rotate(45deg)',
+        sum: changed ? `Изменено: ${changed} из 5` : 'Эмодзи, регистр, точка, скобочки, юмор', sc: changed ? '#1C8A3E' : '#86868B'
+      },
+      toggleAdv: () => { this.stopDemo(); this.setState({ adv: !st.adv }); },
+      rs: { c: isDef ? '#C7C7CC' : '#1C8A3E', cur: isDef ? 'default' : 'pointer' },
+      reset: () => {
+        if (isDef) return;
+        this.set({ ...this.DEF });
+        this.setState({ toast: true }); clearTimeout(this.tT); this.tT = setTimeout(() => this.setState({ toast: false }), 2200);
+      },
+      toast: { o: st.toast ? 1 : 0, t: st.toast ? 'translate(-50%, 0px)' : 'translate(-50%, 10px)' },
+      jumps: [
+        ['Все настройки', () => { this.stopDemo(); this.setState({ view: 'root' }); }, !isStyle],
+        ['Настройки стиля', () => { this.stopDemo(); this.setState({ view: 'style', adv: false }); if (this.scroller.current) this.scroller.current.scrollTo({ top: 0, behavior: 'smooth' }); }, isStyle && !st.adv],
+        ['▶ Смена тона', () => this.demoTones(), this.timers.length > 0 && !st.adv],
+        ['Доп. настройки', () => this.demoAdv(), isStyle && st.adv]
+      ].map(([l, on, act]) => ({ l, on, bg: act ? '#1D1D1F' : 'transparent', c: act ? '#FFFFFF' : '#6E6E73' }))
+    };
+  }
+}
+</script>
+</body>
+</html>
